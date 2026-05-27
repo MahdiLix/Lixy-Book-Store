@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/adminStyle.css">
+
+  <title>Admin page</title>
+</head>
+
+<body>
+  <main>
+ 
+    <div id="adminFormContainer">
+      <h2>Welcom to book library!</h2>
+      <h3>Please login to your account</h3>
+      <form id="adminForm">
+        <input type="email" id="email" placeholder="email *" required>
+        <input type="text" id="password" placeholder="password *" required>
+        <button type="submit">login</button>
+      </form>
+    </div>
+
+
+    <div id="bookStoreDisplayContainer" style="display: none;">
+      <div style="display: flex; justify-content: center;">
+        <div style="display: inline-block">
+          <form id="searchQueryForm">
+            <input type="text" id="searchQueryInput" placeholder="search book..." />
+            <button type="submit" id="getBooksBtn">search</button>
+          </form>
+        </div>
+        <button id="addNewBookBtn">add new book</button>
+
+      </div>
+
+
+      <div id="addNewBookContainer" style="display: none">
+        <h3>Add New Book</h3>
+        <form id="addNewBookForm">
+          <!--  pattern="[A-Za-z\s\-'\.*]+" -->
+          <input type="text" id="title" placeholder="Title *" required /> <br />
+          <input type="text" id="author" placeholder="Author *" required />
+          <br />
+          <input type="number" id="publishedYear" placeholder="publishedYear" />
+          <br />
+
+          <select id="genre">
+            <option value="">Select Book Genre (optional)</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="Science">Science</option>
+            <option value="Computer">Computer</option>
+            <option value="History">History</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Biography">Biography</option>
+            <option value="Other">Other</option>
+          </select>
+          <br />
+          <input type="number" id="availableCopies" value="1" min="0" placeholder="available copies" />
+
+          <div>
+            <button type="submit" id="submitAddBookBtn">submit book</button>
+            <button type="button" id="cancelAddBookBtn">cancel add book</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- <div>
+        <ul id="booksDisplayContainer" style="display: none"></ul>
+      </div> -->
+      <table id="booksTable" style="display: none">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th>Available</th>
+            <th>Edit</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+ 
+
+    </div>
+
+    <div id="errorDisplayContainer"></div>
+  </main>
+
+
+  <script src="../js/loginUser.js"></script>
+</body>
+
+</html>

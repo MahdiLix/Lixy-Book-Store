@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import EditBookForm from "../../components/EditBook/EditBookForm";
+import EditBookForm from "../../components/Admin/EditBook/EditBookForm";
 import ErrorMessage from "../../components/Shared/ErrorMessage";
 import Loading from "../../components/Shared/Loading";
 import { fetchBookById, updateBook } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
+import { buildBookPayload, createEmptyBookForm } from "../../utils/bookForm";
+
+
 
 export default function EditBookPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const [bookForm, setBookForm] = useState({
-    title: "",
-    author: "",
-    publishedYear: "",
-    genre: "",
-    availableCopies: "1",
-  });
+ 
+  const [bookForm, setBookForm] = useState(createEmptyBookForm());
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -25,15 +22,8 @@ export default function EditBookPage() {
     async function loadBook() {
       try {
         const book = await fetchBookById(id);
+        setBookForm(createEmptyBookForm(book));
 
-        setBookForm({
-          title: book.title || "",
-          author: book.author || "",
-          publishedYear: book.publishedYear || "",
-          genre: book.genre || "",
-          availableCopies:
-            book.availableCopies !== undefined ? String(book.availableCopies) : "1",
-        });
       } catch (err) {
         setError(`Failed to load book: ${err.message}`);
       } finally {
@@ -48,35 +38,18 @@ export default function EditBookPage() {
     e.preventDefault();
     setError("");
 
-    const title = bookForm.title.trim();
-    const author = bookForm.author.trim();
-
-    if (!title || !author) {
+    if (!bookForm.title.trim() || !bookForm.author.trim()) {
       setError("Title and Author is required!");
       return;
     }
 
-    const payload = {
-      title,
-      author,
-    };
-
-    if (bookForm.publishedYear.trim()) {
-      payload.publishedYear = Number(bookForm.publishedYear);
-    }
-
-    if (bookForm.genre) {
-      payload.genre = bookForm.genre;
-    }
-
-    if (bookForm.availableCopies !== "") {
-      payload.availableCopies = Number(bookForm.availableCopies);
-    }
+    const payload = buildBookPayload(bookForm);
 
     try {
       setLoading(true);
       await updateBook(id, payload, getAuthToken());
       navigate("/admin/books", { replace: true });
+
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -107,8 +80,8 @@ export default function EditBookPage() {
         onCancel={handleCancel}
       />
 
-      <ErrorMessage message={error} />
       {loading && <Loading />}
+      <ErrorMessage message={error} />
     </main>
   );
 }

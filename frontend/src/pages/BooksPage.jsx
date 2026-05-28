@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import BooksHeader from "../components/Books/BooksHeader";
 import SearchBookForm from "../components/Books/SearchBookForm";
 import BooksTable from "../components/Books/BooksTable";
 import ErrorMessage from "../components/Shared/ErrorMessage";
@@ -14,9 +15,9 @@ export default function BooksPage() {
   useEffect(() => {
     loadBooks("");
   }, []);
- 
-  
-   async function loadBooks(term = "") {
+
+
+  async function loadBooks(term = "") {
     setError("");
     setLoading(true);
 
@@ -37,8 +38,8 @@ export default function BooksPage() {
 
   return (
     <main id="mainContainer">
-      <h2>Welcome to Lixy Book Store</h2>
-
+      <BooksHeader />
+      
       <SearchBookForm
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

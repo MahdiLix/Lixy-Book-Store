@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
-function BookRow({ book, onEdit, onRemove, showActions }) {
+function BookRow({ book, showAdminActions, onEdit, onRemove }) {
   return (
     <tr>
       <td>{book.title || ""}</td>
@@ -10,13 +8,17 @@ function BookRow({ book, onEdit, onRemove, showActions }) {
       <td>{book.genre || "—"}</td>
       <td>{book.availableCopies ?? 0}</td>
 
-      {showActions && (
+      {showAdminActions && (
         <>
           <td>
-            <button onClick={() => onEdit(book._id)}>Edit</button>
+            <button type="button" onClick={() => onEdit(book._id)}>
+              Edit
+            </button>
           </td>
           <td>
-            <button onClick={() => onRemove(book._id)}>Remove</button>
+            <button type="button" onClick={() => onRemove(book._id)}>
+              Remove
+            </button>
           </td>
         </>
       )}
@@ -24,7 +26,7 @@ function BookRow({ book, onEdit, onRemove, showActions }) {
   );
 }
 
-export default function BooksTable({ books, showActions = false, onEdit, onRemove }) {
+export default function BooksTable({ books, showAdminActions = false, onEdit, onRemove }) {
   if (!books || books.length === 0) {
     return <p>No Books Found!</p>;
   }
@@ -39,7 +41,7 @@ export default function BooksTable({ books, showActions = false, onEdit, onRemov
           <th>Year</th>
           <th>Genre</th>
           <th>Available</th>
-          {showActions && <><th>Edit</th><th>Remove</th></>}
+          {showAdminActions && <><th>Edit</th><th>Remove</th></>}
         </tr>
       </thead>
       <tbody>
@@ -47,7 +49,7 @@ export default function BooksTable({ books, showActions = false, onEdit, onRemov
           <BookRow
             key={book._id}
             book={book}
-            showActions={showActions}
+            showAdminActions={showAdminActions}
             onEdit={onEdit}
             onRemove={onRemove}
           />

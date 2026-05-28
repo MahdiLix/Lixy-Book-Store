@@ -1,3 +1,6 @@
+import BooksHeader from "../Books/BooksHeader";
+import LoginHeader from "./LoginHeader";
+
 export default function LoginForm({
   email,
   password,
@@ -8,8 +11,8 @@ export default function LoginForm({
 }) {
   return (
     <div id="adminFormContainer">
-      <h2>Welcome to book library!</h2>
-      <h3>Please login to your account</h3>
+      <BooksHeader />
+      <LoginHeader />
 
       <form id="adminForm" onSubmit={onSubmit}>
         <input

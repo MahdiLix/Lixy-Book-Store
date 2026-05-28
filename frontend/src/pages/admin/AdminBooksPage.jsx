@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/Admin/AdminHeader";
+import AdminToolbar from "../../components/Admin/AdminToolbar";
 import AddBookForm from "../../components/Admin/AddBookForm";
 import SearchBookForm from "../../components/Books/SearchBookForm";
 import BooksTable from "../../components/Books/BooksTable";
@@ -8,29 +9,25 @@ import ErrorMessage from "../../components/Shared/ErrorMessage";
 import Loading from "../../components/Shared/Loading";
 import { addBook, deleteBook, fetchBooks } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
+import { buildBookPayload, createEmptyBookForm } from "../../utils/bookForm";
+
+
 
 export default function AdminBooksPage() {
   const navigate = useNavigate();
 
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [activePanel, setActivePanel] = useState("search"); // search || add
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [bookForm, setBookForm] = useState({
-    title: "",
-    author: "",
-    publishedYear: "",
-    genre: "",
-    availableCopies: "1",
-  });
+  const [bookForm, setBookForm] = useState(createEmptyBookForm());
 
   useEffect(() => {
     loadBooks("");
   }, []);
 
-  // convert to conponent
   async function loadBooks(term = "") {
     setError("");
     setLoading(true);
@@ -47,64 +44,46 @@ export default function AdminBooksPage() {
 
   async function handleSearch(e) {
     e.preventDefault();
-    setShowAddForm(false);
+    setActivePanel("search");
     await loadBooks(searchTerm.trim());
   }
 
-  function handleShowAddForm() {
-    setShowAddForm(true);
+  function handleShowSearch() {
+    setActivePanel("search");
+  }
+
+  function handleShowAdd() {
+    setActivePanel("add");
     setError("");
   }
 
   function handleCancelAddForm() {
-    setShowAddForm(false);
-    setBookForm({
-      title: "",
-      author: "",
-      publishedYear: "",
-      genre: "",
-      availableCopies: "1",
-    });
+    setActivePanel("search");
+    setBookForm(createEmptyBookForm());
   }
 
   async function handleAddBook(e) {
     e.preventDefault();
     setError("");
 
-    const title = bookForm.title.trim();
-    const author = bookForm.author.trim();
-
-    if (!title || !author) {
+    if (!bookForm.title.trim() || !bookForm.author.trim()) {
       setError("Title and Author is required!");
       return;
     }
 
-    const payload = {
-      title,
-      author,
-    };
-
-    if (bookForm.publishedYear.trim()) {
-      payload.publishedYear = Number(bookForm.publishedYear);
-    }
-
-    if (bookForm.genre) {
-      payload.genre = bookForm.genre;
-    }
-
-    if (bookForm.availableCopies !== "") {
-      payload.availableCopies = Number(bookForm.availableCopies);
-    }
+    const payload = buildBookPayload(bookForm);
 
     try {
       setLoading(true);
       const data = await addBook(payload, getAuthToken());
 
+      console.log('from admin add book page',data.book)
       if (data.book) {
-        setBooks((prev) => [data.book, ...prev]);
+          setBooks((prev)=> [data.book, ...prev]);
       }
 
-      handleCancelAddForm();
+      setBookForm(createEmptyBookForm());
+      setActivePanel("search");
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -118,14 +97,9 @@ export default function AdminBooksPage() {
     }
   }
 
-  function handleEdit(bookId) {
-    navigate(`/admin/edit/${bookId}`);
-  }
-
   async function handleRemove(bookId) {
-    const ok = window.confirm(`Are you sure you want to delete the book ${bookId} ?`);
+    const ok = window.confirm("Remove this book?");
     if (!ok) return;
-
 
     try {
       setLoading(true);
@@ -144,28 +118,35 @@ export default function AdminBooksPage() {
     }
   }
 
+  function handleEdit(bookId) {
+    navigate(`/admin/edit/${bookId}`);
+  }
+
   function handleLogout() {
     clearAuthToken();
     navigate("/login", { replace: true });
   }
 
+
   return (
     <main id="bookStoreDisplayContainer">
       <AdminHeader onLogout={handleLogout} />
 
-      <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
+      <AdminToolbar
+        activePanel={activePanel}
+        onShowSearch={handleShowSearch}
+        onShowAdd={handleShowAdd}
+      />
+
+      {activePanel === "search" && (
         <SearchBookForm
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           onSearch={handleSearch}
         />
+      )}
 
-        <button id="addNewBookBtn" onClick={handleShowAddForm}>
-          add new book
-        </button>
-      </div>
-
-      {showAddForm && (
+      {activePanel === "add" && (
         <AddBookForm
           bookForm={bookForm}
           setBookForm={setBookForm}
@@ -176,10 +157,10 @@ export default function AdminBooksPage() {
 
       {loading && <Loading />}
 
-      {!loading && (
+      {activePanel === "search" && !loading && (
         <BooksTable
           books={books}
-          showActions={true}
+          showAdminActions={true}
           onEdit={handleEdit}
           onRemove={handleRemove}
         />

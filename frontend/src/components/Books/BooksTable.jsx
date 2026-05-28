@@ -1,60 +1,43 @@
-function BookRow({ book, showAdminActions, onEdit, onRemove }) {
-  return (
-    <tr>
-      <td>{book.title || ""}</td>
-      <td>{book.author || ""}</td>
-      <td>{book.isbn || "—"}</td>
-      <td>{book.publishedYear || "—"}</td>
-      <td>{book.genre || "—"}</td>
-      <td>{book.availableCopies ?? 0}</td>
+import BookRow from "./BookRow";
+import { ui } from "../../styles/ui";
 
-      {showAdminActions && (
-        <>
-          <td>
-            <button type="button" onClick={() => onEdit(book._id)}>
-              Edit
-            </button>
-          </td>
-          <td>
-            <button type="button" onClick={() => onRemove(book._id)}>
-              Remove
-            </button>
-          </td>
-        </>
-      )}
-    </tr>
-  );
-}
-
-export default function BooksTable({ books, showAdminActions = false, onEdit, onRemove }) {
+export default function BooksTable({
+  books,
+  showActions = false,
+  onEdit,
+  onRemove,
+}) {
   if (!books || books.length === 0) {
-    return <p>No Books Found!</p>;
+    return <div className={ui.notice}>No Books Found!</div>;
   }
 
   return (
-    <table id="booksTable">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>ISBN</th>
-          <th>Year</th>
-          <th>Genre</th>
-          <th>Available</th>
-          {showAdminActions && <><th>Edit</th><th>Remove</th></>}
-        </tr>
-      </thead>
-      <tbody>
-        {books.map((book) => (
-          <BookRow
-            key={book._id}
-            book={book}
-            showAdminActions={showAdminActions}
-            onEdit={onEdit}
-            onRemove={onRemove}
-          />
-        ))}
-      </tbody>
-    </table>
+    <div className={ui.tableWrap}>
+      <table className={ui.table}>
+        <thead>
+          <tr>
+            <th className={ui.th}>Title</th>
+            <th className={ui.th}>Author</th>
+            <th className={ui.th}>ISBN</th>
+            <th className={ui.th}>Year</th>
+            <th className={ui.th}>Genre</th>
+            <th className={ui.th}>Available</th>
+            {showActions && <th className={ui.th}>Edit</th>}
+            {showActions && <th className={ui.th}>Remove</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {books.map((book) => (
+            <BookRow
+              key={book._id}
+              book={book}
+              showActions={showActions}
+              onEdit={onEdit}
+              onRemove={onRemove}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

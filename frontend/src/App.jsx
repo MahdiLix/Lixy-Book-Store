@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import BooksPage from "./pages/BooksPage";
 import LoginPage from "./pages/LoginPage";
+import CartPage from "./pages/CartPage";
 import AdminBooksPage from "./pages/admin/AdminBooksPage";
 import EditBookPage from "./pages/admin/EditBookPage";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";
@@ -11,6 +12,7 @@ export default function App() {
       <Route path="/" element={<Navigate to="/books" replace />} />
       <Route path="/books" element={<BooksPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/cart" element={<CartPage />} />
 
       <Route
         path="/admin/books"

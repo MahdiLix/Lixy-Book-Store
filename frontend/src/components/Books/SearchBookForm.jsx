@@ -1,20 +1,23 @@
+import { ui } from "../../styles/ui";
+
 export default function SearchBookForm({
   searchTerm,
   setSearchTerm,
   onSearch,
+  onFocus,
+  onBlur,
 }) {
   return (
-    <form id="searchQueryForm" onSubmit={onSearch} style={{ display: "inline-block" }}>
+    <form onSubmit={onSearch} className="w-full max-w-2xl">
       <input
+        className={ui.input}
         type="text"
-        id="searchQueryInput"
-        placeholder="search book..."
+        placeholder="Search book by title, author, genre..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
-      <button type="submit" id="getBooksBtn">
-        search
-      </button>
     </form>
   );
 }

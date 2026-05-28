@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import AdminHeader from "../../components/Admin/AdminHeader";
 import EditBookForm from "../../components/Admin/EditBook/EditBookForm";
-import ErrorMessage from "../../components/Shared/ErrorMessage";
 import Loading from "../../components/Shared/Loading";
+import FeedbackMessage from "../../components/Shared/FeedbackMessage";
 import { fetchBookById, updateBook } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
 import { buildBookPayload, createEmptyBookForm } from "../../utils/bookForm";
-
-
+import { ui } from "../../styles/ui";
 
 export default function EditBookPage() {
   const { id } = useParams();
   const navigate = useNavigate();
- 
+
   const [bookForm, setBookForm] = useState(createEmptyBookForm());
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("notice");
 
   useEffect(() => {
     async function loadBook() {
       try {
         const book = await fetchBookById(id);
         setBookForm(createEmptyBookForm(book));
-
       } catch (err) {
-        setError(`Failed to load book: ${err.message}`);
+        setType("error");
+        setMessage(`Failed to load book: ${err.message}`);
       } finally {
         setInitialLoading(false);
       }
@@ -36,18 +37,25 @@ export default function EditBookPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
+    setMessage("");
 
     if (!bookForm.title.trim() || !bookForm.author.trim()) {
-      setError("Title and Author is required!");
+      setType("error");
+      setMessage("Title and Author is required!");
       return;
     }
 
-    const payload = buildBookPayload(bookForm);
-
     try {
       setLoading(true);
-      await updateBook(id, payload, getAuthToken());
+      await updateBook(id, buildBookPayload(bookForm), getAuthToken());
+
+      setMessage("Book updated successfully.");
+      setType("success");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+
       navigate("/admin/books", { replace: true });
 
     } catch (err) {
@@ -57,7 +65,13 @@ export default function EditBookPage() {
         return;
       }
 
-      setError(`Error update book: ${err.message}`);
+      setMessage(`Failed to update book: ${err.message}`);
+      setType("error");
+
+      setTimeout(() => {
+        setMessage("");
+      });
+
     } finally {
       setLoading(false);
     }
@@ -67,21 +81,30 @@ export default function EditBookPage() {
     navigate("/admin/books", { replace: true });
   }
 
-  if (initialLoading) {
-    return <Loading />;
-  }
-
   return (
-    <main>
-      <EditBookForm
-        bookForm={bookForm}
-        setBookForm={setBookForm}
-        onSubmit={handleSubmit}
-        onCancel={handleCancel}
-      />
+    <main className={ui.page}>
+      <AdminHeader subtitle="Admin Dashboard" />
 
-      {loading && <Loading />}
-      <ErrorMessage message={error} />
+      <div className={ui.pageTopSpace}>
+        <div className={ui.container}>
+          <div className="flex flex-col gap-6">
+            {initialLoading ? (
+              <Loading />
+            ) : (
+              <EditBookForm
+                bookForm={bookForm}
+                setBookForm={setBookForm}
+                onSubmit={handleSubmit}
+                onCancel={handleCancel}
+              />
+            )}
+
+            {loading && <Loading />}
+
+            <FeedbackMessage message={message} type={type} />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

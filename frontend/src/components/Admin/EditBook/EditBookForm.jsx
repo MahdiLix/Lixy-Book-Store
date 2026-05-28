@@ -1,4 +1,5 @@
 import BookFormFields from "../BookFormFields";
+import { ui } from "../../../styles/ui";
 
 export default function EditBookForm({
   bookForm,
@@ -7,21 +8,23 @@ export default function EditBookForm({
   onCancel,
 }) {
   return (
-    <div id="editBookContainer">
-      <h3>Edit Book</h3>
+    <div className={ui.card}>
+      <div className={ui.cardBody}>
+        <h3 className={ui.sectionTitle}>Edit Book</h3>
 
-      <form id="editBookForm" onSubmit={onSubmit}>
-        <BookFormFields bookForm={bookForm} setBookForm={setBookForm} />
+        <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-4">
+          <BookFormFields bookForm={bookForm} setBookForm={setBookForm} />
 
-        <div>
-          <button type="submit" id="submitEditdBook">
-            submit book
-          </button>
-          <button type="button" id="cancelEditBook" onClick={onCancel}>
-            cancel
-          </button>
-        </div>
-      </form>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button type="submit" className={ui.primaryBtn}>
+              Update Book
+            </button>
+            <button type="button" onClick={onCancel} className={ui.secondaryBtn}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

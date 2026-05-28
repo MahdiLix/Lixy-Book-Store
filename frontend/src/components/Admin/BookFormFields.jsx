@@ -1,50 +1,43 @@
+import { ui } from "../../styles/ui";
 import { restrictAuthorInput, restrictTitleInput } from "../../utils/inputGuards";
 
 export default function BookFormFields({ bookForm, setBookForm }) {
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <input
+        className={ui.input}
         type="text"
-        id="title"
         placeholder="Title *"
-        required
         value={bookForm.title}
         onChange={(e) =>
           setBookForm((prev) => ({ ...prev, title: e.target.value }))
         }
         onKeyDown={restrictTitleInput}
       />
-      <br />
 
       <input
+        className={ui.input}
         type="text"
-        id="author"
         placeholder="Author *"
-        required
         value={bookForm.author}
         onChange={(e) =>
           setBookForm((prev) => ({ ...prev, author: e.target.value }))
         }
         onKeyDown={restrictAuthorInput}
       />
-      <br />
 
       <input
+        className={ui.input}
         type="number"
-        id="publishedYear"
-        placeholder="publishedYear"
+        placeholder="Published Year"
         value={bookForm.publishedYear}
         onChange={(e) =>
-          setBookForm((prev) => ({
-            ...prev,
-            publishedYear: e.target.value,
-          }))
+          setBookForm((prev) => ({ ...prev, publishedYear: e.target.value }))
         }
       />
-      <br />
 
       <select
-        id="genre"
+        className={ui.select}
         value={bookForm.genre}
         onChange={(e) =>
           setBookForm((prev) => ({ ...prev, genre: e.target.value }))
@@ -60,13 +53,12 @@ export default function BookFormFields({ bookForm, setBookForm }) {
         <option value="Biography">Biography</option>
         <option value="Other">Other</option>
       </select>
-      <br />
 
       <input
+        className={ui.input}
         type="number"
-        id="availableCopies"
         min="0"
-        placeholder="available copies"
+        placeholder="Available Copies"
         value={bookForm.availableCopies}
         onChange={(e) =>
           setBookForm((prev) => ({
@@ -75,6 +67,6 @@ export default function BookFormFields({ bookForm, setBookForm }) {
           }))
         }
       />
-    </>
+    </div>
   );
 }

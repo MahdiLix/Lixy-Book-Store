@@ -1,5 +1,3 @@
-
-// GET ALL BOOK BY QUERY
 export async function fetchBooks(term = "") {
   const url = `/api/books?q=${encodeURIComponent(term)}`;
   const res = await fetch(url);
@@ -12,8 +10,6 @@ export async function fetchBooks(term = "") {
   return result.data || [];
 }
 
-
-// GET BOOK BY ID FOR UPDATE
 export async function fetchBookById(id) {
   const res = await fetch(`/api/books/${id}`);
 
@@ -25,8 +21,6 @@ export async function fetchBookById(id) {
   return result.data;
 }
 
-
-// ADD A NEW BOOK TO DB
 export async function addBook(bookData, authHeader) {
   const res = await fetch("/api/books", {
     method: "POST",
@@ -39,19 +33,12 @@ export async function addBook(bookData, authHeader) {
 
   const data = await res.json();
 
-  if (res.status === 401) {
-    throw new Error("UNAUTHORIZED");
-  }
+  if (res.status === 401) throw new Error("UNAUTHORIZED");
+  if (!res.ok) throw new Error(data.message || `Server Error ${res.status}`);
 
-  if (!res.ok) {
-    throw new Error(data.message || `Server Error ${res.status}`);
-  }
- console.log("from api:", data.book)
-  return data 
+  return data;
 }
 
-
-// UPDATE BOOK BY ID
 export async function updateBook(id, bookData, authHeader) {
   const res = await fetch(`/api/books/update/${id}`, {
     method: "PUT",
@@ -64,19 +51,12 @@ export async function updateBook(id, bookData, authHeader) {
 
   const data = await res.json();
 
-  if (res.status === 401) {
-    throw new Error("UNAUTHORIZED");
-  }
-
-  if (!res.ok) {
-    throw new Error(data.message || `Server Error ${res.status}`);
-  }
+  if (res.status === 401) throw new Error("UNAUTHORIZED");
+  if (!res.ok) throw new Error(data.message || `Server Error ${res.status}`);
 
   return data;
 }
 
-
-// REMOVE BOOK BY ID
 export async function deleteBook(id, authHeader) {
   const res = await fetch(`/api/books/delete/${id}`, {
     method: "DELETE",
@@ -87,13 +67,8 @@ export async function deleteBook(id, authHeader) {
 
   const data = await res.json();
 
-  if (res.status === 401) {
-    throw new Error("UNAUTHORIZED");
-  }
-
-  if (!res.ok) {
-    throw new Error(data.message || `Server Error ${res.status}`);
-  }
+  if (res.status === 401) throw new Error("UNAUTHORIZED");
+  if (!res.ok) throw new Error(data.message || `Server Error ${res.status}`);
 
   return data;
 }

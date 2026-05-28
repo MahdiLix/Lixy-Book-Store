@@ -12,7 +12,7 @@ export async function loginAdmin(loginField) {
   }
 
   if (!data.token) {
-    throw new Error("Login failed: token not returned");
+    throw new Error("Login failed");
   }
 
   return data;

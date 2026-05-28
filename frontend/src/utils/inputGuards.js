@@ -2,6 +2,7 @@ export function restrictTitleInput(event) {
   const key = event.key;
   const allowedControlKeys = [
     "Backspace",
+    "Shift",
     "Delete",
     "Tab",
     "Escape",
@@ -14,7 +15,7 @@ export function restrictTitleInput(event) {
 
   if (allowedControlKeys.includes(key) || event.ctrlKey || event.metaKey) return;
 
-  const allowedRegex = /^[A-Za-z0-9\s\-.'"*]$/;
+  const allowedRegex = /^[A-Za-z0-9\s\-+_.'"*]$/;
   if (!allowedRegex.test(key)) {
     event.preventDefault();
     alert(`Invalid character: ${key}`);
@@ -26,6 +27,7 @@ export function restrictAuthorInput(event) {
   const allowedControlKeys = [
     "Backspace",
     "Delete",
+    "Shift",
     "Tab",
     "Escape",
     "Enter",
@@ -37,7 +39,7 @@ export function restrictAuthorInput(event) {
 
   if (allowedControlKeys.includes(key) || event.ctrlKey || event.metaKey) return;
 
-  const allowedRegex = /^[A-Za-z\s\-.'"*]$/;
+  const allowedRegex = /^[A-Za-z0-9\s\-+_.'"*]$/;
   if (!allowedRegex.test(key)) {
     event.preventDefault();
     alert(`Invalid character: ${key}`);

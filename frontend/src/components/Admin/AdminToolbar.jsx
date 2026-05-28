@@ -1,25 +1,29 @@
+import { ui } from "../../styles/ui";
+
 export default function AdminToolbar({
   activePanel,
   onShowSearch,
   onShowAdd,
 }) {
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
-      <button
-        type="button"
-        onClick={onShowSearch}
-        disabled={activePanel === "search"}
-      >
-        search books
-      </button>
+    <div className={`${ui.card} ${ui.cardBody}`}>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <button
+          type="button"
+          onClick={onShowSearch}
+          className={activePanel === "search" ? ui.primaryBtn : ui.secondaryBtn}
+        >
+          Search Book
+        </button>
 
-      <button
-        type="button"
-        onClick={onShowAdd}
-        disabled={activePanel === "add"}
-      >
-        add new book
-      </button>
+        <button
+          type="button"
+          onClick={onShowAdd}
+          className={activePanel === "add" ? ui.primaryBtn : ui.secondaryBtn}
+        >
+          Add New Book
+        </button>
+      </div>
     </div>
   );
 }

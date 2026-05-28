@@ -4,7 +4,7 @@ const putBookById = async (req, res, next) => {
   try {
     
     const id = req.params.id;
-    console.log('from put', id)
+   
      if (!id) {
       return res.status(400).json({
         message: "provide book _id to update",

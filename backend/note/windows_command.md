@@ -1,3 +1,5 @@
+## you can test server CRUD manually in shell with this command:
+
 ```
 LOGIN SUPER ADMIN COMMAND
 Invoke-RestMethod -Uri http://localhost:5000/api/admin/login `
@@ -41,7 +43,7 @@ POST NEW BOOK
 
 ```
  $body = '{"title":"new title 1","author": "mahdi rad1"}'
-Invoke-RestMethod -Uri http://localhost:5000/api/books/  `
+Invoke-RestMethod -Uri http://localhost:5000/api/books/add  `
   -Method Post `
   -Body $body `
   -ContentType "application/json" `

@@ -1,5 +1,7 @@
+## you can test server CRUD in bash with this unix command:
 
-// LOGIN AS ADMIN OR SUPERADMIN
+ LOGIN AS ADMIN OR SUPERADMIN
+
 ```
 curl -X POST http://localhost:5000/api/user/login \
    -H "Content-Type: application/json" \
@@ -7,13 +9,25 @@ curl -X POST http://localhost:5000/api/user/login \
 ```
 
 POST
+```
 curl -X POST http://localhost:5000/api/books \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMWFjNmI5NjYwZGExMzNiMGQzOGYyNSIsImlhdCI6MTc4MDE0MDQ2MywiZXhwIjoxNzgyNzMyNDYzfQ.Nb3I6g7AXIK2accCsh54UW_34AZ3BAvYrVeIJHmwoDU" \
+  -H "Authorization: Bearer  <YOUR_TOKEN> " \
   -d '{"title": "Go", "author": "mahdi"}'
-  
+```
+
 PUT
+```
   curl -X PUT http://localhost:5000/api/books/update/9783161484100 \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGYyZThkOTY4ZTIzMGVhMzk5MmI1ZiIsImlhdCI6MTc3OTYyODc3MywiZXhwIjoxNzgyMjIwNzczfQ.UjEWsiGfAt4zNDJdYNrA6-D4Pn1GN09fR7tlMqTZm_k" \
+  -H "Authorization: Bearer <YOUR_TOKEN> " \
   -d '{"title":"Updated Title","availableCopies":10}'
+```
+
+DELETE
+``` 
+ curl -X DELETE http://localhost:5000/api/books/delete \
+  -H "Content-Type: application/json"
+  -H "Authorization: Bearer <YOUR_TOKEN>" 
+
+```

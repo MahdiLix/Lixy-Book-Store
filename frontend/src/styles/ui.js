@@ -2,7 +2,7 @@ export const ui = {
   page: "min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100",
   container: "mx-auto w-full max-w-7xl px-4",
   fixedHeader:
-    "fixed top-2 left-0 right-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95",
+    "fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95",
   pageTopSpace: "pt-24 sm:pt-28",
   card: "rounded-2xl bg-white shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800",
   cardBody: "p-4 sm:p-6",

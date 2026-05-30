@@ -22,7 +22,7 @@ export async function fetchBookById(id) {
 }
 
 export async function addBook(bookData, authHeader) {
-  const res = await fetch("/api/books", {
+  const res = await fetch("/api/books/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

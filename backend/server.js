@@ -12,8 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-
+ 
 // request loger
 app.use((req, res, next) => {
   const timeStamp = new Date().toISOString()
@@ -21,18 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// FRONTEND SIDE
  
-// app.get("/books", (req, res, next) => {
-//   res.status(200).sendFile(path.join(__dirname, "public", "template", "index.html"))
-// })
-// app.get("/login", (req, res, next) => {
-//   res.status(200).sendFile(path.join(__dirname, 'public', 'template', 'admin.html'))
-// })
-// app.get("/admin/editbook/:id", (req, res, next) => {
-//   res.status(200).sendFile(path.join(__dirname, "public", 'template', 'editBook.html'))
-// })
-
 // BACKEND SIDE
 app.use("/api/books", bookRoutes);
 app.use("/api/user", adminRouter);
@@ -60,9 +48,8 @@ mongoose
   });
 
 const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || "localhost";
+const HOST = process.env.HOST || '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
   console.log(`Server runninng on http://${HOST}:${PORT}`);
-  console.log("Server endpoint: /api/book");
-});
+ });

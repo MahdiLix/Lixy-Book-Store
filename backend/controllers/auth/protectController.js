@@ -7,8 +7,7 @@ const protect = async (req, res, next) => {
       req.headers.authorization.startsWith("Bearer") &&
       req.headers.authorization.split(" ")[1];
 
-      console.log('RECIVED IN PROTECT:', token) /// remove later
-    if (!token) {
+     if (!token) {
       return res.status(401).json({
         message: "You are not logged in!",
       });

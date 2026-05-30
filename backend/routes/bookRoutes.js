@@ -11,15 +11,13 @@ const { protect, authorize } = require('../controllers/auth/protectController');
 
 
 
-bookRouter.get("/", getBookByQuery)
-bookRouter.get("/:id", getBookById)
+bookRouter.get("/", getBookByQuery);
+bookRouter.get("/:id", getBookById);
 
 // ADMIN CAN ONLY POST, DELETE, UPDATE BOOKS
-bookRouter.post("/", protect, authorize("admin", "superadmin"), postNewBook)
-// bookRouter.post("/", postNewBook)
+bookRouter.post("/add", protect, authorize("admin", "superadmin"), postNewBook);
+  
+bookRouter.put("/update/:id", protect, authorize("admin", "superadmin"), putBookById);
 
-
-bookRouter.put("/update/:id", protect, authorize("admin", "superadmin"), putBookById)
-
-bookRouter.delete("/delete/:id", protect, authorize("admin", "superadmin"), deleteBookById)
+bookRouter.delete("/delete/:id", protect, authorize("admin", "superadmin"), deleteBookById);
 module.exports = bookRouter;

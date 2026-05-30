@@ -10,7 +10,8 @@ const authToken = (userId) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email.trim() || !password.trim()) {
+    
+    if (!email.trim() || !password) {
       return res.status(400).json({
         message: "provide email and password correctly",
       });

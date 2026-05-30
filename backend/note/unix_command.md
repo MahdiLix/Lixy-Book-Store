@@ -9,7 +9,7 @@ curl -X POST http://localhost:5000/api/user/login \
 POST
 curl -X POST http://localhost:5000/api/books \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGYyZThkOTY4ZTIzMGVhMzk5MmI1ZiIsImlhdCI6MTc3OTYyNzg3OCwiZXhwIjoxNzgyMjE5ODc4fQ.ZclvGoP8XyunAz5fes6IfX0xXjZrv0wO8pzp8OIYYTE" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMWFjNmI5NjYwZGExMzNiMGQzOGYyNSIsImlhdCI6MTc4MDE0MDQ2MywiZXhwIjoxNzgyNzMyNDYzfQ.Nb3I6g7AXIK2accCsh54UW_34AZ3BAvYrVeIJHmwoDU" \
   -d '{"title": "Go", "author": "mahdi"}'
   
 PUT

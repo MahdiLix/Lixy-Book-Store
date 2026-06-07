@@ -9,11 +9,10 @@ const getBookByQuery = async (req, res, next) => {
       filter.$or = [
         { title: { $regex: searchTerm, $options: "i" } },
         { author: { $regex: searchTerm, $options: "i" } },
-        { genre: { $regex: searchTerm, $options: "i" } },
+        { genre: { $regex: searchTerm, $options: "i" } }
       ];
     }
-
-    //  if (sort) {
+     //  if (sort) {
     //   queryBook = queryBook.sort(sort);
     // }
     const books = await bookModel.find(filter);

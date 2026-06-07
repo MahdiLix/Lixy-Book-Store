@@ -1,5 +1,5 @@
 export async function loginAdmin(loginField) {
-  const res = await fetch("/api/user/login", {
+  const res = await fetch("/api/admin/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginField),

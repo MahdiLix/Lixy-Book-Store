@@ -18,7 +18,7 @@ const postNewBook = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      book: newBook
+      data: newBook
     });
   } catch (error) {
     // database error hadling

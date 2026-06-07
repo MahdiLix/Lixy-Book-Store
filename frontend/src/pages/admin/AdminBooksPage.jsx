@@ -62,8 +62,8 @@ export default function AdminBooksPage() {
       setLoading(true);
       const data = await addBook(buildBookPayload(bookForm), getAuthToken());
 
-      if (data.book) {
-        setBooks((prev) => [data.book, ...prev]);
+      if (data.data) {
+        setBooks((prev) => [data.data, ...prev]);
       }
 
       setBookForm(createEmptyBookForm());

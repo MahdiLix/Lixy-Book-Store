@@ -1,4 +1,4 @@
-const userModel = require("../../models/userModel");
+const userModel = require("../../../models/userModel");
 
 const register = async (req, res, next) => {
   try {
@@ -9,10 +9,8 @@ const register = async (req, res, next) => {
         messsage: "username, email, password is required!",
       });
     }
-    // admin only can add to user
-    if (role) {
-      delete req.body.role;
-    }
+    // superadmin can only add admin role
+    req.body.role = 'admin';
 
     const newUser = await userModel.create({ username, email, password });
 

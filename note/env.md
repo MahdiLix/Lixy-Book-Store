@@ -1,5 +1,5 @@
 
-## create a .env in root and paste this below info:
+## create a .env in root and paste this info:
 
 HOST="0.0.0.0"
 PORT=5000

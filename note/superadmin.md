@@ -1,5 +1,5 @@
 
 ## Login in http://localhost:3000/login
 
-email: uper@admin.gmail.com
+email: super@admin.gmail.com
 password: SuperAdminSecret12345

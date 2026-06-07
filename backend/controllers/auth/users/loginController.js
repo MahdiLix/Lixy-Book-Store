@@ -1,4 +1,4 @@
-const userModel = require("../../models/userModel");
+const userModel = require("../../../models/userModel");
 const jsonwebtoken = require("jsonwebtoken");
 
 const authToken = (userId) => {
@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
     user.password = undefined;
     // now add cookies to save login token in browser
    
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       token: authToken(user._id), //db _id: 6a084fa00291285802ad12d8
     });

@@ -8,11 +8,17 @@ const deleteBookById = async (req, res, next) => {
         message: "provide book _id to remove",
       });
     }
-    await bookModel.findByIdAndDelete( id );
-    
+    const deletedBook = await bookModel.findByIdAndDelete( id );  
+ 
+    if (!deletedBook) {
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+    }
     return res.status(200).json({
       success: true,
-      message: `Removed book with _ID: ${id} `,
+      message: `Removed book by _ID: ${id} `,
     });
   } catch (error) {
     next(error);

@@ -1,5 +1,5 @@
 const jsonwebtoken = require("jsonwebtoken");
-const userModel = require("../../models/userModel");
+const userModel = require("../../../models/userModel");
 
 const protect = async (req, res, next) => {
   try {

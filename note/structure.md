@@ -39,7 +39,7 @@
 │   │   ├── booksCrud
 │   │   │   ├── deleteBookByIdService.js
 │   │   │   ├── getBookByIdService.js
-│   │   │   ├── getBookByQuery.js
+│   │   │   ├── getBookByQueryService.js
 │   │   │   ├── postNewBookService.js
 │   │   │   └── putBookByIdService.js
 │   │   └── users

@@ -1,17 +1,18 @@
 const express = require('express');
-const login = require('../controllers/auth/users/loginController');
-const register = require('../controllers/auth/admins/registerController');
-const { protect, authorize } = require('../controllers/auth/users/protectController');
-const deleteAdminById = require('../controllers/auth/admins/deleteAdminController');
-const adminRouter = express.Router()
+const adminRouter = express.Router();
+const { userProtect, authorize } = require('../controllers/users/userProtect');
+const registerNewAdmin = require('../controllers/admins/registerNewAdmin');
+const deleteAdminById = require('../controllers/admins/deleteAdminById');
+const userLogin = require('../controllers/users/userLogin');
+
 
 
 
 // ONLY SUPER ADMIN CAN ADD NEW ADMIN AS ROLE ADMIN
-adminRouter.post("/register", protect, authorize("superadmin"), register);
+adminRouter.post("/register", userProtect, authorize("superadmin"), registerNewAdmin);
 
-adminRouter.post("/login", login);
-adminRouter.delete('/delete/:id', protect, authorize('superadmin'), deleteAdminById);
+adminRouter.post("/login", userLogin);
+adminRouter.delete('/delete/:id', userProtect, authorize('superadmin'), deleteAdminById);
 
 module.exports = adminRouter;
 

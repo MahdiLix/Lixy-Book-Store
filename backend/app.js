@@ -20,13 +20,13 @@ app.use("/api/books", bookRoutes);
 app.use("/api/admin", adminRouter);
 
 // ERROR CORE
-app.use(async (err, req, res, next) => {
-  const statusCode = err.status || 500;
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || err.status ||  500;
   const errorMessage = err.message || "INTERNAL SERVER ERROR";
 
-  console.error(`${errorMessage}: ${err}`);
+  console.error(err);
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
     message: errorMessage,
     statusCode

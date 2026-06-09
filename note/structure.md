@@ -2,19 +2,18 @@
 ├── backend
 │   ├── app.js
 │   ├── controllers
-│   │   ├── auth
-│   │   │   ├── admins
-│   │   │   │   ├── deleteAdminController.js
-│   │   │   │   └── registerController.js
-│   │   │   └── users
-│   │   │       ├── loginController.js
-│   │   │       └── protectController.js
-│   │   └── crud
-│   │       ├── deleteBookController.js
-│   │       ├── getBookByIdController.js
-│   │       ├── getBookController.js
-│   │       ├── postNewBookController.js
-│   │       └── putBookController.js
+│   │   ├── admins
+│   │   │   ├── deleteAdminById.js
+│   │   │   └── registerNewAdmin.js
+│   │   ├── booksCrud
+│   │   │   ├── deleteBookById.js
+│   │   │   ├── getBookById.js
+│   │   │   ├── getBookByQuery.js
+│   │   │   ├── postNewBook.js
+│   │   │   └── putBookById.js
+│   │   └── users
+│   │       ├── userLogin.js
+│   │       └── userProtect.js
 │   ├── database.js
 │   ├── Dockerfile
 │   ├── middlewares
@@ -33,6 +32,19 @@
 │   │   └── bookRoutes.js
 │   ├── seedSuperadmin.js
 │   ├── server.js
+│   ├── services
+│   │   ├── admins
+│   │   │   ├── deleteAdminService.js
+│   │   │   └── registerNewAdminService.js
+│   │   ├── booksCrud
+│   │   │   ├── deleteBookByIdService.js
+│   │   │   ├── getBookByIdService.js
+│   │   │   ├── getBookByQuery.js
+│   │   │   ├── postNewBookService.js
+│   │   │   └── putBookByIdService.js
+│   │   └── users
+│   │       ├── userLoginService.js
+│   │       └── userProtectService.js
 │   └── tests
 │       ├── helper
 │       │   └── userLoginAuth.js
@@ -105,4 +117,4 @@
 │   └── superadmin.md
 └── README.md
 
-32 directories, 74 files
+35 directories, 83 files

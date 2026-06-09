@@ -24,7 +24,7 @@ describe('LOGIN AUTHENTICATION', () => {
           password: 'SuperAdminSecret12345',
         })
     
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.token).toBeDefined()
 
@@ -38,9 +38,9 @@ describe('LOGIN AUTHENTICATION', () => {
         .post('/api/admin/register')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          username: 'akfjdlfadssfadfsffin4',
-          email: 'faerdsdfg4@gdasdafmail.com',
-          password: 'Asword12s345',
+          username: 'admintest1',
+          email: 'admin@test1.com',
+          password: 'admin@testPassword12345',
         });
  
       expect(res.status).toBe(201);

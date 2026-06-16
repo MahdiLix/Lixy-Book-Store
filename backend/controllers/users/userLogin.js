@@ -7,7 +7,7 @@ const userLogin = async (req, res, next) => {
     console.log("USER LOGIN DETAIL FROM userLogin.js ", req.body)
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (!email?.trim() || !password?.trim()) {
       return next(createError(400, "provide email and password correctly"));
     }
  

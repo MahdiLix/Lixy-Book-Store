@@ -16,7 +16,7 @@ const loginService = async (userData) => {
   if (!user) {
     throw createError(401, "Invalid credentials");
   }
-  // console.log("user login password in login file", user)
+ 
   const matchPass = await user.comparePassword(password);
   if (!matchPass) {
     throw createError(401, "Invalid credentials");

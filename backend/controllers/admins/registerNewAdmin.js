@@ -15,7 +15,7 @@ const registerNewAdmin = async (req, res, next) => {
       message: "Admin created successfully!",
       data: newUser,
     });
-
+    
   } catch (error) {
     if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((err) => err.message);

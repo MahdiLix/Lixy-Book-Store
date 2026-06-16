@@ -29,14 +29,14 @@ describe("LOGIN AUTHENTICATION", () => {
   });
 
   describe("POST /api/admin/register", () => {
-    it("should add new admin by superadmin", async () => {
+    it("should post a new admin by superadmin", async () => {
       const res = await request(app)
         .post("/api/admin/register")
         .set("Authorization", `Bearer ${token}`)
         .send({
-          username: "admintest1",
-          email: "admin@test1.com",
-          password: "admin@test1",
+          username: "admin2",
+          email: "admin2.gemail.com",
+          password: "admin2Password",
         });
 
       expect(res.status).toBe(201);
@@ -48,13 +48,26 @@ describe("LOGIN AUTHENTICATION", () => {
   });
 
   describe("PUT /api/admin/update/:id", () => {
-    it("should update user data by _id with superadmin", async () => {
+    it("should update admin data by id with superadmin", async () => {
       const res = await request(app)
         .put(`/api/admin/update/${adminId}`)
         .set("Authorization", `Bearer ${token}`)
         .send({
-          email: "admin@test1@update.com",
-          password: "admin@test1@passwordUpdated",
+          username: "admin2.updated",
+          email: "admin2.updated.gemail.com",
+        });
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+    });
+  });
+
+  describe("PATCH /api/admin/password/:id", () => {
+    it("should update admin password by id", async () => {
+      const res = await request(app)
+        .patch(`/api/admin/password/${adminId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          password: "admin2Password.updated",
         });
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -62,7 +75,7 @@ describe("LOGIN AUTHENTICATION", () => {
   });
 
   describe("DELETE /api/admin/delete/:id", () => {
-    it("should delete admin by _id with superadmin", async () => {
+    it("should delete admin by id with superadmin", async () => {
       const res = await request(app)
         .delete(`/api/admin/delete/${adminId}`)
         .set("Authorization", `Bearer ${token}`);

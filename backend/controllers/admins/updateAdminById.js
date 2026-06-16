@@ -1,19 +1,19 @@
 const createError = require("../../middlewares/errors/errorHandling");
-const putAdminByIdService = require("../../services/admins/putAdminByIdService");
+const updateAdminByIdService = require("../../services/admins/updateAdminByIdService");
+ 
 
-const putAdminById = async (req, res, next) => {
+const updateAdminById = async (req, res, next) => {
   try {
     const id = req.params.id;
     if (!id) {
       return next(createError(400, "provide user _id to update"));
     }
-    const user = await putAdminByIdService(id, req.body)
+    const user = await updateAdminByIdService(id, req.body)
 
     if (!user) {
       return next(createError(404, "Not found user with this _id"));
     }
-    console.log('user after update by superadmin', user);
- 
+  
     res.status(200).json({
       success: true,
       data: user,
@@ -28,4 +28,4 @@ const putAdminById = async (req, res, next) => {
     next(error);
   }
 }
-module.exports = putAdminById;
+module.exports = updateAdminById;

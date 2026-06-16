@@ -1,8 +1,8 @@
 const createError = require("../../middlewares/errors/errorHandling");
 const bookModel = require("../../models/bookModel");
-const putBookByIdService = require("../../services/booksCrud/putBookByIdService");
-
-const putBookById = async (req, res, next) => {
+const updateBookByIdService = require("../../services/booksCrud/updateBookByIdService");
+ 
+const updateBookById = async (req, res, next) => {
   try {
 
     const id = req.params.id;
@@ -10,7 +10,7 @@ const putBookById = async (req, res, next) => {
     if (!id) {
       return next(createError(400, "provide book _id to update"));
     }
-    const book = await putBookByIdService(id, req.body);
+    const book = await updateBookByIdService(id, req.body);
     if (!book) {
       return next(createError(404, "Not found book with this _id"));
     }
@@ -30,4 +30,4 @@ const putBookById = async (req, res, next) => {
   }
 };
 
-module.exports = putBookById;
+module.exports = updateBookById;

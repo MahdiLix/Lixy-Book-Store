@@ -30,19 +30,17 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.pre("save", async function () {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 12);
-   }
-   return ;
+  if (!this.isModified("password")) return;
+
+  this.password = await bcrypt.hash(this.password, 12);
 });
 
 userSchema.methods.comparePassword = async function (condidatePassword) {
-  return bcrypt.compare(condidatePassword, this.password)
-}
-
+  return bcrypt.compare(condidatePassword, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);

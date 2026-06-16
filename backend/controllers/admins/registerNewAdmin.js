@@ -1,12 +1,11 @@
 const createError = require("../../middlewares/errors/errorHandling");
-const userModel = require("../../models/userModel");
 const registerNewService = require("../../services/admins/registerNewAdminService");
 
 const registerNewAdmin = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
 
-    if (!username.trim() || !email || !password) {
+    if (!username?.trim() || !email || !password) {
       return next(createError(400, "username, email, password is required!"));
     }
     const newUser = await registerNewService(req.body);

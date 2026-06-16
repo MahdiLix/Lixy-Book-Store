@@ -14,7 +14,7 @@ const putBookById = async (req, res, next) => {
     if (!book) {
       return next(createError(404, "Not found book with this _id"));
     }
-
+    console.log('book after update', book)
     res.status(200).json({
       success: true,
       data: book,

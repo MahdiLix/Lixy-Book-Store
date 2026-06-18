@@ -20,7 +20,7 @@ const bookSchema = new mongoose.Schema(
       type: String,
       unique: true,
       default: function () {
-        return Math.floor(1_000_000_000 + ( Math.random() * 9_000_000_000_000) );
+        return Math.floor(1_000_000_000 + Math.random() * 9_000_000_000_000);
       },
       immutable: true,
       match: [/^[0-9]+$/, "ISBN only contain digits"],
@@ -51,13 +51,17 @@ const bookSchema = new mongoose.Schema(
     availableCopies: {
       type: Number,
       default: 1,
-      min: [0, "Available copies cannot be Negative"]
-    }
+      min: [0, "Available copies cannot be Negative"],
+    },
+    bookImage: {
+      type: String,
+      default: "",
+    },
   },
 
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Book", bookSchema);

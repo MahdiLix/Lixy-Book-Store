@@ -1,17 +1,22 @@
 const bookModel = require("../../models/bookModel");
 
-const postNewBookService = async (bookData) => {
+const postNewBookService = async (bookBody, bookFile) => {
+  const data = { ...bookBody };
+  const { title, author, publishedYear, genre, availableCopies } = data;
 
-  const { title, author, publishedYear, genre, availableCopies } = bookData;
+  // ADMIN CANNOT ENTER ISBN
+  delete data.isbn;
+  delete data.bookImage;
 
-  // * DELETE null value for apply mongoDB default value:
-  delete bookData.isbn; // USER CANNOT ENTER ISBN
-  if (publishedYear == null) delete bookData.publishedYear;
-  if (genre == null) delete bookData.genre;
-  if (availableCopies == null) delete bookData.availableCopies;
+  if (publishedYear == null) delete data.publishedYear;
+  if (genre == null) delete data.genre;
+  if (availableCopies == null) delete data.availableCopies;
 
-  return await bookModel.create(bookData)
-
+  if (bookFile && bookFile.filename) {
+    data.bookImage = `/uploads/${bookFile.filename}`;
+  } 
+  
+  return await bookModel.create(data);
 };
 
 module.exports = postNewBookService;

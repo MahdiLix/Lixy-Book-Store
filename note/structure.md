@@ -4,19 +4,22 @@
 │   ├── controllers
 │   │   ├── admins
 │   │   │   ├── deleteAdminById.js
-│   │   │   └── registerNewAdmin.js
+│   │   │   ├── registerNewAdmin.js
+│   │   │   ├── updateAdminById.js
+│   │   │   └── updateAdminPassById.js
 │   │   ├── booksCrud
 │   │   │   ├── deleteBookById.js
 │   │   │   ├── getBookById.js
 │   │   │   ├── getBookByQuery.js
 │   │   │   ├── postNewBook.js
-│   │   │   └── putBookById.js
+│   │   │   └── updateBookById.js
 │   │   └── users
 │   │       ├── userLogin.js
 │   │       └── userProtect.js
 │   ├── database.js
 │   ├── Dockerfile
 │   ├── middlewares
+│   │   ├── bookUpload.js
 │   │   └── errors
 │   │       └── errorHandling.js
 │   ├── models
@@ -35,22 +38,27 @@
 │   ├── services
 │   │   ├── admins
 │   │   │   ├── deleteAdminService.js
-│   │   │   └── registerNewAdminService.js
+│   │   │   ├── registerNewAdminService.js
+│   │   │   ├── updateAdminByIdService.js
+│   │   │   └── updateAdminPassByIdService.js
 │   │   ├── booksCrud
 │   │   │   ├── deleteBookByIdService.js
 │   │   │   ├── getBookByIdService.js
 │   │   │   ├── getBookByQueryService.js
 │   │   │   ├── postNewBookService.js
-│   │   │   └── putBookByIdService.js
+│   │   │   └── updateBookByIdService.js
 │   │   └── users
 │   │       ├── userLoginService.js
 │   │       └── userProtectService.js
-│   └── tests
-│       ├── helper
-│       │   └── userLoginAuth.js
-│       └── integration
-│           ├── adminServices.test.js
-│           └── booksServices.test.js
+│   ├── tests
+│   │   ├── fixtures
+│   │   │   └── test-image.png
+│   │   ├── helper
+│   │   │   └── userLoginAuth.js
+│   │   └── integration
+│   │       ├── adminServices.test.js
+│   │       └── booksServices.test.js
+│   └── uploads
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
@@ -115,6 +123,8 @@
 │   ├── env.md
 │   ├── structure.md
 │   └── superadmin.md
+├── package.json
+├── package-lock.json
 └── README.md
 
-35 directories, 83 files
+37 directories, 91 files

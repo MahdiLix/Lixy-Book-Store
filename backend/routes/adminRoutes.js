@@ -20,3 +20,4 @@ adminRouter.delete('/delete/:id', userProtect, authorize('superadmin'), deleteAd
 
 module.exports = adminRouter;
 
+``

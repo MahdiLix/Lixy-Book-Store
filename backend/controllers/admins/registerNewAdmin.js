@@ -23,7 +23,7 @@ const registerNewAdmin = async (req, res, next) => {
     }
 
     if (error.code === 11000) {
-      return next(createError(400, "username or email already exists!"));
+      return next(createError(409, "username or email already exists!"));
     }
 
     next(error);

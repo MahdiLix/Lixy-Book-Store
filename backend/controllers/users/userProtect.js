@@ -6,12 +6,12 @@ const userProtect = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(createError(400, "Provide token to login"));
+      return next(createError(401, "Provide token to login"));
     }
     const token = authHeader.split(" ")[1];
 
     if (!token) {
-      return next(createError(400, "Provide token to login"));
+      return next(createError(401, "Provide token to login"));
     }
 
     const user = await decodeUserService(token);

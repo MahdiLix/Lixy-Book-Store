@@ -18,8 +18,9 @@ services:
     env_file:
       - .env
     environment:
+      UPLOAD_ROOT: /app/uploads # overrides the host path in .env
       NODE_ENV: development
-  
+
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -42,7 +43,6 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-  
 
 volumes:
   mongo_data:

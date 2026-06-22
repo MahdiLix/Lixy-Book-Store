@@ -24,7 +24,7 @@ const loginService = async (userData) => {
   // remove pass for security
   user.password = undefined;
  
-  return authToken(user._id) //db _id: 6a084fa00291285802ad12d8
+  return authToken(user._id) //db id: 6a084fa00291285802ad12d8
   
 }
 

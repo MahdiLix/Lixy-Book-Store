@@ -6,7 +6,7 @@ const deleteAdminById = async (req, res, next) => {
  
     const id = req.params.id;
     if (!id) {
-      return next(createError(400, "provide user _id to remove"));
+      return next(createError(400, "provide user id to remove"));
     }
     
     const deletedAdmin = await deleteAdminByIdService(id)
@@ -16,7 +16,7 @@ const deleteAdminById = async (req, res, next) => {
     }
     res.status(200).json({
       success: true,
-      message: `Removed admin by _ID: ${id} `,
+      message: `Removed admin by id: ${id} `,
     });
   } catch (error) {
     next(error);

@@ -1,29 +1,31 @@
 const createError = require("../../middlewares/errors/errorHandling");
 const bookModel = require("../../models/bookModel");
 const updateBookByIdService = require("../../services/booksCrud/updateBookByIdService");
- 
+
 const updateBookById = async (req, res, next) => {
   try {
-
     const id = req.params.id;
 
     if (!id) {
-      return next(createError(400, "provide book _id to update"));
+      return next(createError(400, "provide book id to update"));
     }
     const book = await updateBookByIdService(id, req.body);
     if (!book) {
-      return next(createError(404, "Not found book with this _id"));
+      return next(createError(404, "Not found book with this id"));
     }
-    console.log('book after update', book)
+
+    console.log("book after update", book);
     res.status(200).json({
       success: true,
       data: book,
     });
-    
   } catch (error) {
     if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((err) => err.message);
-      return next(createError(400, `${messages.join(', ')}`));
+      return next(createError(400, `${messages.join(", ")}`));
+    }
+    if (error.code === 11000) {
+      return next(createError(409, "title or author already exists!"));
     }
 
     next(error);

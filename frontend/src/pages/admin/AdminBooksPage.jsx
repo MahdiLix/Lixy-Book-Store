@@ -27,12 +27,24 @@ export default function AdminBooksPage() {
     loadBooks("");
   }, []);
 
-  async function loadBooks(term = "") {
+  async function loadBooks({
+    searchTerm = "",
+    page = 1,
+    limit = 10,
+    latest = false,
+  } = {}) {
     setLoading(true);
-    setMessage("");
+    setMessage("true");
+
     try {
-      const data = await fetchBooks(term);
-      setBooks(data);
+      const res = await fetchBooks({
+        searchTerm,
+        page,
+        limit,
+        latest,
+      });
+
+      setBooks(res.books || []);
     } catch (err) {
       setType("error");
       setMessage(`Failed to load books: ${err.message}`);
@@ -45,7 +57,12 @@ export default function AdminBooksPage() {
     e.preventDefault();
     setSearchFocused(false);
     setActivePanel("search");
-    await loadBooks(searchTerm.trim());
+    await loadBooks({
+      searchTerm: searchTerm.trim(),
+      page: 1,
+      limit: 10,
+      latest: false,
+    });
   }
 
   async function handleAddBook(e) {
@@ -75,7 +92,6 @@ export default function AdminBooksPage() {
       setTimeout(() => {
         setMessage("");
       }, 3000);
-
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -89,7 +105,6 @@ export default function AdminBooksPage() {
       setTimeout(() => {
         setMessage("");
       }, 3000);
-
     } finally {
       setLoading(false);
     }
@@ -106,7 +121,6 @@ export default function AdminBooksPage() {
       setBooks((prev) => prev.filter((book) => book._id !== bookId));
       setType("success");
       setMessage("Book removed successfully.");
-
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -116,11 +130,10 @@ export default function AdminBooksPage() {
 
       setMessage(`Failed to remove book: ${err.message}`);
       setType("error");
-      
-      setTimeout(() => {
-        setMessage("")
-      }, 3000)
 
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -129,7 +142,6 @@ export default function AdminBooksPage() {
   function handleEdit(bookId) {
     navigate(`/admin/edit/${bookId}`);
   }
-
 
   return (
     <main className={ui.page}>

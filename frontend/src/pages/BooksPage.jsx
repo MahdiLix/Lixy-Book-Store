@@ -15,15 +15,27 @@ export default function BooksPage() {
   const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
-    loadBooks("");
+    loadBooks();
   }, []);
 
-  async function loadBooks(term = "") {
+  async function loadBooks({
+    searchTerm = "",
+    page = 1,
+    limit = 10,
+    latest = false,
+  } = {}) {
     setError("");
     setLoading(true);
+
     try {
-      const data = await fetchBooks(term);
-      setBooks(data);
+      const res = await fetchBooks({
+        searchTerm,
+        page,
+        limit,
+        latest,
+      });
+
+      setBooks(res.books || []);
     } catch (err) {
       setError(`Failed to load books: ${err.message}`);
     } finally {
@@ -34,7 +46,13 @@ export default function BooksPage() {
   async function handleSearch(e) {
     e.preventDefault();
     setSearchFocused(false);
-    await loadBooks(searchTerm.trim());
+
+    await loadBooks({
+      searchTerm: searchTerm.trim(),
+      page: 1,
+      limit: 10,
+      latest: false,
+    });
   }
 
   return (

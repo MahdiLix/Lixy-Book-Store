@@ -1,5 +1,21 @@
-export async function fetchBooks(term = "") {
-  const url = `/api/books?q=${encodeURIComponent(term)}`;
+export async function fetchBooks({
+  searchTerm = "",
+  page = 1,
+  limit = 10,
+  latest = false,
+} = {}) {
+
+  const params = new URLSearchParams();
+  
+  if (searchTerm) params.set("searchTerm", searchTerm);
+  if (page) params.set("page", String(page));
+  if (limit) params.set("limit", String(limit));
+  if (latest) params.set("latest", String(latest));
+
+  const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
+  console.log('URL FROM BOOKS API', url)
+
+
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -7,16 +23,18 @@ export async function fetchBooks(term = "") {
   }
 
   const result = await res.json();
-  return result.data || [];
+
+  return {
+    books: result.data || [],
+    pagination: result.pagination || null,
+  };
 }
 
 export async function fetchBookById(id) {
   const res = await fetch(`/api/books/${id}`);
-
   if (!res.ok) {
     throw new Error(`Server Error: ${res.status}`);
   }
-
   const result = await res.json();
   return result.data;
 }

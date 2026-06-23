@@ -39,8 +39,7 @@ describe("BOOKS API TESTS", () => {
     if (uploadFilePath) {
       const fileName = path.basename(uploadFilePath);
       const fullPath = path.join(UPLOAD_ROOT, fileName);  
-      console.log('uploadFilePath - use for base name', uploadFilePath)
-      console.log('UPLOAD_ROOT',UPLOAD_ROOT)
+ 
       try {
         await fs.promises.unlink(fullPath);
         console.log(`File Cleanup: Removed ${fullPath}`);
@@ -98,7 +97,7 @@ describe("BOOKS API TESTS", () => {
       expect(res.body.data.bookImage).toMatch(/\/uploads\//);
 
       bookId = res.body.data._id;
-      uploadFilePath = res.body.data.bookImage;
+      uploadFilePath = res.body.data.bookImage; // -> set this path in postNewBook
       console.log("uploadFilePath", uploadFilePath);
     });
   });
@@ -114,10 +113,10 @@ describe("BOOKS API TESTS", () => {
     });
   });
 
-  describe("GET /api/books?q=<title>", () => {
+  describe("GET /api/books?searchTerm=<title>", () => {
     it("should find the created book by query", async () => {
       const res = await request(app).get(
-        `/api/books?q=${encodeURIComponent(bookTitle)}`,
+        `/api/books?searchTerm=${bookTitle}`,
       );
 
       expect(res.status).toBe(200);
@@ -127,8 +126,8 @@ describe("BOOKS API TESTS", () => {
 
     it("should return an empty list for a query that matches nothing", async () => {
       const res = await request(app).get(
-        "/api/books?q=this-title-should-never-exist-zzz",
-      );
+        "/api/books?searchTerm=this-title-should-never-exist-xyz",
+      ); 
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);

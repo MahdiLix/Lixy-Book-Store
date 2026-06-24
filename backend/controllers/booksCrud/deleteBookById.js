@@ -8,11 +8,7 @@ const deleteBookById = async (req, res, next) => {
       return next(createError(400, "provide book id to remove"));
     }
     const deletedBook = await deleteBookByIdService(id);
-
-    if (!deletedBook) {
-      return next(createError(404, "Book not found with this id"));
-    }
-
+  
     res.status(200).json({
       success: true,
       message: `Removed book by id: ${id} `,

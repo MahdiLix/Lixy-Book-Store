@@ -32,8 +32,9 @@ const bookUpload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 2, // 2MG
+    fileSize: 2 * 1024 * 1024 , // 2MG
   },
 });
 
 module.exports = bookUpload;
+ 

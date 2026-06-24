@@ -4,17 +4,16 @@ export async function fetchBooks({
   limit = 10,
   latest = false,
 } = {}) {
-
   const params = new URLSearchParams();
-  
+
   if (searchTerm) params.set("searchTerm", searchTerm);
   if (page) params.set("page", String(page));
   if (limit) params.set("limit", String(limit));
   if (latest) params.set("latest", String(latest));
 
   const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
-  console.log('URL FROM BOOKS API', url)
 
+  console.log("URL FROM BOOKS API", url);
 
   const res = await fetch(url);
 
@@ -40,13 +39,14 @@ export async function fetchBookById(id) {
 }
 
 export async function addBook(bookData, authHeader) {
+  const isFormData = bookData instanceof FormData;
+
   const res = await fetch("/api/books/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: authHeader,
     },
-    body: JSON.stringify(bookData),
+    body: isFormData ? bookData : JSON.stringify(bookData),
   });
 
   const data = await res.json();
@@ -58,13 +58,15 @@ export async function addBook(bookData, authHeader) {
 }
 
 export async function updateBook(id, bookData, authHeader) {
+  const isFormData = bookData instanceof FormData;
+
   const res = await fetch(`/api/books/update/${id}`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       Authorization: authHeader,
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
     },
-    body: JSON.stringify(bookData),
+    body: isFormData ? bookData : JSON.stringify(bookData),
   });
 
   const data = await res.json();

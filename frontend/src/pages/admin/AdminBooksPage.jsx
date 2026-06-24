@@ -9,7 +9,7 @@ import Loading from "../../components/Shared/Loading";
 import FeedbackMessage from "../../components/Shared/FeedbackMessage";
 import { addBook, deleteBook, fetchBooks } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
-import { buildBookPayload, createEmptyBookForm } from "../../utils/bookForm";
+import { createEmptyBookForm } from "../../utils/bookForm";
 import { ui } from "../../styles/ui";
 
 export default function AdminBooksPage() {
@@ -19,12 +19,14 @@ export default function AdminBooksPage() {
   const [activePanel, setActivePanel] = useState("search");
   const [searchFocused, setSearchFocused] = useState(false);
   const [bookForm, setBookForm] = useState(createEmptyBookForm());
+  const [bookImageFile, setBookImageFile] = useState(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("notice");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadBooks("");
+    loadBooks();
   }, []);
 
   async function loadBooks({
@@ -34,7 +36,7 @@ export default function AdminBooksPage() {
     latest = false,
   } = {}) {
     setLoading(true);
-    setMessage("true");
+    setMessage("");
 
     try {
       const res = await fetchBooks({
@@ -48,6 +50,10 @@ export default function AdminBooksPage() {
     } catch (err) {
       setType("error");
       setMessage(`Failed to load books: ${err.message}`);
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -57,6 +63,7 @@ export default function AdminBooksPage() {
     e.preventDefault();
     setSearchFocused(false);
     setActivePanel("search");
+
     await loadBooks({
       searchTerm: searchTerm.trim(),
       page: 1,
@@ -72,22 +79,59 @@ export default function AdminBooksPage() {
     if (!bookForm.title.trim() || !bookForm.author.trim()) {
       setType("error");
       setMessage("Title and Author is required!");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+
+      return;
+    }
+
+    if (!bookImageFile) {
+      setType("error");
+      setMessage("Book image is required!");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+
       return;
     }
 
     try {
       setLoading(true);
-      const data = await addBook(buildBookPayload(bookForm), getAuthToken());
+
+      const formData = new FormData();
+      formData.append("title", bookForm.title.trim());
+      formData.append("author", bookForm.author.trim());
+
+      if (bookForm.publishedYear.trim()) {
+        formData.append("publishedYear", bookForm.publishedYear.trim());
+      }
+
+      if (bookForm.genre) {
+        formData.append("genre", bookForm.genre);
+      }
+
+      if (bookForm.availableCopies !== "") {
+        formData.append("availableCopies", bookForm.availableCopies);
+      }
+
+      formData.append("bookImage", bookImageFile);
+
+      const data = await addBook(formData, getAuthToken());
 
       if (data.data) {
         setBooks((prev) => [data.data, ...prev]);
       }
 
       setBookForm(createEmptyBookForm());
+      setBookImageFile(null);
+      setFileInputKey((prev) => prev + 1);
       setActivePanel("search");
-      // message for success add book pop up
-      setMessage("Book added successfully.");
+
       setType("success");
+      setMessage("Book added successfully.");
 
       setTimeout(() => {
         setMessage("");
@@ -98,9 +142,9 @@ export default function AdminBooksPage() {
         navigate("/login", { replace: true });
         return;
       }
-      // message for failed add
-      setMessage(`Failed to add book: ${err.message}`);
+
       setType("error");
+      setMessage(`Failed to add book: ${err.message}`);
 
       setTimeout(() => {
         setMessage("");
@@ -121,6 +165,10 @@ export default function AdminBooksPage() {
       setBooks((prev) => prev.filter((book) => book._id !== bookId));
       setType("success");
       setMessage("Book removed successfully.");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -128,8 +176,8 @@ export default function AdminBooksPage() {
         return;
       }
 
-      setMessage(`Failed to remove book: ${err.message}`);
       setType("error");
+      setMessage(`Failed to remove book: ${err.message}`);
 
       setTimeout(() => {
         setMessage("");
@@ -180,13 +228,19 @@ export default function AdminBooksPage() {
               <AddBookForm
                 bookForm={bookForm}
                 setBookForm={setBookForm}
+                bookImageFile={bookImageFile}
+                setBookImageFile={setBookImageFile}
+                fileInputKey={fileInputKey}
                 onSubmit={handleAddBook}
                 onCancel={() => {
                   setBookForm(createEmptyBookForm());
+                  setBookImageFile(null);
+                  setFileInputKey((prev) => prev + 1);
                   setActivePanel("search");
                 }}
               />
             )}
+
             {searchFocused && <div className={ui.overlay} />}
 
             {loading && <Loading />}

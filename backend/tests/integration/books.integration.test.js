@@ -42,7 +42,7 @@ describe("BOOKS API TESTS", () => {
  
       try {
         await fs.promises.unlink(fullPath);
-        console.log(`File Cleanup: Removed ${fullPath}`);
+        console.log(`File Cleanup Successfully: Removed ${fullPath}`);
       } catch (error) {
         if (error.code !== "ENOENT") {
           console.error(`Cleanup Error: ${error}`);

@@ -36,6 +36,7 @@ export default function BooksPage() {
       });
 
       setBooks(res.books || []);
+      console.log('RES BOOKS', res.books)
     } catch (err) {
       setError(`Failed to load books: ${err.message}`);
     } finally {

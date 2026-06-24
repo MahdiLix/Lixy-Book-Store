@@ -16,6 +16,7 @@ export default function BooksTable({
       <table className={ui.table}>
         <thead>
           <tr>
+            <th className={ui.th}>Image</th>
             <th className={ui.th}>Title</th>
             <th className={ui.th}>Author</th>
             <th className={ui.th}>ISBN</th>
@@ -26,6 +27,7 @@ export default function BooksTable({
             {showActions && <th className={ui.th}>Remove</th>}
           </tr>
         </thead>
+
         <tbody>
           {books.map((book) => (
             <BookRow

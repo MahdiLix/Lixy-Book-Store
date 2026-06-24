@@ -1,9 +1,14 @@
+import BookCover from "./BookCover";
 import { ui } from "../../styles/ui";
 
 export default function BookRow({ book, showActions = false, onEdit, onRemove }) {
   return (
     <tr className={ui.tr}>
-      <td className={`${ui.td} rounded-l-2xl`}>{book.title || ""}</td>
+      <td className={`${ui.td} rounded-l-2xl`}>
+        <BookCover image={book.bookImage} title={book.title} />
+      </td>
+
+      <td className={ui.td}>{book.title || ""}</td>
       <td className={ui.td}>{book.author || ""}</td>
       <td className={ui.td}>{book.isbn || "—"}</td>
       <td className={ui.td}>{book.publishedYear || "—"}</td>

@@ -54,10 +54,11 @@
 │   │   ├── fixtures
 │   │   │   └── test-image.png
 │   │   ├── helper
+│   │   │   ├── testConfig.js
 │   │   │   └── userLoginAuth.js
 │   │   └── integration
-│   │       ├── adminServices.test.js
-│   │       └── booksServices.test.js
+│   │       ├── admin.integration.test.js
+│   │       └── books.integration.test.js
 │   └── uploads
 ├── docker-compose.yml
 ├── frontend
@@ -123,8 +124,6 @@
 │   ├── env.md
 │   ├── structure.md
 │   └── superadmin.md
-├── package.json
-├── package-lock.json
 └── README.md
 
-37 directories, 91 files
+37 directories, 90 files

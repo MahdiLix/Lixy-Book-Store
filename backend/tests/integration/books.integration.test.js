@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { getUserAuthToken } = require("../helper/userLoginAuth");
 const { uniqueSuffix, UPLOAD_ROOT } = require("../helper/testConfig");
 
+
 describe("BOOKS API TESTS", () => {
   let bearerToken;
   let bookId;
@@ -19,6 +20,7 @@ describe("BOOKS API TESTS", () => {
     bearerToken = await getUserAuthToken();
   });
 
+  
   afterAll(async () => {
     if (bookId && !bookCleanedUp) {
       try {
@@ -38,8 +40,8 @@ describe("BOOKS API TESTS", () => {
 
     if (uploadFilePath) {
       const fileName = path.basename(uploadFilePath);
-      const fullPath = path.join(UPLOAD_ROOT, fileName);  
- 
+      const fullPath = path.join(UPLOAD_ROOT, fileName);
+
       try {
         await fs.promises.unlink(fullPath);
         console.log(`File Cleanup Successfully: Removed ${fullPath}`);
@@ -58,7 +60,7 @@ describe("BOOKS API TESTS", () => {
       __dirname,
       "..",
       "fixtures",
-      "test-image.png",
+      "test-image.jpg",
     );
 
     it("should reject adding a book without an auth token", async () => {
@@ -115,9 +117,7 @@ describe("BOOKS API TESTS", () => {
 
   describe("GET /api/books?searchTerm=<title>", () => {
     it("should find the created book by query", async () => {
-      const res = await request(app).get(
-        `/api/books?searchTerm=${bookTitle}`,
-      );
+      const res = await request(app).get(`/api/books?searchTerm=${bookTitle}`);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -127,7 +127,7 @@ describe("BOOKS API TESTS", () => {
     it("should return an empty list for a query that matches nothing", async () => {
       const res = await request(app).get(
         "/api/books?searchTerm=this-title-should-never-exist-xyz",
-      ); 
+      );
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -136,13 +136,31 @@ describe("BOOKS API TESTS", () => {
   });
 
   describe("PUT /api/books/update/:id", () => {
-    it("should update the selected book by id", async () => {
+    const testUploadFilePath = path.join(
+      __dirname,
+      "..",
+      "fixtures",
+      "test-image-2.jpg",
+    );
+      it("should update the selected book by id, without attach bookImage", async () => {
       const res = await request(app)
         .put(`/api/books/update/${bookId}`)
         .set("Authorization", bearerToken)
         .send({
-          author: "Robert C.C.D. Martin",
-        });
+          author: "Robert C.C.C. Martin"
+        })
+ 
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+    });
+
+
+    it("should update the selected book by id, with attach  bookImage", async () => {
+      const res = await request(app)
+        .put(`/api/books/update/${bookId}`)
+        .set("Authorization", bearerToken)
+        .field("author", "Robert C.C.D. Martin")
+        .attach("bookImage", testUploadFilePath);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -154,7 +172,7 @@ describe("BOOKS API TESTS", () => {
       const res = await request(app)
         .put(`/api/books/update/${fakeId}`)
         .set("Authorization", bearerToken)
-        .send({ author: "Nobody" });
+        .field("author", "Robert C.C.D. Martin");
 
       expect(res.status).toBe(404);
     });

@@ -9,12 +9,8 @@ const updateBookById = async (req, res, next) => {
     if (!id) {
       return next(createError(400, "provide book id to update"));
     }
-    const book = await updateBookByIdService(id, req.body);
-    if (!book) {
-      return next(createError(404, "Not found book with this id"));
-    }
 
-    console.log("book after update", book);
+    const book = await updateBookByIdService(id, req.body, req.file);
     res.status(200).json({
       success: true,
       data: book,

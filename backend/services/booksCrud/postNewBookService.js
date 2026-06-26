@@ -4,7 +4,7 @@ const postNewBookService = async (bookBody, bookFile) => {
   const data = { ...bookBody };
   const { title, author, publishedYear, genre, availableCopies } = data;
 
-  // ADMIN CANNOT ENTER ISBN
+  // ADMIN CANNOT ENTER ISBN, bookImage in body
   delete data.isbn;
   delete data.bookImage;
 
@@ -14,8 +14,8 @@ const postNewBookService = async (bookBody, bookFile) => {
 
   if (bookFile && bookFile.filename) {
     data.bookImage = `/uploads/${bookFile.filename}`;
-  } 
-  
+  }
+
   return await bookModel.create(data);
 };
 

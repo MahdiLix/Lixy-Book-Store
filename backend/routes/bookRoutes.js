@@ -17,7 +17,7 @@ bookRouter.get("/:id", getBookById);
 // ADMIN CAN ONLY POST, DELETE, UPDATE BOOKS
 bookRouter.post("/add", userProtect, authorize("admin", "superadmin"), bookUpload.single("bookImage"), postNewBook);
  
-bookRouter.put("/update/:id", userProtect, authorize("admin", "superadmin"), updateBookById);
+bookRouter.put("/update/:id", userProtect, authorize("admin", "superadmin"), bookUpload.single("bookImage"), updateBookById);
 
 bookRouter.delete("/delete/:id", userProtect, authorize("superadmin"), deleteBookById);
  

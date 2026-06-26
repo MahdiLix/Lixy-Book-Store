@@ -24,7 +24,9 @@ const fileFilter = (req, file, cb) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only image files are allowed"), false);
+    const err = new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname);
+    err.message = "Only image files (jpeg, jpg, png, webp) are allowed";
+    cb(err);
   }
 };
 

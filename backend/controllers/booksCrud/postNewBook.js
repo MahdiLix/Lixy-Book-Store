@@ -1,6 +1,7 @@
 const fs = require("fs");
 const createError = require("../../middlewares/errors/errorHandling");
 const postNewBookService = require("../../services/booksCrud/postNewBookService");
+const deleteUploadImage = require("../../middlewares/deleteUploadImage");
 
 const postNewBook = async (req, res, next) => {
   try {
@@ -9,14 +10,9 @@ const postNewBook = async (req, res, next) => {
     if (!title?.trim() || !author?.trim()) {
       // multer already wrote req.file to disk — clean it up before rejecting
       if (req.file) {
-        fs.unlink(req.file.path, (err) => {
-          if (err)
-            console.error(
-              `Failed to remove orphaned upload: ${req.file.path}`,
-              err,
-            );
-        });
+        await deleteUploadImage(req.file.path);
       }
+
       return next(createError(400, "provide book title and author"));
     }
 
@@ -31,16 +27,12 @@ const postNewBook = async (req, res, next) => {
       success: true,
       data: newBook,
     });
+
+
   } catch (error) {
     // If service call failed, clean up file
     if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err)
-          console.error(
-            `Failed to remove orphaned upload: ${req.file.path}`,
-            err,
-          );
-      });
+      await deleteUploadImage(req.file.path)
     }
     // database error hadling
     if (error.name === "ValidationError") {

@@ -2,7 +2,6 @@ const createError = require("../../middlewares/errors/errorHandling");
 const decodeUserService = require("../../services/users/userProtectService");
 
 const userProtect = async (req, res, next) => {
-   
   try {
     const authHeader = req.headers.authorization;
 

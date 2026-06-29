@@ -1,5 +1,6 @@
 export async function fetchBooks({
   searchTerm = "",
+  genre = "",
   page = 1,
   limit = 10,
   latest = false,
@@ -7,14 +8,13 @@ export async function fetchBooks({
   const params = new URLSearchParams();
 
   if (searchTerm) params.set("searchTerm", searchTerm);
+  if (genre) params.set("genre", genre);
   if (page) params.set("page", String(page));
   if (limit) params.set("limit", String(limit));
   if (latest) params.set("latest", String(latest));
 
   const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
-
-  console.log("URL FROM BOOKS API", url);
-
+ 
   const res = await fetch(url);
 
   if (!res.ok) {

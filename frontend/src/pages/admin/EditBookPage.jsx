@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AdminHeader from "../../components/Admin/AdminHeader";
+import Header from "../../components/Header";
 import EditBookForm from "../../components/Admin/EditBook/EditBookForm";
 import Loading from "../../components/Shared/Loading";
 import FeedbackMessage from "../../components/Shared/FeedbackMessage";
@@ -12,8 +12,9 @@ import { ui } from "../../styles/ui";
 export default function EditBookPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [bookForm, setBookForm] = useState(createEmptyBookForm());
+  const [bookImageFile, setBookImageFile] = useState(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -47,7 +48,24 @@ export default function EditBookPage() {
 
     try {
       setLoading(true);
-      await updateBook(id, buildBookPayload(bookForm), getAuthToken());
+
+      // Only switch to FormData (and include the file) when the admin
+      // actually picked a new image — otherwise keep the lighter JSON
+      // payload so the existing DB image is left untouched.
+      let payload;
+
+      if (bookImageFile) {
+        const fields = buildBookPayload(bookForm);
+        payload = new FormData();
+        Object.entries(fields).forEach(([key, value]) => {
+          payload.append(key, value);
+        });
+        payload.append("bookImage", bookImageFile);
+      } else {
+        payload = buildBookPayload(bookForm);
+      }
+
+      await updateBook(id, payload, getAuthToken());
 
       setMessage("Book updated successfully.");
       setType("success");
@@ -57,7 +75,6 @@ export default function EditBookPage() {
       }, 3000);
 
       navigate("/admin/books", { replace: true });
-
     } catch (err) {
       if (err.message === "UNAUTHORIZED") {
         clearAuthToken();
@@ -70,8 +87,7 @@ export default function EditBookPage() {
 
       setTimeout(() => {
         setMessage("");
-      });
-
+      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -83,7 +99,7 @@ export default function EditBookPage() {
 
   return (
     <main className={ui.page}>
-      <AdminHeader subtitle="Admin Dashboard" />
+      <Header logoutRedirectTo="/login" />
 
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
@@ -94,6 +110,9 @@ export default function EditBookPage() {
               <EditBookForm
                 bookForm={bookForm}
                 setBookForm={setBookForm}
+                bookImageFile={bookImageFile}
+                setBookImageFile={setBookImageFile}
+                fileInputKey={fileInputKey}
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
               />

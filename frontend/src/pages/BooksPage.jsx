@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import SearchBookForm from "../components/Books/SearchBookForm";
-import BooksTable from "../components/Books/BooksTable";
+import BooksGrid from "../components/Books/BooksGrid";
 import Loading from "../components/Shared/Loading";
 import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
@@ -12,7 +11,6 @@ export default function BooksPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
     loadBooks();
@@ -36,7 +34,6 @@ export default function BooksPage() {
       });
 
       setBooks(res.books || []);
-      console.log('RES BOOKS', res.books)
     } catch (err) {
       setError(`Failed to load books: ${err.message}`);
     } finally {
@@ -46,7 +43,6 @@ export default function BooksPage() {
 
   async function handleSearch(e) {
     e.preventDefault();
-    setSearchFocused(false);
 
     await loadBooks({
       searchTerm: searchTerm.trim(),
@@ -63,27 +59,12 @@ export default function BooksPage() {
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex flex-col gap-6">
-            <section className={`${ui.card} relative z-30`}>
-              <div className={`${ui.cardBody} flex justify-center`}>
-                <SearchBookForm
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  onSearch={handleSearch}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
-                />
-              </div>
-            </section>
-
-            {searchFocused && <div className={ui.overlay} />}
-
+  
             {loading && <Loading />}
 
             {!loading && (
-              <div className={`${ui.rowWrap} relative z-10`}>
-                <div className="w-full">
-                  <BooksTable books={books} />
-                </div>
+              <div className="relative z-10">
+                <BooksGrid books={books} />
               </div>
             )}
 

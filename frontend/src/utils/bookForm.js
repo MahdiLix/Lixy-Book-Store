@@ -8,6 +8,10 @@ export function createEmptyBookForm(book = {}) {
       book.availableCopies !== undefined && book.availableCopies !== null
         ? String(book.availableCopies)
         : "1",
+    // Carries the existing DB image URL into the form so BookImagePicker
+    // can preview it on the Edit page (not sent back as a field itself —
+    // the file upload, if any, replaces it).
+    bookImage: book.bookImage || "",
   };
 }
 

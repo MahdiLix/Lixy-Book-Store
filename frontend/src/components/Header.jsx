@@ -1,57 +1,116 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Heart, Bell, Globe, ShoppingCart, Sun, Moon, User } from "lucide-react";
+import SearchBookForm from "./Books/SearchBookForm";
 import { clearAuthToken, isLoggedIn } from "../utils/auth";
 import { useTheme } from "../context/ThemeContext";
 import { ui } from "../styles/ui";
 
+const LOGO_SRC = "/lixystoreblue-logo.png";
+
 export default function Header({
-  subtitle = "",
   loginRedirectTo = "/login",
-  logoutRedirectTo = "/books",
+  logoutRedirectTo = "/",
+  searchTerm,
+  setSearchTerm,
+  onSearch,
+  searchPlaceholder = "Search for the book you want and read it now... Sherlock Holmes, Harry Pot...",
 }) {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const loggedIn = isLoggedIn();
 
-  function handleAuthClick() {
-    if (loggedIn) {
-      clearAuthToken();
-      navigate(logoutRedirectTo, { replace: true });
-      return;
-    }
+ 
+  const [internalTerm, setInternalTerm] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const term = searchTerm !== undefined ? searchTerm : internalTerm;
+  const setTerm = setSearchTerm || setInternalTerm;
+ 
+  
+  function handleAvatarClick() {
+    clearAuthToken();
+    navigate(logoutRedirectTo, { replace: true });
+  }
 
+  function handleLoginClick() {
     navigate(loginRedirectTo);
   }
 
+  function handleSearchSubmit(e) {
+    e.preventDefault();
+    setSearchFocused(false);
+    if (onSearch) {
+      onSearch(e);
+      return;
+    }
+    navigate(`/search?search=${encodeURIComponent(term.trim())}`);
+  }
+
   return (
-    <header className={ui.fixedHeader}>
-      <div className={`${ui.container} ${ui.headerGrid}`}>
-        <div className="flex items-center justify-start">
-          <Link to="/cart" className={ui.ghostBtn}>
-            🛒 Cart
+    <>
+      <header className={ui.homeHeader}>
+        <div className={`${ui.homeHeaderRow} relative z-30`}>
+          <Link to="/books" className={ui.homeLogoLink}>
+            <img src={LOGO_SRC} alt="Lixy Store logo" className={ui.homeLogoImg} />
+            <span className={ui.homeLogoText}>Lixy Store</span>
           </Link>
-        </div>
 
-        <div className="flex flex-col items-center text-center py-3">
-          <Link to="/books" className={ui.headerTitle}>
-            Lixy Book Store
-          </Link>
-          {subtitle ? (
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
-              {subtitle}
-            </p>
-          ) : null}
-        </div>
+          <SearchBookForm
+            variant="header"
+            searchTerm={term}
+            setSearchTerm={setTerm}
+            onSearch={handleSearchSubmit}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder={searchPlaceholder}
+          />
 
-        <div className="flex items-center justify-end gap-2">
-          <button type="button" onClick={toggleTheme} className={ui.iconBtn}>
-            {theme === "dark" ? "Light" : "Dark"}
-          </button>
+          <div className={ui.homeHeaderActions}>
+            <button type="button" className={ui.homeIconBtn} aria-label="Wishlist">
+              <Heart size={20} />
+            </button>
 
-          <button type="button" onClick={handleAuthClick} className={ui.ghostBtn}>
-            {loggedIn ? "Logout" : "Login"}
-          </button>
+            <button type="button" className={ui.homeIconBtn} aria-label="Notifications">
+              <Bell size={20} />
+            </button>
+
+            <button type="button" className={ui.homeIconBtn} aria-label="Language">
+              <Globe size={20} />
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className={ui.homeIconBtn}
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
+            <Link to="/cart" className={ui.homeIconBtn} aria-label="Cart">
+              <ShoppingCart size={20} />
+            </Link>
+
+            {loggedIn ? (
+              <button
+                type="button"
+                onClick={handleAvatarClick}
+                className={ui.homeAvatarBtn}
+                aria-label="Log out"
+                title="Log out"
+              >
+                <User size={20} />
+              </button>
+            ) : (
+              <button type="button" onClick={handleLoginClick} className={ui.homeLoginBtn}>
+                Login
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {searchFocused && <div className={ui.overlay} />}
+    </>
   );
 }

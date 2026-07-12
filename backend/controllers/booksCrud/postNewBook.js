@@ -34,7 +34,7 @@ const postNewBook = async (req, res, next) => {
     if (req.file) {
       await deleteUploadImage(req.file.path)
     }
-    // database error hadling
+ 
     if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((err) => err.message);
       return next(createError(400, `${messages.join(", ")}`));

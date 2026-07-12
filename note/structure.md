@@ -20,6 +20,7 @@
 │   ├── Dockerfile
 │   ├── middlewares
 │   │   ├── bookUpload.js
+│   │   ├── deleteUploadImage.js
 │   │   └── errors
 │   │       └── errorHandling.js
 │   ├── models
@@ -52,7 +53,8 @@
 │   │       └── userProtectService.js
 │   ├── tests
 │   │   ├── fixtures
-│   │   │   └── test-image.png
+│   │   │   ├── test-image-2.jpg
+│   │   │   └── test-image.jpg
 │   │   ├── helper
 │   │   │   ├── testConfig.js
 │   │   │   └── userLoginAuth.js
@@ -60,6 +62,19 @@
 │   │       ├── admin.integration.test.js
 │   │       └── books.integration.test.js
 │   └── uploads
+│       ├── bookImage-1782543274302-423615845.jpg
+│       ├── bookImage-1782543405236-218759939.png
+│       ├── bookImage-1782545292217-399550674.jpg
+│       ├── bookImage-1782545338991-483401636.webp
+│       ├── bookImage-1782545417107-788165050.png
+│       ├── bookImage-1782630024616-982291270.jpg
+│       ├── bookImage-1782668862246-873750835.jpg
+│       ├── bookImage-1782668878760-922996115.png
+│       ├── bookImage-1782669460679-436873813.jpeg
+│       ├── bookImage-1782715876968-159906848.png
+│       ├── bookImage-1782716008776-901355553.png
+│       ├── bookImage-1782716731958-292944701.png
+│       └── bookImage-1782717957978-364093932.png
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
@@ -68,8 +83,7 @@
 │   ├── postcss.config.js
 │   ├── public
 │   │   ├── index.html
-│   │   ├── lixybookstore.png
-│   │   └── lixystoreblue.png
+│   │   └── lixystoreblue-logo.png
 │   ├── src
 │   │   ├── api
 │   │   │   ├── authApi.js
@@ -80,19 +94,26 @@
 │   │   │   ├── Admin
 │   │   │   │   ├── AddBookForm.jsx
 │   │   │   │   ├── AdminHeader.jsx
-│   │   │   │   ├── AdminToolbar.jsx
 │   │   │   │   ├── BookFormFields.jsx
+│   │   │   │   ├── BookImagePicker.jsx
 │   │   │   │   └── EditBook
 │   │   │   │       └── EditBookForm.jsx
 │   │   │   ├── Books
+│   │   │   │   ├── BookCard.jsx
+│   │   │   │   ├── BookCover.jsx
 │   │   │   │   ├── BookRow.jsx
-│   │   │   │   ├── BooksHeader.jsx
+│   │   │   │   ├── BooksGrid.jsx
 │   │   │   │   ├── BooksTable.jsx
 │   │   │   │   └── SearchBookForm.jsx
 │   │   │   ├── Header.jsx
+│   │   │   ├── Home
+│   │   │   │   ├── BookCarousel.jsx
+│   │   │   │   ├── CategorySidebar.jsx
+│   │   │   │   ├── GenreBar.jsx
+│   │   │   │   ├── HeroBanner.jsx
+│   │   │   │   └── PromoBanner.jsx
 │   │   │   ├── Login
-│   │   │   │   ├── LoginForm.jsx
-│   │   │   │   └── LoginHeader.jsx
+│   │   │   │   └── LoginForm.jsx
 │   │   │   ├── SearchBookForm.jsx
 │   │   │   └── Shared
 │   │   │       ├── Card.jsx
@@ -101,6 +122,7 @@
 │   │   │       ├── Loading.jsx
 │   │   │       ├── PageShell.jsx
 │   │   │       ├── ProtectedRoute.jsx
+│   │   │       ├── SearchPanel.jsx
 │   │   │       └── SectionTitle.jsx
 │   │   ├── context
 │   │   │   └── ThemeContext.jsx
@@ -108,10 +130,14 @@
 │   │   ├── index.js
 │   │   ├── pages
 │   │   │   ├── admin
+│   │   │   │   ├── AddBookPage.jsx
 │   │   │   │   ├── AdminBooksPage.jsx
 │   │   │   │   └── EditBookPage.jsx
+│   │   │   ├── BookDetailPage.jsx
 │   │   │   ├── BooksPage.jsx
+│   │   │   ├── BooksSearchPage.jsx
 │   │   │   ├── CartPage.jsx
+│   │   │   ├── HomePage.jsx
 │   │   │   └── LoginPage.jsx
 │   │   ├── styles
 │   │   │   └── ui.js
@@ -126,4 +152,4 @@
 │   └── superadmin.md
 └── README.md
 
-37 directories, 90 files
+38 directories, 115 files

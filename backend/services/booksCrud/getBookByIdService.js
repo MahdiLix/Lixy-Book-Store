@@ -1,8 +1,11 @@
 const bookModel = require("../../models/bookModel");
 
-const getBookByIdService = async (id = "") => {
-   return await bookModel.findById(id)
-  
-}
+console.log("BOOK MODEL:", bookModel);
+
+const getBookByIdService = async (bookId = "") => {
+  return await bookModel.incrementView(bookId);
+};
+
+
 
 module.exports = getBookByIdService;

@@ -50,7 +50,7 @@ export default function Header({
     <>
       <header className={ui.homeHeader}>
         <div className={`${ui.homeHeaderRow} relative z-30`}>
-          <Link to="/books" className={ui.homeLogoLink}>
+          <Link to="/" className={ui.homeLogoLink}>
             <img src={LOGO_SRC} alt="Lixy Store logo" className={ui.homeLogoImg} />
             <span className={ui.homeLogoText}>Lixy Store</span>
           </Link>

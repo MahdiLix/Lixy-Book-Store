@@ -5,7 +5,7 @@ const getBookByQueryService = async (queryParams = {}) => {
     searchTerm = "",
     page = 1,
     limit = 10,
-    latest = false, // true => only books added in the last month
+    latest = false, // true => only last month 
   } = queryParams;
 
   let filter = {};
@@ -29,7 +29,7 @@ const getBookByQueryService = async (queryParams = {}) => {
   const skip = (pageNum - 1) * limitNum;
 
   const [books, total] = await Promise.all([
-    bookModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limitNum),
+    bookModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limitNum), // -> sort decs
     bookModel.countDocuments(filter),
   ]);
 

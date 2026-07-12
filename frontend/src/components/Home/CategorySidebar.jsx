@@ -22,10 +22,7 @@ const NEW_CATEGORIES = [
   "Poetry books",
 ];
 
-// Reusable category filter sidebar — matches the Figma's two checkbox
-// groups (Popular Categories / New Books Categories) plus its own
-// in-panel search box. Selection state lives here; pass onChange if a
-// parent page needs to react to filter changes.
+ 
 export default function CategorySidebar({ onChange }) {
   const [filterTerm, setFilterTerm] = useState("");
   const [checked, setChecked] = useState({});

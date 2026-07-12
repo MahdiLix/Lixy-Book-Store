@@ -148,4 +148,15 @@ export const ui = {
   searchResultsHeading: "mb-5 text-lg font-semibold text-slate-900 dark:text-white",
   searchResultsGrid:
     "grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
+
+  // Book detail page
+  detailLayout: "flex flex-col gap-10 md:flex-row md:items-start",
+  detailCoverWrap: "w-full max-w-[400px] shrink-0",
+  detailInfoList: "flex flex-col gap-5",
+  detailInfoRow: "text-base text-slate-700 dark:text-slate-200",
+  detailInfoLabel: "font-medium text-slate-900 dark:text-white",
+  detailSectionHeading:
+    "mt-10 text-lg font-semibold text-slate-900 dark:text-white",
+  detailIntroText:
+    "mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300",
 };

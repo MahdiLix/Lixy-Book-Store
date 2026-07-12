@@ -9,6 +9,7 @@ const getBookById = async (req, res, next) => {
     if (!book) {
       return next(createError(404, `Not found book with id ${id || ""}`));
     }
+    
     res.status(200).json({
       success: true,
       data: book,

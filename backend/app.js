@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 });
 
 // BACKEND SIDE
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // -> for serve images
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // -> for serve photos 
 app.use("/api/books", bookRoutes);
 app.use("/api/admin", adminRouter);
 

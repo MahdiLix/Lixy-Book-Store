@@ -21,7 +21,12 @@ function getImageSrc(bookImage) {
 export default function BookCover({ image, title, size = "sm" }) {
   const src = getImageSrc(image);
 
-  const sizeClass = size === "lg" ? "h-full w-full max-h-52" : "h-24 w-18";
+  const sizeClass =
+    size === "xl"
+      ? "h-full w-full max-h-[520px]"
+      : size === "lg"
+      ? "h-full w-full max-h-52"
+      : "h-24 w-18";
 
   if (!src) {
     return (

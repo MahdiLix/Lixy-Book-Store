@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import BookCover from "./BookCover";
 import { ui } from "../../styles/ui";
 
@@ -6,8 +7,12 @@ function formatPrice(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
+ 
 export default function BookCard({ book, onSelect }) {
+  const navigate = useNavigate();
+
   const {
+    _id,
     title,
     author,
     bookImage,
@@ -22,12 +27,16 @@ export default function BookCard({ book, onSelect }) {
     discountPercent != null && originalPrice != null && price != null;
   const inStock = (availableCopies ?? 0) > 0;
 
+  function handleClick() {
+    if (onSelect) {
+      onSelect(book);
+      return;
+    }
+    navigate(`/books/${_id}`);
+  }
+
   return (
-    <article
-      className={ui.bookCard}
-      onClick={onSelect ? () => onSelect(book) : undefined}
-      role={onSelect ? "button" : undefined}
-    >
+    <article className={ui.bookCard} onClick={handleClick} role="button">
       {hasDiscount && (
         <span className={ui.bookCardBadge}>%{discountPercent}</span>
       )}

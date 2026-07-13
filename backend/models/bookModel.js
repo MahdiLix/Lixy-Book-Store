@@ -19,8 +19,8 @@ const GENRES = [
   "Religious",
   "Self-help",
   "Other",
-];
-
+]; 
+ 
 function generateCandidateIsbn() {
   const MIN = 1_000_000_000_000;
   const MAX = 9_999_999_999_999;

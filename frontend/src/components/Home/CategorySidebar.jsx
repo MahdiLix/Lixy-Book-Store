@@ -1,65 +1,14 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { ui } from "../../styles/ui";
-
-const POPULAR_CATEGORIES = [
-  "Memory books",
-  "Novels",
-  "Story books",
-  "Travel books",
-  "Poetry books",
-  "Biography books",
-  "Religious books",
-  "Knowledge books",
-  "Children's books",
-];
-
-const NEW_CATEGORIES = [
-  "Memory books",
-  "Novels",
-  "Story books",
-  "Travel books",
-  "Poetry books",
-];
-
+import { GENRES } from "../../constants/genres";
  
-export default function CategorySidebar({ onChange }) {
+export default function CategorySidebar({ onSelectGenre, selectedGenre }) {
   const [filterTerm, setFilterTerm] = useState("");
-  const [checked, setChecked] = useState({});
 
-  function toggle(key) {
-    const next = { ...checked, [key]: !checked[key] };
-    setChecked(next);
-    onChange?.(next);
-  }
-
-  function renderGroup(title, items, prefix) {
-    const visible = filterTerm
-      ? items.filter((c) => c.toLowerCase().includes(filterTerm.toLowerCase()))
-      : items;
-
-    if (!visible.length) return null;
-
-    return (
-      <div className="mb-6">
-        <h3 className={ui.searchSidebarGroupTitleUnderline}>{title}</h3>
-        {visible.map((category) => {
-          const key = `${prefix}:${category}`;
-          return (
-            <label key={key} className={ui.searchSidebarRow}>
-              <input
-                type="checkbox"
-                checked={Boolean(checked[key])}
-                onChange={() => toggle(key)}
-                className={ui.searchSidebarCheckbox}
-              />
-              {category}
-            </label>
-          );
-        })}
-      </div>
-    );
-  }
+  const filteredGenres = filterTerm
+    ? GENRES.filter((g) => g.toLowerCase().includes(filterTerm.toLowerCase()))
+    : GENRES;
 
   return (
     <aside className={ui.searchSidebar}>
@@ -74,8 +23,21 @@ export default function CategorySidebar({ onChange }) {
         />
       </div>
 
-      {renderGroup("Popular Categories", POPULAR_CATEGORIES, "popular")}
-      {renderGroup("New Books Categories", NEW_CATEGORIES, "new")}
+      <div className="mb-6">
+        <h3 className={ui.searchSidebarGroupTitleUnderline}>Popular Categories</h3>
+        {filteredGenres.map((genre) => (
+          <label key={genre} className={ui.searchSidebarRow}>
+            <input
+              type="checkbox"
+              name="genre-sidebar"
+              checked={selectedGenre === genre}
+              onChange={() => onSelectGenre?.(genre)}
+              className={ui.searchSidebarCheckbox}
+            />
+            {genre}
+          </label>
+        ))}
+      </div>
     </aside>
   );
 }

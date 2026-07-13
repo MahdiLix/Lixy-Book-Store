@@ -64,17 +64,8 @@
 │   └── uploads
 │       ├── bookImage-1782543274302-423615845.jpg
 │       ├── bookImage-1782543405236-218759939.png
-│       ├── bookImage-1782545292217-399550674.jpg
-│       ├── bookImage-1782545338991-483401636.webp
-│       ├── bookImage-1782545417107-788165050.png
-│       ├── bookImage-1782630024616-982291270.jpg
-│       ├── bookImage-1782668862246-873750835.jpg
-│       ├── bookImage-1782668878760-922996115.png
-│       ├── bookImage-1782669460679-436873813.jpeg
-│       ├── bookImage-1782715876968-159906848.png
-│       ├── bookImage-1782716008776-901355553.png
-│       ├── bookImage-1782716731958-292944701.png
-│       └── bookImage-1782717957978-364093932.png
+│        
+|
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile

@@ -1,5 +1,8 @@
 import { ui } from "../../styles/ui";
-import { restrictAuthorInput, restrictTitleInput } from "../../utils/inputGuards";
+import {
+  restrictAuthorInput,
+  restrictTitleInput,
+} from "../../utils/inputGuards";
 
 export default function BookFormFields({ bookForm, setBookForm }) {
   return (
@@ -45,10 +48,10 @@ export default function BookFormFields({ bookForm, setBookForm }) {
       >
         <option value="">Select Book Genre (optional)</option>
         <option value="Fiction">Fiction</option>
-        <option value="Non-Fiction">Non-Fiction</option>
-        <option value="Science">Science</option>
-        <option value="Computer">Computer</option>
+        <option value="Love">Love</option>
+        <option value="Novel">Novel</option>
         <option value="History">History</option>
+        <option value="Science Fiction">Science Fiction</option>
         <option value="Fantasy">Fantasy</option>
         <option value="Biography">Biography</option>
         <option value="Other">Other</option>
@@ -58,12 +61,12 @@ export default function BookFormFields({ bookForm, setBookForm }) {
         className={ui.input}
         type="number"
         min="0"
-        placeholder="Available Copies"
-        value={bookForm.availableCopies}
+        placeholder="Stock Quantity"
+        value={bookForm.stockQuantity}
         onChange={(e) =>
           setBookForm((prev) => ({
             ...prev,
-            availableCopies: e.target.value,
+            stockQuantity: e.target.value,
           }))
         }
       />

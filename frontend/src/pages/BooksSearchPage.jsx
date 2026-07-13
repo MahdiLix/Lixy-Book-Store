@@ -9,8 +9,6 @@ import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
-
-
 export default function BooksSearchPage() {
   const [params, setParams] = useSearchParams();
   const urlSearchTerm = params.get("search") || "";
@@ -20,11 +18,13 @@ export default function BooksSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Re-run whenever the URL's ?search= changes (e.g. user searches again
-  // from the Header while already on this page).
+  const [activeGenre, setActiveGenre] = useState("Fiction");
+
   useEffect(() => {
-    setSearchTerm(urlSearchTerm);
-    loadResults(urlSearchTerm);
+    if (urlSearchTerm) {
+      setSearchTerm(urlSearchTerm);
+      loadResults(urlSearchTerm);
+    }
   }, [urlSearchTerm]);
 
   async function loadResults(term) {
@@ -46,6 +46,27 @@ export default function BooksSearchPage() {
     setParams({ search: searchTerm.trim() });
   }
 
+  // Genre bar and Category send selected genre to this function and handle hear
+  async function handleGenreSelect(genre) {
+    setActiveGenre(genre);
+    setSearchTerm("");
+    setParams({});
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetchBooks({
+        searchTerm: genre,
+        limit: 40,
+      });
+      setBooks(res.books || []);
+    } catch (err) {
+      setError(`Failed to load "${genre}" books: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className={ui.page}>
       <Header
@@ -55,17 +76,22 @@ export default function BooksSearchPage() {
       />
 
       <div className={ui.pageTopSpace}>
-        <GenreBar />
+        <GenreBar onSelectGenre={handleGenreSelect} activeGenre={activeGenre} />
 
         <div className={`${ui.homeContainer} py-8`}>
           <div className={ui.searchPageLayout}>
-            <CategorySidebar />
+            <CategorySidebar
+              onSelectGenre={handleGenreSelect}
+              selectedGenre={activeGenre}
+            />
 
             <div className="flex-1">
               <h2 className={ui.searchResultsHeading}>
                 {urlSearchTerm
                   ? `Results for "${urlSearchTerm}"`
-                  : "All Books"}
+                  : activeGenre
+                    ? `Genre: ${activeGenre}`
+                    : "All Books"}
               </h2>
 
               {loading && <Loading />}

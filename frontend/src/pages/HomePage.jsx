@@ -9,6 +9,7 @@ import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
+// i must seperate this section from this section
 const HERO_SLIDES = [
   {
     id: "viking",
@@ -73,9 +74,13 @@ export default function HomePage() {
   async function handleGenreSelect(genre) {
     setActiveGenre(genre);
     setError("");
-
+ 
     try {
-      const res = await fetchBooks({ genre, limit: 12 });
+      const res = await fetchBooks({
+        searchTerm: genre,
+      });
+
+      console.log("recived books from db", res.books);
       setGenreBooks(res.books || []);
     } catch (err) {
       setError(`Failed to load "${genre}" books: ${err.message}`);
@@ -87,7 +92,7 @@ export default function HomePage() {
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <div className={ui.pageTopSpace}>
-        <GenreBar onSelectGenre={handleGenreSelect} />
+        <GenreBar onSelectGenre={handleGenreSelect} activeGenre={activeGenre} />
 
         <div className={`${ui.homeContainer} flex flex-col gap-10 py-8`}>
           <HeroBanner slides={HERO_SLIDES} />
@@ -107,8 +112,16 @@ export default function HomePage() {
                 books={genreBooks}
                 viewAllHref="/books"
               />
-              <BookCarousel title="Top Books" books={topBooks} viewAllHref="/books" />
-              <BookCarousel title="Must Offer" books={mustOfferBooks} viewAllHref="/books" />
+              <BookCarousel
+                title="Top Books"
+                books={topBooks}
+                viewAllHref="/books"
+              />
+              <BookCarousel
+                title="Must Offer"
+                books={mustOfferBooks}
+                viewAllHref="/books"
+              />
             </div>
           )}
 

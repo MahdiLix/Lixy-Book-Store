@@ -5,7 +5,7 @@ const getBookByQueryService = async (queryParams = {}) => {
     searchTerm = "",
     page = 1,
     limit = 10,
-    latest = false, // true => only last month 
+    latest = false, // true => only last month
   } = queryParams;
 
   let filter = {};

@@ -1,21 +1,12 @@
-import { useState } from "react";
 import { ui } from "../../styles/ui";
+import { GENRES } from "../../constants/genres";
 
-const DEFAULT_GENRES = [
-  "Fiction",
-  "Love",
-  "Novel",
-  "History",
-  "Science fiction",
-  "Fantastic",
-  "More",
-];
-
-export default function GenreBar({ genres = DEFAULT_GENRES, onSelectGenre }) {
-  const [active, setActive] = useState(genres[0]);
-
+export default function GenreBar({
+  genres = GENRES,
+  onSelectGenre,
+  activeGenre="Fiction",
+}) {
   function handleClick(genre) {
-    setActive(genre);
     onSelectGenre?.(genre);
   }
 
@@ -25,7 +16,7 @@ export default function GenreBar({ genres = DEFAULT_GENRES, onSelectGenre }) {
         <span
           key={genre}
           onClick={() => handleClick(genre)}
-          className={genre === active ? ui.genreItemActive : ui.genreItem}
+          className={genre === activeGenre ? ui.genreItemActive : ui.genreItem}
         >
           {genre}
         </span>

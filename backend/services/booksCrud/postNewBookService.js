@@ -2,21 +2,27 @@ const bookModel = require("../../models/bookModel");
 
 const postNewBookService = async (bookBody, bookFile) => {
   const data = { ...bookBody };
-  const { title, author, publishedYear, genre, availableCopies } = data;
 
-  // ADMIN CANNOT ENTER ISBN, bookImage in body
   delete data.isbn;
   delete data.bookImage;
+  delete data.discountHours; // No needed in backend side
+  delete data.discountedPrice; // Mongo middlewares calculate automatically
 
-  if (publishedYear == null) delete data.publishedYear;
-  if (genre == null) delete data.genre;
-  if (availableCopies == null) delete data.availableCopies;
+  if (data.publishedYear === "") delete data.publishedYear;
+  if (data.genre === "") delete data.genre;
+
+  if (data.discount === "" || data.discount === 0) {
+    delete data.discount;
+    delete data.discountEndDate;
+  }
 
   if (bookFile && bookFile.filename) {
     data.bookImage = `/uploads/${bookFile.filename}`;
   }
 
-  return await bookModel.create(data);
+  const book = new bookModel(data);
+
+  return await book.save();
 };
 
 module.exports = postNewBookService;

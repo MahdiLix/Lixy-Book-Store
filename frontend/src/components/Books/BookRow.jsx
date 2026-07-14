@@ -1,7 +1,12 @@
 import BookCover from "./BookCover";
 import { ui } from "../../styles/ui";
 
-export default function BookRow({ book, showActions = false, onEdit, onRemove }) {
+export default function BookRow({
+  book,
+  showActions = false,
+  onEdit,
+  onRemove,
+}) {
   return (
     <tr className={ui.tr}>
       <td className={`${ui.td} rounded-l-2xl`}>
@@ -13,8 +18,7 @@ export default function BookRow({ book, showActions = false, onEdit, onRemove })
       <td className={ui.td}>{book.isbn || "—"}</td>
       <td className={ui.td}>{book.publishedYear || "—"}</td>
       <td className={ui.td}>{book.genre || "—"}</td>
-      <td className={ui.td}>{book.availableCopies ?? 0}</td>
-
+      <td className={ui.td}>{book.stockQuantity}</td>
       {showActions && (
         <>
           <td className={ui.td}>

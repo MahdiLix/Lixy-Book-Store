@@ -18,7 +18,7 @@ export default function BooksSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [activeGenre, setActiveGenre] = useState("Fiction");
+  const [activeGenre, setActiveGenre] = useState("");
 
   useEffect(() => {
     if (urlSearchTerm) {

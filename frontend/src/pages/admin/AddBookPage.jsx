@@ -58,8 +58,22 @@ export default function AddBookPage() {
         formData.append("genre", bookForm.genre);
       }
 
-      if (bookForm.availableCopies !== "") {
-        formData.append("availableCopies", bookForm.availableCopies);
+      if (bookForm.stockQuantity !== "") {
+        formData.append("stockQuantity", bookForm.stockQuantity);
+      }
+      if (bookForm.price !== "") {
+        formData.append("price", bookForm.price);
+      }
+      if (bookForm.discount !== "") {
+        formData.append("discount", bookForm.discount);
+      }
+
+      // Convert hours to Date and append for the backend schema
+      if (Number(bookForm.discount) > 0 && bookForm.discountHours) {
+        const endDate = new Date(
+          Date.now() + Number(bookForm.discountHours) * 60 * 60 * 1000,
+        );
+        formData.append("discountEndDate", endDate.toISOString());
       }
 
       formData.append("bookImage", bookImageFile);

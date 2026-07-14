@@ -7,7 +7,6 @@ function formatPrice(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
- 
 export default function BookCard({ book, onSelect }) {
   const navigate = useNavigate();
 
@@ -16,16 +15,15 @@ export default function BookCard({ book, onSelect }) {
     title,
     author,
     bookImage,
-    availableCopies,
+    inStock,
+    stockQuantity,
     price,
-    originalPrice,
-    discountPercent,
-    rating,
+    discountedPrice,
+    discount,
+    viewRate,
   } = book;
 
-  const hasDiscount =
-    discountPercent != null && originalPrice != null && price != null;
-  const inStock = (availableCopies ?? 0) > 0;
+  const hasDiscount = discount > 0 && discountedPrice != null;
 
   function handleClick() {
     if (onSelect) {
@@ -37,9 +35,7 @@ export default function BookCard({ book, onSelect }) {
 
   return (
     <article className={ui.bookCard} onClick={handleClick} role="button">
-      {hasDiscount && (
-        <span className={ui.bookCardBadge}>%{discountPercent}</span>
-      )}
+      {hasDiscount && <span className={ui.bookCardBadge}>%{discount}</span>}
 
       <div className={ui.bookCardCoverWrap}>
         <BookCover image={bookImage} title={title} size="lg" />
@@ -50,35 +46,24 @@ export default function BookCard({ book, onSelect }) {
       </h3>
       {author && <p className={ui.bookCardSub}>{author}</p>}
 
-      {rating != null && (
-        <div className={ui.bookCardMetaRow}>
-          <span className={ui.bookCardRating}>
-            ★ {Number(rating).toFixed(1)}
-          </span>
-        </div>
-      )}
-
       <div className={ui.bookCardFooter}>
         <div className={ui.bookCardPriceWrap}>
           {hasDiscount && (
-            <span className={ui.bookCardOldPrice}>
-              {formatPrice(originalPrice)}
-            </span>
+            <span className={ui.bookCardOldPrice}>{formatPrice(price)}</span>
           )}
-          {price != null && (
-            <span className={ui.bookCardPrice}>{formatPrice(price)}</span>
-          )}
+
+          <span className={ui.bookCardPrice}>
+            {formatPrice(hasDiscount ? discountedPrice : price) + '$'}
+          </span>
         </div>
 
         {hasDiscount && (
-          <span className={ui.bookCardDiscountPill}>
-            -{discountPercent}%
-          </span>
+          <span className={ui.bookCardDiscountPill}>-{discount}%</span>
         )}
       </div>
 
       <span className={inStock ? ui.bookCardStock : ui.bookCardOutOfStock}>
-        {inStock ? `${availableCopies} in stock` : "Out of stock"}
+        {inStock ? `in stock` : "Out of stock"}
       </span>
     </article>
   );

@@ -48,7 +48,11 @@ export default function BookDetailPage() {
             <>
               <div className={ui.detailLayout}>
                 <div className={ui.detailCoverWrap}>
-                  <BookCover image={book.bookImage} title={book.title} size="xl" />
+                  <BookCover
+                    image={book.bookImage}
+                    title={book.title}
+                    size="xl"
+                  />
                 </div>
 
                 <div className={ui.detailInfoList}>
@@ -70,8 +74,8 @@ export default function BookDetailPage() {
                   </p>
                   <p className={ui.detailInfoRow}>
                     <span className={ui.detailInfoLabel}>Stock :</span>{" "}
-                    {(book.availableCopies ?? 0) > 0
-                      ? `${book.availableCopies} available`
+                    {(book.stockQuantity ?? 0) > 0
+                      ? "available"
                       : "Out of stock"}
                   </p>
                 </div>

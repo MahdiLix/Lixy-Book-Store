@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { ui } from "../../styles/ui";
-import { GENRES } from "../../constants/genres";
+import { TOP_GENRES } from "../../constants/genres";
  
 export default function CategorySidebar({ onSelectGenre, selectedGenre }) {
   const [filterTerm, setFilterTerm] = useState("");
 
   const filteredGenres = filterTerm
-    ? GENRES.filter((g) => g.toLowerCase().includes(filterTerm.toLowerCase()))
-    : GENRES;
+    ? TOP_GENRES.filter((g) => g.toLowerCase().includes(filterTerm.toLowerCase()))
+    : TOP_GENRES;
 
   return (
     <aside className={ui.searchSidebar}>

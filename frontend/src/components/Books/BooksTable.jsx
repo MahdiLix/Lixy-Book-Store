@@ -16,13 +16,13 @@ export default function BooksTable({
       <table className={ui.table}>
         <thead>
           <tr>
-            <th className={ui.th}>Image</th>
-            <th className={ui.th}>Title</th>
-            <th className={ui.th}>Author</th>
-            <th className={ui.th}>ISBN</th>
-            <th className={ui.th}>Year</th>
-            <th className={ui.th}>Genre</th>
-            <th className={ui.th}>Available</th>
+            <th className={ui.th}>image</th>
+            <th className={ui.th}>title</th>
+            <th className={ui.th}>author</th>
+            <th className={ui.th}>isbn</th>
+            <th className={ui.th}>published year</th>
+            <th className={ui.th}>genre</th>
+            <th className={ui.th}>stock quantity</th>
             {showActions && <th className={ui.th}>Edit</th>}
             {showActions && <th className={ui.th}>Remove</th>}
           </tr>

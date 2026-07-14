@@ -21,7 +21,6 @@ const postNewBook = async (req, res, next) => {
     }
 
     const newBook = await postNewBookService(req.body, req.file);
-    console.log("Newbook added to db -> postNewBook.js", newBook);
 
     res.status(201).json({
       success: true,

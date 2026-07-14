@@ -62,10 +62,9 @@
 │   │       ├── admin.integration.test.js
 │   │       └── books.integration.test.js
 │   └── uploads
-│       ├── bookImage-1782543274302-423615845.jpg
-│       ├── bookImage-1782543405236-218759939.png
+│       ├── bookImage-1783919469896-747222574.jpg
+│       ├── bookImage-1783919495872-138255262.png
 │        
-|
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
@@ -115,6 +114,8 @@
 │   │   │       ├── ProtectedRoute.jsx
 │   │   │       ├── SearchPanel.jsx
 │   │   │       └── SectionTitle.jsx
+│   │   ├── constants
+│   │   │   └── genres.js
 │   │   ├── context
 │   │   │   └── ThemeContext.jsx
 │   │   ├── index.css
@@ -143,4 +144,4 @@
 │   └── superadmin.md
 └── README.md
 
-38 directories, 115 files
+39 directories, 121 files

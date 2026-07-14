@@ -61,18 +61,18 @@ const bookSchema = new mongoose.Schema(
       },
       default: "Other",
     },
-    isStock: {
+    inStock: {
       type: Boolean,
       default: true,
     },
     stockQuantity: {
       type: Number,
-      default: 1,
+      required: [true, "Stock quantity is required!"],
       min: [0, "stock quantity cannot be negative"],
     },
     price: {
       type: Number,
-      default: 1,
+      required: [true, "Price is required!"],
     },
     discount: {
       type: Number,
@@ -101,8 +101,8 @@ const bookSchema = new mongoose.Schema(
 );
 
 // Document Middlewares
-bookSchema.pre("validate", function checkIsStock() {
-  this.isStock = (this.stockQuantity ?? 0) > 0; // -> true/ false
+bookSchema.pre("validate", function checkInStock() {
+  this.inStock = (this.stockQuantity ?? 0) > 0; // -> true/ false
 });
 
 bookSchema.pre("validate", function calculateDiscountPrice() {

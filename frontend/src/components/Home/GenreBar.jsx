@@ -1,10 +1,10 @@
 import { ui } from "../../styles/ui";
-import { GENRES } from "../../constants/genres";
+import {TOP_GENRES} from "../../constants/genres";
 
 export default function GenreBar({
-  genres = GENRES,
+  genres = TOP_GENRES,
   onSelectGenre,
-  activeGenre="Fiction",
+  activeGenre,
 }) {
   function handleClick(genre) {
     onSelectGenre?.(genre);

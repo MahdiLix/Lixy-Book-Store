@@ -4,14 +4,31 @@ export function createEmptyBookForm(book = {}) {
     author: book.author || "",
     publishedYear: book.publishedYear ? String(book.publishedYear) : "",
     genre: book.genre || "",
-    availableCopies:
-      book.availableCopies !== undefined && book.availableCopies !== null
-        ? String(book.availableCopies)
+    stockQuantity:
+      book.stockQuantity !== undefined && book.stockQuantity !== null
+        ? String(book.stockQuantity)
         : "1",
-    // Carries the existing DB image URL into the form so BookImagePicker
-    // can preview it on the Edit page (not sent back as a field itself —
-    // the file upload, if any, replaces it).
-    bookImage: book.bookImage || "",
+    price:
+      book.price !== undefined && book.price !== null
+        ? String(book.price)
+        : "1",
+    discount:
+      book.discount !== undefined && book.discount !== null
+        ? String(book.discount)
+        : "0",
+
+    //  Calculate remaining hours if editing an existing book
+    discountHours: book.discountEndDate
+      ? String(
+          Math.max(
+            1,
+            Math.round(
+              (new Date(book.discountEndDate).getTime() - Date.now()) /
+                (1000 * 60 * 60),
+            ),
+          ),
+        )
+      : "",
   };
 }
 
@@ -29,8 +46,23 @@ export function buildBookPayload(bookForm) {
     payload.genre = bookForm.genre;
   }
 
-  if (bookForm.availableCopies !== "") {
-    payload.availableCopies = Number(bookForm.availableCopies);
+  if (bookForm.stockQuantity !== "") {
+    payload.stockQuantity = Number(bookForm.stockQuantity);
+  }
+
+  if (bookForm.price !== "") {
+    payload.price = Number(bookForm.price);
+  }
+
+  if (bookForm.discount !== "") {
+    payload.discount = Number(bookForm.discount);
+  }
+
+  // onvert frontend hours to a real Date for the backend
+  if (Number(bookForm.discount) > 0 && bookForm.discountHours) {
+    payload.discountEndDate = new Date(
+      Date.now() + Number(bookForm.discountHours) * 60 * 60 * 1000,
+    );
   }
 
   return payload;

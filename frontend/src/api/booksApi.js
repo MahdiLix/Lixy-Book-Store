@@ -48,6 +48,7 @@ export async function addBook(bookData, authHeader) {
     },
     body: isFormData ? bookData : JSON.stringify(bookData),
   });
+  console.log('form data send to db', bookData )
 
   const data = await res.json();
 

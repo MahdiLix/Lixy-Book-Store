@@ -56,7 +56,7 @@ export default function BooksSearchPage() {
 
     try {
       const res = await fetchBooks({
-        searchTerm: genre,
+        genre,
         limit: 40,
       });
       setBooks(res.books || []);

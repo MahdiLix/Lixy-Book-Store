@@ -9,7 +9,7 @@ import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
-// i must seperate this section from this section
+// i must seperate this section
 const HERO_SLIDES = [
   {
     id: "viking",
@@ -45,7 +45,7 @@ export default function HomePage() {
   const [topBooks, setTopBooks] = useState([]);
   const [mustOfferBooks, setMustOfferBooks] = useState([]);
   const [genreBooks, setGenreBooks] = useState([]);
-  const [activeGenre, setActiveGenre] = useState("Fiction");
+  const [activeGenre, setActiveGenre] = useState("Genres");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -58,12 +58,22 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const top = await fetchBooks({ limit: 12 });
-      const mustOffer = await fetchBooks({ limit: 12, latest: true });
+      const top = await fetchBooks({ limit: 12, top: true });
+      const mustOffer = await fetchBooks({ limit: 12, mustOffer: true, latest: true });
 
       setTopBooks(top.books || []);
       setMustOfferBooks(mustOffer.books || []);
-      setGenreBooks(top.books || []);
+
+      // Check if activeGenre is empty or default "Genres", then auto-search "Fiction"
+      const isDefaultGenre =
+        !activeGenre || activeGenre === "" || activeGenre === "Genres";
+      const genreToSearch = isDefaultGenre ? "Fiction" : activeGenre;
+
+      if (isDefaultGenre) {
+        setActiveGenre("Fiction");
+      }
+      await handleGenreSelect(genreToSearch);
+      
     } catch (err) {
       setError(`Failed to load books: ${err.message}`);
     } finally {
@@ -74,13 +84,13 @@ export default function HomePage() {
   async function handleGenreSelect(genre) {
     setActiveGenre(genre);
     setError("");
- 
+
     try {
       const res = await fetchBooks({
-        searchTerm: genre,
+        genre, 
+        limit: 12,
       });
 
-      console.log("recived books from db", res.books);
       setGenreBooks(res.books || []);
     } catch (err) {
       setError(`Failed to load "${genre}" books: ${err.message}`);

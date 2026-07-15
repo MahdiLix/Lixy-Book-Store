@@ -4,6 +4,8 @@ export async function fetchBooks({
   page = 1,
   limit = 10,
   latest = false,
+  top = false,
+  mustOffer = false,
 } = {}) {
   const params = new URLSearchParams();
 
@@ -12,9 +14,11 @@ export async function fetchBooks({
   if (page) params.set("page", String(page));
   if (limit) params.set("limit", String(limit));
   if (latest) params.set("latest", String(latest));
+  if (top) params.set("top", String(top));
+  if (mustOffer) params.set("mustOffer", String(mustOffer));
 
   const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
- 
+
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -48,7 +52,7 @@ export async function addBook(bookData, authHeader) {
     },
     body: isFormData ? bookData : JSON.stringify(bookData),
   });
-  console.log('form data send to db', bookData )
+  console.log("form data send to db", bookData);
 
   const data = await res.json();
 

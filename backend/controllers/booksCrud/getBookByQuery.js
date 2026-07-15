@@ -2,13 +2,17 @@ const getBookByQueryService = require("../../services/booksCrud/getBookByQuerySe
 
 const getBookByQuery = async (req, res, next) => {
   try {
-    const { searchTerm, page, limit, latest } = req.query;
+    const { searchTerm, genre, page, limit, latest, top, mustOffer } =
+      req.query;
 
     const result = await getBookByQueryService({
       searchTerm,
+      genre,
       page,
       limit,
       latest,
+      top,
+      mustOffer,
     });
 
     res.status(200).json({

@@ -2,6 +2,8 @@ export function createEmptyBookForm(book = {}) {
   return {
     title: book.title || "",
     author: book.author || "",
+    description: book.description || "",
+
     publishedYear: book.publishedYear ? String(book.publishedYear) : "",
     genre: book.genre || "",
     stockQuantity:
@@ -29,6 +31,7 @@ export function createEmptyBookForm(book = {}) {
           ),
         )
       : "",
+    bookImage: book.bookImage || "",
   };
 }
 
@@ -37,6 +40,9 @@ export function buildBookPayload(bookForm) {
     title: bookForm.title.trim(),
     author: bookForm.author.trim(),
   };
+  if (bookForm.description) {
+    payload.description = bookForm.description.trim();
+  }
 
   if (bookForm.publishedYear.trim()) {
     payload.publishedYear = Number(bookForm.publishedYear);

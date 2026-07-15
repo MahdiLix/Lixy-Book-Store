@@ -30,6 +30,16 @@ export default function BookFormFields({ bookForm, setBookForm }) {
         }
         onKeyDown={restrictAuthorInput}
       />
+ 
+      <textarea
+        className={`${ui.input} resize-none`} // resize-none  
+        rows={4}
+        placeholder="Book Description (optional)"
+        value={bookForm.description}
+        onChange={(e) =>
+          setBookForm((prev) => ({ ...prev, description: e.target.value }))
+        }
+      />
 
       <input
         className={ui.input}

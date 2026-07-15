@@ -7,11 +7,6 @@ import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBookById } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
-// Placeholder copy until the backend has a real summary/description field
-// for books — swap this out once that's available.
-const PLACEHOLDER_INTRO =
-  "This text explains about this book the user selected. It would normally cover the plot, the author's background, and why a reader might want to pick it up. Once the backend stores a real description field for each book, this placeholder will be replaced with that content automatically.";
-
 export default function BookDetailPage() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
@@ -81,8 +76,11 @@ export default function BookDetailPage() {
                 </div>
               </div>
 
-              <h2 className={ui.detailSectionHeading}>Introduction Book :</h2>
-              <p className={ui.detailIntroText}>{PLACEHOLDER_INTRO}</p>
+              <h2 className={ui.detailSectionHeading}>Description Book :</h2>
+
+              <p className={ui.detailIntroText}>
+                {book.description || "No description available for this book."}
+              </p>
             </>
           )}
 

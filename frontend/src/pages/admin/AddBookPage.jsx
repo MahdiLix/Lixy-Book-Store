@@ -49,6 +49,10 @@ export default function AddBookPage() {
       const formData = new FormData();
       formData.append("title", bookForm.title.trim());
       formData.append("author", bookForm.author.trim());
+      
+      if (bookForm.description) {
+        formData.append("description", bookForm.description.trim());
+      }
 
       if (bookForm.publishedYear.trim()) {
         formData.append("publishedYear", bookForm.publishedYear.trim());

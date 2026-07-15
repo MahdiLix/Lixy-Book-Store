@@ -19,8 +19,8 @@ const GENRES = [
   "Religious",
   "Self-help",
   "Other",
-]; 
- 
+];
+
 function generateCandidateIsbn() {
   const MIN = 1_000_000_000_000;
   const MAX = 9_999_999_999_999;
@@ -40,6 +40,12 @@ const bookSchema = new mongoose.Schema(
       required: [true, "Author is required!"],
       trim: true,
       maxlength: [200, "Author cannot be longer than 200 characters"],
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [2000, "Description cannot be longer than 2000 characters"],
+      default: "",
     },
     isbn: {
       type: String,

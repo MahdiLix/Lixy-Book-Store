@@ -58,8 +58,8 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const top = await fetchBooks({ limit: 12, top: true });
-      const mustOffer = await fetchBooks({ limit: 12, mustOffer: true, latest: true });
+      const top = await fetchBooks({ top: true, limit: 12});
+      const mustOffer = await fetchBooks({ mustOffer: true, limit: 12});
 
       setTopBooks(top.books || []);
       setMustOfferBooks(mustOffer.books || []);

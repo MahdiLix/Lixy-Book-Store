@@ -9,43 +9,13 @@ import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
-// i must seperate this section
-const HERO_SLIDES = [
-  {
-    id: "viking",
-    title: "Books Head",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum magna.",
-    tags: "Detective-Love-History",
-    image: "/lixystoreblue-logo.png",
-    accentColor: "#3d5a6c",
-  },
-  {
-    id: "sherlock-mavi",
-    title: "Books Head",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum magna.",
-    tags: "Detective-ScienceFiction-Fantastic",
-    image: "/lixystoreblue-logo.png",
-    accentColor: "#5a4a8c",
-  },
-  {
-    id: "sherlock-gumus",
-    title: "Books Head",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum magna.",
-    tags: "Novel-History-Love",
-    image: "/lixystoreblue-logo.png",
-    accentColor: "#7c3b54",
-  },
-];
-
 export default function HomePage() {
-  const [searchTerm, setSearchTerm] = useState(""); // Memory
+  const [searchTerm, setSearchTerm] = useState("");
   const [topBooks, setTopBooks] = useState([]);
   const [mustOfferBooks, setMustOfferBooks] = useState([]);
   const [genreBooks, setGenreBooks] = useState([]);
-  const [activeGenre, setActiveGenre] = useState("Genres");
+  const [heroBooks, setHeroBooks] = useState([]);
+  const [activeGenre, setActiveGenre] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -58,22 +28,25 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const top = await fetchBooks({ top: true, limit: 12});
-      const mustOffer = await fetchBooks({ mustOffer: true, limit: 12});
+      const top = await fetchBooks({ top: true, limit: 12 });
+      setHeroBooks([...top.books.filter((_g, i) => i < 3)] || []); // prevent search again for top
 
-      setTopBooks(top.books || []);
-      setMustOfferBooks(mustOffer.books || []);
+      const mustOffer = await fetchBooks({
+        mustOffer: true,
+        limit: 12,
+        latest: true,
+      });
 
       // Check if activeGenre is empty or default "Genres", then auto-search "Fiction"
       const isDefaultGenre =
         !activeGenre || activeGenre === "" || activeGenre === "Genres";
-      const genreToSearch = isDefaultGenre ? "Fiction" : activeGenre;
+      const selectedGenre = "Fiction";
 
-      if (isDefaultGenre) {
-        setActiveGenre("Fiction");
-      }
-      await handleGenreSelect(genreToSearch);
       
+      setTopBooks(top.books || []);
+      setMustOfferBooks(mustOffer.books || []);
+
+      await handleGenreSelect(selectedGenre);
     } catch (err) {
       setError(`Failed to load books: ${err.message}`);
     } finally {
@@ -84,16 +57,16 @@ export default function HomePage() {
   async function handleGenreSelect(genre) {
     setActiveGenre(genre);
     setError("");
+    setLoading(true);
 
     try {
-      const res = await fetchBooks({
-        genre, 
-        limit: 12,
-      });
-
+      const res = await fetchBooks({ genre, limit: 12 });
       setGenreBooks(res.books || []);
     } catch (err) {
       setError(`Failed to load "${genre}" books: ${err.message}`);
+      setGenreBooks([]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -105,7 +78,7 @@ export default function HomePage() {
         <GenreBar onSelectGenre={handleGenreSelect} activeGenre={activeGenre} />
 
         <div className={`${ui.homeContainer} flex flex-col gap-10 py-8`}>
-          <HeroBanner slides={HERO_SLIDES} />
+          <HeroBanner books={heroBooks} />
 
           <PromoBanner
             image="/lixystoreblue-logo.png"

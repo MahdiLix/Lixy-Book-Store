@@ -125,10 +125,10 @@ export const ui = {
     "flex items-center gap-1 text-sm font-medium text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300",
   carouselTrack:
     "flex gap-4 overflow-x-auto scroll-smooth pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-  carouselItem: "snap-start shrink-0 w-[180px] sm:w-[15.5%] sm:min-w-[170px]",
+  carouselItem: "snap-start shrink-0 w-[180px] sm:w-[20%] sm:min-w-[170px]",
   carouselArrowBtn:
     "absolute top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-md ring-1 ring-slate-200 transition hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700",
-
+ 
   // Search results page layout
   searchPageLayout: "flex gap-8 items-start",
   searchSidebar:

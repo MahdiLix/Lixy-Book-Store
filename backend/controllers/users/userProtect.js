@@ -33,7 +33,9 @@ const authorize = (...roles) => {
       return next(createError(401, "Unauthorized"));
     }
     if (!roles.includes(req.user.role)) {
-      return next(createError(403, "You don't have permission for this action!"));
+      return next(
+        createError(403, "You don't have permission for this action!"),
+      );
     }
 
     return next();

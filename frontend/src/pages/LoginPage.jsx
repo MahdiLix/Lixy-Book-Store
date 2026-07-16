@@ -23,7 +23,7 @@ export default function LoginPage() {
     e.preventDefault();
     setMessage("");
 
-    if (!email.trim() || !password.trim()) {
+    if (!email?.trim() || !password?.trim()) {
       setType("error");
       setMessage("Provide Email and Password");
       return;
@@ -44,8 +44,8 @@ export default function LoginPage() {
 
   return (
     <main className={ui.page}>
-      <Header subtitle="Admin Login" logoutRedirectTo="/books" />
-
+      {/* redirect to HomePage */}
+      <Header subtitle="Admin Login" logoutRedirectTo="/" />
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center">

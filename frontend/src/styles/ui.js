@@ -38,7 +38,8 @@ export const ui = {
   td: "px-4 py-4 text-sm text-slate-800 dark:text-slate-200",
   tr: "bg-slate-50 dark:bg-slate-950/50",
   headerGrid: "grid h-20 grid-cols-[auto_1fr_auto] items-center gap-3",
-  headerTitle: "text-lg font-bold tracking-wide text-slate-900 dark:text-white sm:text-2xl",
+  headerTitle:
+    "text-lg font-bold tracking-wide text-slate-900 dark:text-white sm:text-2xl",
 
   // Book card grid
   booksGrid:
@@ -75,7 +76,8 @@ export const ui = {
   homeHeaderRow: "flex h-20 items-center gap-6 px-[50px]",
   homeLogoLink: "flex items-center gap-3 shrink-0",
   homeLogoImg: "h-10 w-10 object-contain",
-  homeLogoText: "text-2xl font-semibold text-slate-900 dark:text-white whitespace-nowrap",
+  homeLogoText:
+    "text-2xl font-semibold text-slate-900 dark:text-white whitespace-nowrap",
   homeSearchWrap: "relative flex-1 max-w-3xl mx-auto",
   homeSearchInput:
     "w-full rounded-xl bg-slate-100 border border-slate-200 px-11 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100 dark:placeholder-slate-500",
@@ -128,7 +130,7 @@ export const ui = {
   carouselItem: "snap-start shrink-0 w-[180px] sm:w-[20%] sm:min-w-[170px]",
   carouselArrowBtn:
     "absolute top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-md ring-1 ring-slate-200 transition hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700",
- 
+
   // Search results page layout
   searchPageLayout: "flex gap-8 items-start",
   searchSidebar:
@@ -145,7 +147,8 @@ export const ui = {
     "flex items-center gap-2 py-1.5 text-sm text-slate-700 dark:text-slate-300",
   searchSidebarCheckbox:
     "h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800",
-  searchResultsHeading: "mb-5 text-lg font-semibold text-slate-900 dark:text-white",
+  searchResultsHeading:
+    "mb-5 text-lg font-semibold text-slate-900 dark:text-white",
   searchResultsGrid:
     "grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
 
@@ -159,4 +162,56 @@ export const ui = {
     "mt-10 text-lg font-semibold text-slate-900 dark:text-white",
   detailIntroText:
     "mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-300",
-};
+
+  // ===== Cart =====
+  // Cart icon button with badge (Header)
+  cartIconBtn:
+    "relative flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
+  cartBadge:
+    "absolute -top-0.5 -right-0.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-rose-600 px-1 text-[11px] font-bold text-white ring-2 ring-white dark:ring-slate-950",
+
+  // Add-to-cart button (Book detail)
+  addToCartBtn:
+    "inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400",
+  addToCartSuccess:
+    "inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-medium text-white dark:bg-emerald-500",
+
+  // Cart page layout
+  cartLayout: "grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]",
+  cartItems: "flex flex-col gap-4",
+  cartItem:
+    "flex gap-4 rounded-2xl bg-white p-4 shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800",
+  cartItemCover: "h-28 w-20 shrink-0",
+  cartItemInfo: "flex flex-1 flex-col gap-1",
+  cartItemTitle:
+    "line-clamp-2 text-sm font-semibold text-slate-900 dark:text-white",
+  cartItemSub: "text-xs text-slate-500 dark:text-slate-400",
+  cartItemPrice: "text-sm font-bold text-indigo-600 dark:text-indigo-400",
+  cartQtyControl: "flex items-center gap-2 self-end",
+  cartQtyBtn:
+    "flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800",
+  cartQtyValue:
+    "min-w-[24px] text-center text-sm font-medium text-slate-900 dark:text-white",
+  cartRemoveBtn:
+    "flex h-9 w-9 items-center justify-center self-end rounded-lg text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-950/40",
+  cartSummary:
+    "rounded-2xl bg-white p-5 shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 lg:sticky lg:top-28 h-fit",
+  cartSummaryRow: "flex items-center justify-between py-2",
+  cartSummaryValue: "text-sm font-medium text-slate-900 dark:text-white",
+  cartSummaryTotal:
+    "mt-2 border-t border-slate-200 py-3 text-base font-bold text-slate-900 dark:border-slate-800 dark:text-white",
+  cartEmptyIcon:
+    "flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500",
+
+  // ===== Book Detail Page Additions =====
+  // Price & Discount
+  detailPrice: "text-3xl font-extrabold text-slate-900 dark:text-white",
+  detailOldPrice: "text-lg text-slate-400 line-through dark:text-slate-500",
+  detailDiscountPill:
+    "rounded-lg bg-emerald-50 px-2 py-1 text-sm font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+
+  // Inline Cart Controls (Quantity + Remove + Cart Redirect)
+  detailCartControls: "flex items-center gap-3 flex-wrap",
+  detailRemoveBtn:
+    "flex h-10 w-10 items-center justify-center rounded-xl border border-rose-300 text-rose-600 transition hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/40",
+  };

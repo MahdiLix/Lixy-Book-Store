@@ -21,7 +21,7 @@ const loginService = async (userData) => {
   if (!matchPass) {
     throw createError(401, "Invalid credentials");
   }
-  // remove pass for security
+  // remove pass for more security
   user.password = undefined;
  
   return authToken(user._id) //db id: 6a084fa00291285802ad12d8

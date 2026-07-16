@@ -4,7 +4,6 @@ const loginService = require("../../services/users/userLoginService");
 
 const userLogin = async (req, res, next) => {
   try {
-    console.log("USER LOGIN DETAIL FROM userLogin.js ", req.body)
     const { email, password } = req.body;
 
     if (!email?.trim() || !password?.trim()) {

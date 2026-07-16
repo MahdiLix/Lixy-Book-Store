@@ -1,4 +1,4 @@
-const GENRES = [
+export const GENRES = [
   "Fiction",
   "Love",
   "Novel",

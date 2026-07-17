@@ -7,6 +7,7 @@ import BookCarousel from "../components/Home/BookCarousel";
 import Loading from "../components/Shared/Loading";
 import FeedbackMessage from "../components/Shared/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
+import promoBannerImage from "../assets/images/promo_banner_1.png"
 import { ui } from "../styles/ui";
 
 export default function HomePage() {
@@ -81,11 +82,11 @@ export default function HomePage() {
           <HeroBanner books={heroBooks} />
 
           <PromoBanner
-            image="/lixystoreblue-logo.png"
-            title="This Week's Pick"
-            subtitle="Hand-picked stories our readers can't put down."
+            image={promoBannerImage}
+            // title="This Week's Pick"
+            // subtitle="Hand-picked stories our readers can't put down."
           />
-
+ 
           {loading && <Loading />}
 
           {!loading && (

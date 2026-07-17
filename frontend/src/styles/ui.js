@@ -111,9 +111,11 @@ export const ui = {
   heroCardBtn:
     "mt-1 inline-flex w-fit items-center justify-center rounded-lg border border-white/70 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10",
 
-  // Promo banner (extra big image section)
+  // // Promo banner (extra big image section)
   promoBanner: "overflow-hidden rounded-2xl bg-slate-800 relative h-48 sm:h-64",
-  promoBannerImg: "h-full w-full object-cover",
+  promoBannerImg:
+    "absolute inset-0 h-full w-full object-cover object-[center_35%]",
+
   promoBannerOverlay:
     "absolute inset-0 flex flex-col items-start justify-center gap-2 bg-gradient-to-r from-slate-950/80 via-slate-950/40 to-transparent px-8",
   promoBannerTitle: "text-2xl sm:text-3xl font-bold text-white",
@@ -214,4 +216,4 @@ export const ui = {
   detailCartControls: "flex items-center gap-3 flex-wrap",
   detailRemoveBtn:
     "flex h-10 w-10 items-center justify-center rounded-xl border border-rose-300 text-rose-600 transition hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/40",
-  };
+};

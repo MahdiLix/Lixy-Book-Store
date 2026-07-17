@@ -3,25 +3,33 @@ import { useParams, Link } from "react-router-dom";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import Header from "../components/Header";
 import BookCover from "../components/Books/BookCover";
-import PriceTag from "../components/Books/PriceTag"; // Reusable Component
+import PriceTag from "../components/Books/PriceTag";
 import Loading from "../components/Shared/Loading";
 import FeedbackMessage from "../components/Shared/FeedbackMessage";
-import { fetchBookById } from "../api/booksApi";
+import { fetchBookById, fetchBooks } from "../api/booksApi";
 import { useCart } from "../context/CartContext";
 import { ui } from "../styles/ui";
+import BookCarousel from "../components/Home/BookCarousel";
 
 export default function BookDetailPage() {
   const { id } = useParams();
   const { cart, addToCart, updateQuantity, removeFromCart } = useCart();
-  
+
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Related books state
+  const [relatedBooks, setRelatedBooks] = useState([]);
+  const [loadingRelated, setLoadingRelated] = useState(false);
 
   useEffect(() => {
     async function loadBook() {
       setLoading(true);
       setError("");
+      setBook(null);
+      setRelatedBooks([]);
+
       try {
         const data = await fetchBookById(id);
         setBook(data);
@@ -34,12 +42,70 @@ export default function BookDetailPage() {
     loadBook();
   }, [id]);
 
-  const getBookId = (b) => b?._id ?? b?.id;
-  const currentBookId = book ? getBookId(book) : null;
+  useEffect(() => {
+    if (!book) return;
 
-  const cartItem = cart.find((item) => getBookId(item.book) === currentBookId);
+    async function loadRelatedBooks() {
+      setLoadingRelated(true);
+      try {
+        let results = [];
+        const currentBookId = book._id;
+
+        if (book.author) {
+          const res = await fetchBooks({ searchTerm: book.author, limit: 10 });
+          const allBooks = res?.books;
+          results = allBooks.filter((b) => b._id !== currentBookId);
+        }
+
+        if (results.length === 0 && book.title) {
+          const stopWords = [
+            "the",
+            "a",
+            "an",
+            "of",
+            "and",
+            "in",
+            "to",
+            "for",
+            "with",
+            "on",
+            "at",
+            "by",
+          ];
+          const titleWords = book.title
+            .toLowerCase()
+            .split(" ")
+            .filter((word) => word.length > 2 && !stopWords.includes(word));
+
+          if (titleWords.length > 0) {
+            const searchTerm = titleWords[0];
+            const res = await fetchBooks({ searchTerm: searchTerm, limit: 10 });
+            const allBooks = res?.books;
+            results = allBooks.filter((b) => b._id !== currentBookId);
+          }
+        }
+
+        if (results.length === 0 && book.genre) {
+          const res = await fetchBooks({ genre: book.genre, limit: 10 });
+          const allBooks = res?.books;
+          results = allBooks.filter((b) => b._id !== currentBookId);
+        }
+
+        setRelatedBooks(results || []);
+      } catch (err) {
+        console.error("Failed to load related books:", err.message);
+      } finally {
+        setLoadingRelated(false);
+      }
+    }
+
+    loadRelatedBooks();
+  }, [book]);
+
+  const currentBookId = book ? book._id : null;
+  const cartItem = cart.find((item) => item.book._id === currentBookId);
   const quantityInCart = cartItem?.quantity || 0;
-  const inStock = (book?.stockQuantity ?? 0) > 0;
+  const inStock = book?.inStock || false;
 
   function handleAddToCart() {
     if (!book || !inStock) return;
@@ -70,7 +136,11 @@ export default function BookDetailPage() {
             <>
               <div className={ui.detailLayout}>
                 <div className={ui.detailCoverWrap}>
-                  <BookCover image={book.bookImage} title={book.title} size="xl" />
+                  <BookCover
+                    image={book.bookImage}
+                    title={book.title}
+                    size="xl"
+                  />
                 </div>
 
                 <div className={ui.detailInfoList}>
@@ -112,7 +182,9 @@ export default function BookDetailPage() {
                         >
                           <Minus size={18} />
                         </button>
-                        <span className={ui.cartQtyValue}>{quantityInCart}</span>
+                        <span className={ui.cartQtyValue}>
+                          {quantityInCart}
+                        </span>
                         <button
                           type="button"
                           onClick={handleIncrement}
@@ -129,8 +201,7 @@ export default function BookDetailPage() {
                         >
                           <Trash2 size={18} />
                         </button>
-                        
-                        {/* Redirect button to Cart Page */}
+
                         <Link to="/cart" className={`${ui.primaryBtn} flex-1`}>
                           Shopping cart
                         </Link>
@@ -153,6 +224,16 @@ export default function BookDetailPage() {
               <p className={ui.detailIntroText}>
                 {book.description || "No description available for this book."}
               </p>
+
+              {!loadingRelated && relatedBooks.length > 0 && (
+                <div className="mt-16">
+                  <BookCarousel
+                    title={`Related Books`}
+                    books={relatedBooks}
+                    viewAllHref="/books"
+                  />
+                </div>
+              )}
             </>
           )}
 

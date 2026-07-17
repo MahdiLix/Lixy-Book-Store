@@ -6,21 +6,23 @@ const mongoose = require("mongoose");
 const { getUserAuthToken } = require("../helper/userLoginAuth");
 const { uniqueSuffix, UPLOAD_ROOT } = require("../helper/testConfig");
 
-
 describe("BOOKS API TESTS", () => {
   let bearerToken;
   let bookId;
   let bookCleanedUp = false;
+
+  // uses for POST, PUT fields
   let uploadFilePath;
   const bookTitle = `Clean Code ${uniqueSuffix()}`;
   const bookAuthor = "Robert C. Martin";
+  const stockQuantity = 2;
+  const price = 10;
 
   beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);
     bearerToken = await getUserAuthToken();
   });
 
-  
   afterAll(async () => {
     if (bookId && !bookCleanedUp) {
       try {
@@ -68,6 +70,8 @@ describe("BOOKS API TESTS", () => {
         .post("/api/books/add")
         .field("title", bookTitle)
         .field("author", bookAuthor)
+        .field("stockQuantity", stockQuantity)
+        .field("price", price)
         .attach("bookImage", testUploadFilePath);
 
       expect(res.status).toBe(401);
@@ -78,6 +82,8 @@ describe("BOOKS API TESTS", () => {
         .post("/api/books/add")
         .set("Authorization", bearerToken)
         .field("author", bookAuthor)
+        .field("stockQuantity", stockQuantity)
+        .field("price", price)
         .attach("bookImage", testUploadFilePath);
 
       expect(res.status).toBe(400);
@@ -90,6 +96,8 @@ describe("BOOKS API TESTS", () => {
         .set("Authorization", bearerToken)
         .field("title", bookTitle)
         .field("author", bookAuthor)
+        .field("stockQuantity", stockQuantity)
+        .field("price", price)
         .attach("bookImage", testUploadFilePath);
 
       expect(res.status).toBe(201);
@@ -142,18 +150,17 @@ describe("BOOKS API TESTS", () => {
       "fixtures",
       "test-image-2.jpg",
     );
-      it("should update the selected book by id, without attach bookImage", async () => {
+    it("should update the selected book by id, without attach bookImage", async () => {
       const res = await request(app)
         .put(`/api/books/update/${bookId}`)
         .set("Authorization", bearerToken)
         .send({
-          author: "Robert C.C.C. Martin"
-        })
- 
+          author: "Robert C.C.C. Martin",
+        });
+
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
     });
-
 
     it("should update the selected book by id, with attach  bookImage", async () => {
       const res = await request(app)

@@ -15,6 +15,10 @@ const getBookById = async (req, res, next) => {
       data: book,
     });
   } catch (error) {
+    // FIX: Handle CastError for invalid MongoDB IDs
+    if (error.name === "CastError") {
+      return next(createError(400, "Invalid book id format"));
+    }
     next(error);
   }
 };

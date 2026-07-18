@@ -1,13 +1,10 @@
-const deleteUploadImage = require("../../middlewares/deleteUploadImage");
 const bookModel = require("../../models/bookModel");
-const createError = require("../../middlewares/errors/errorHandling");
+const deleteUploadImage = require("../../middlewares/deleteUploadImage");
 
 const deleteBookByIdService = async (id) => {
   const book = await bookModel.findById(id);
-  
-  if (!book) {
-    throw createError(404, "Book not found with this id");
-  }
+
+  if (!book) return null; // handle responce by controller
 
   const bookPath = book.bookImage;
 
@@ -16,6 +13,7 @@ const deleteBookByIdService = async (id) => {
   }
 
   await book.deleteOne();
+  return book;  
 };
 
 module.exports = deleteBookByIdService;

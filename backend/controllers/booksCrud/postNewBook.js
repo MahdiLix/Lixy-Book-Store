@@ -1,4 +1,3 @@
-const fs = require("fs");
 const createError = require("../../middlewares/errors/errorHandling");
 const postNewBookService = require("../../services/booksCrud/postNewBookService");
 const deleteUploadImage = require("../../middlewares/deleteUploadImage");

@@ -3,9 +3,12 @@ const adminRouter = express.Router();
 const { userProtect, authorize } = require("../controllers/users/userProtect");
 const registerNewAdmin = require("../controllers/admins/registerNewAdmin");
 const userLogin = require("../controllers/users/userLogin");
+const getAdminById = require("../controllers/admins/getAdminById");
+const getAllAdmins = require("../controllers/admins/getAllAdmins"); 
 const updateAdminById = require("../controllers/admins/updateAdminById");
-const updateAdminPassById = require("../controllers/admins/updateAdminPassById");
+const updateAdminPasswordById = require("../controllers/admins/updateAdminPasswordById");
 const deleteAdminById = require("../controllers/admins/deleteAdminById");
+
 
 adminRouter.post("/login", userLogin);
 
@@ -15,6 +18,16 @@ adminRouter.post(
   userProtect,
   authorize("superadmin"),
   registerNewAdmin,
+);
+
+adminRouter.get("/users", userProtect, authorize("superadmin"), getAllAdmins);
+
+// Only admins/superadmins should view admin profiles
+adminRouter.get(
+  "/:id",
+  userProtect,
+  authorize("admin", "superadmin"),
+  getAdminById,
 );
 
 adminRouter.put(
@@ -28,7 +41,7 @@ adminRouter.patch(
   "/password/:id",
   userProtect,
   authorize("admin", "superadmin"),
-  updateAdminPassById,
+  updateAdminPasswordById,
 );
 
 adminRouter.delete(

@@ -1,13 +1,10 @@
 const deleteUploadImage = require("../../middlewares/deleteUploadImage");
-const createError = require("../../middlewares/errors/errorHandling");
 const bookModel = require("../../models/bookModel");
 
 const updateBookByIdService = async (id, bookData, bookFile) => {
   const book = await bookModel.findById(id);
 
-  if (!book) {
-    throw createError(404, "Book not found with this id");
-  }
+  if (!book) return null;
 
   const oldBookImage = book.bookImage;
 
@@ -26,7 +23,8 @@ const updateBookByIdService = async (id, bookData, bookFile) => {
   // remove old image from uploads path
   if (
     oldBookImage &&
-    bookFile && bookFile.filename &&
+    bookFile &&
+    bookFile.filename &&
     oldBookImage !== updatedBook.bookImage
   ) {
     await deleteUploadImage(oldBookImage);

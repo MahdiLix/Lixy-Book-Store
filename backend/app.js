@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const bookRouter = require("./routes/bookRouter");
 const userRouter = require("./routes/userRouter");
-const adminRouter = require("./routes/adminRoutes");
+const adminRouter = require("./routes/adminRouter");
 
 
 const app = express();

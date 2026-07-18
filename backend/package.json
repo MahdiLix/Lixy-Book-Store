@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose",
-    "seed": "node seedSuperadmin.js",
+    "seed": "node ./seed/seedSuperadmin.js",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },

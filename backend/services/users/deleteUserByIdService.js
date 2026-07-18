@@ -1,6 +1,6 @@
 const userModel = require("../../models/userModel");
 
-const deleteAdminByIdService = async (id) => {
+const deleteUserByIdService = async (id) => {
   return await userModel.findByIdAndDelete(id);
 };
-module.exports = deleteAdminByIdService;
+module.exports = deleteUserByIdService;

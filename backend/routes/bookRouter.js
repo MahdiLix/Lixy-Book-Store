@@ -32,7 +32,7 @@ bookRouter.put(
 bookRouter.delete(
   "/delete/:id",
   userProtect,
-  authorize("superadmin"),
+  authorize("admin", "superadmin"),
   deleteBookById,
 );
 

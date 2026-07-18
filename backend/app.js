@@ -1,14 +1,16 @@
-const path = require('path');
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
-const bookRoutes = require("./routes/bookRoutes");
+
+const bookRouter = require("./routes/bookRouter");
+const userRouter = require("./routes/userRouter");
 const adminRouter = require("./routes/adminRoutes");
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-  
 
 // request loger
 app.use((req, res, next) => {
@@ -18,13 +20,14 @@ app.use((req, res, next) => {
 });
 
 // BACKEND SIDE
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // -> for serve photos 
-app.use("/api/books", bookRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // -> for serve photos
+app.use("/api/books", bookRouter);
+app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 
 // ERROR CORE
 app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || err.status ||  500;
+  const statusCode = err.statusCode || err.status || 500;
   const errorMessage = err.message || "INTERNAL SERVER ERROR";
 
   console.error(err);
@@ -32,7 +35,7 @@ app.use((err, req, res, next) => {
   return res.status(statusCode).json({
     success: false,
     message: errorMessage,
-    statusCode
+    statusCode,
   });
 });
 

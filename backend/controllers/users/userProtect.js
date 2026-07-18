@@ -6,24 +6,37 @@ const userProtect = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(createError(401, "Provide token to login"));
+      return next(
+        createError(
+          401,
+          "Authentication required. Please provide a valid token.",
+        ),
+      );
     }
+
     const token = authHeader.split(" ")[1];
 
     if (!token) {
-      return next(createError(401, "Provide token to login"));
+      return next(
+        createError(
+          401,
+          "Authentication required. Please provide a valid token.",
+        ),
+      );
     }
 
     const user = await decodeUserService(token);
 
     if (!user) {
-      return next(createError(401, "This user doesn't exist"));
+      return next(
+        createError(401, "The user belonging to this token no longer exists."),
+      );
     }
 
     req.user = user;
     return next();
   } catch (error) {
-    return next(createError(401, "Invalid Token"));
+    return next(createError(401, "Invalid or expired token."));
   }
 };
 

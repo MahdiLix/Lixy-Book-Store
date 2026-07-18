@@ -1,18 +1,18 @@
 const userModel = require("../../models/userModel");
 
-const updateAdminByIdService = async (id, userData) => {
- 
-  const data = { ...userData };
+const updateAdminByIdService = async (id, { username, email }) => {
+  const update = await userModel.findByIdAndUpdate(
+    id,
+    {
+      username,
+      email,
+    },
+    {
+      runValidators: true,
+      returnDocument: "after",
+    },
+  );
 
-  if (data.password) {
-    delete data.password;
-  }
- 
-  const update = await userModel.findByIdAndUpdate(id, data, {
-    runValidators: true,
-    returnDocument: "after",
-  });
- 
   return update;
 };
 module.exports = updateAdminByIdService;

@@ -3,23 +3,28 @@ const registerNewService = require("../../services/admins/registerNewAdminServic
 
 const registerNewAdmin = async (req, res, next) => {
   try {
+    // 1. Removed 'role' from destructuring for security
     const { username, email, password } = req.body;
 
-    if (!username?.trim() || !email || !password) {
+    if (!username?.trim() || !email?.trim() || !password) {
       return next(createError(400, "username, email, password is required!"));
     }
-    const newUser = await registerNewService(req.body);
+
+    const newUser = await registerNewService({
+      username,
+      email,
+      password,
+    });
 
     res.status(201).json({
       success: true,
       message: "Admin created successfully!",
       data: newUser,
     });
-    
   } catch (error) {
     if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((err) => err.message);
-      return next(createError(400, `${messages.join(', ')}`))
+      return next(createError(400, `${messages.join(", ")}`));
     }
 
     if (error.code === 11000) {

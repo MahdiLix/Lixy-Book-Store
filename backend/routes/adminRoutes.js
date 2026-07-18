@@ -39,5 +39,3 @@ adminRouter.delete(
 );
 
 module.exports = adminRouter;
-
-``;

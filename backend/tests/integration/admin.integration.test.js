@@ -132,6 +132,9 @@ describe("ADMIN AUTH & CRUD", () => {
         .put(`/api/admin/update/${fakeId}`)
         .set("Authorization", bearerToken)
         .send({ username: "ghost" });
+      console.log("PUT 404");
+      console.log('res status', res.status)
+      console.log('put body', res.body)
 
       expect(res.status).toBe(404);
       expect(res.body.success).toBe(false);

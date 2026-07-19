@@ -107,7 +107,7 @@ describe("BOOKS API TESTS", () => {
       expect(res.body.data.bookImage).toMatch(/\/uploads\//);
 
       bookId = res.body.data._id;
-      uploadFilePath = res.body.data.bookImage; // -> set this path in postNewBook
+      uploadFilePath = res.body.data.bookImage;
       console.log("uploadFilePath", uploadFilePath);
     });
   });

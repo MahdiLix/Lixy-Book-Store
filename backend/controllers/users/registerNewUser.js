@@ -3,7 +3,7 @@ const registerNewUserService = require("../../services/users/registerNewUserServ
 
 const registerNewUser = async (req, res, next) => {
   try {
-    // 1. Removed 'role' from destructuring to prevent privilege escalation
+    //  Removed 'role' from destructuring to prevent privilege escalation
     const { username, email, password } = req.body;
 
     if (!username?.trim() || !email?.trim() || !password) {

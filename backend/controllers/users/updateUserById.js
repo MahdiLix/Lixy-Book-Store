@@ -5,7 +5,7 @@ const updateUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    // prevent to logged-in user cannot change someone else profile by guessing their ID ..
+    // IDOR protection : prevent to logged-in user cannot change someone else profile by guessing their ID ..
     if (req.user.role === "user" && req.user.id !== req.params.id) {
       return next(createError(403, "You can only update your own profile!"));
     }

@@ -10,18 +10,17 @@ const authToken = (userId) => {
 
 const loginService = async ({ email, password }) => {
   const user = await userModel.findOne({ email }).select("+password");
-  if (!user) {
-    throw createError(401, "Invalid credentials");
-  }
+  if (!user) return null;
 
   const matchPass = await user.comparePassword(password);
+
   if (!matchPass) {
-    throw createError(401, "Invalid credentials");
+    return "incorrect";
   }
   // remove pass for more security
   user.password = undefined;
 
-  return authToken(user._id); //db id: 6a084fa00291285802ad12d8
+  return authToken(user._id); //db id is like: 6a084fa00291285802ad12d8
 };
 
 module.exports = loginService;

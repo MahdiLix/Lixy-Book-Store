@@ -6,11 +6,11 @@ const {
   uniqueSuffix,
 } = require("../helper/testConfig");
 
-
-
 describe("ADMIN AUTH & CRUD", () => {
-  let bearerToken;
+  let superAdBearerToken;
   let createdAdminId;
+  let currentAdminPassword;
+
   const suffix = uniqueSuffix();
   const newAdminEmail = `admin_${suffix}@gemail.com`;
   const newAdminUsername = `admin_${suffix}`;
@@ -20,13 +20,13 @@ describe("ADMIN AUTH & CRUD", () => {
   });
 
   afterAll(async () => {
-    if (createdAdminId && bearerToken) {
+    if (createdAdminId && superAdBearerToken) {
       try {
         await request(app)
           .delete(`/api/admin/delete/${createdAdminId}`)
-          .set("Authorization", bearerToken);
+          .set("Authorization", superAdBearerToken);
       } catch (error) {
-        console.error(`Cleanup failed for book ${createdAdminId}:`, error);
+        console.error(`Cleanup failed for admin ${createdAdminId}:`, error);
       }
     }
     await mongoose.disconnect();
@@ -42,7 +42,7 @@ describe("ADMIN AUTH & CRUD", () => {
       expect(res.body.success).toBe(true);
       expect(res.body.token).toBeDefined();
 
-      bearerToken = `Bearer ${res.body.token}`;
+      superAdBearerToken = `Bearer ${res.body.token}`;
     });
 
     it("should reject login with an incorrect password", async () => {
@@ -79,13 +79,16 @@ describe("ADMIN AUTH & CRUD", () => {
     });
 
     it("should register a new admin when authenticated as superadmin", async () => {
+      // initial password
+      currentAdminPassword = "admin2Password";
+
       const res = await request(app)
         .post("/api/admin/register")
-        .set("Authorization", bearerToken)
+        .set("Authorization", superAdBearerToken)
         .send({
           username: newAdminUsername,
           email: newAdminEmail,
-          password: "admin2Password",
+          password: currentAdminPassword,
         });
 
       expect(res.status).toBe(201);
@@ -93,16 +96,15 @@ describe("ADMIN AUTH & CRUD", () => {
       expect(res.body.data._id).toBeDefined();
 
       createdAdminId = res.body.data._id;
-       
     });
 
     it("should reject registering a duplicate email", async () => {
       const res = await request(app)
         .post("/api/admin/register")
-        .set("Authorization", bearerToken)
+        .set("Authorization", superAdBearerToken)
         .send({
           username: `${newAdminUsername}_dup`,
-          email: newAdminEmail, // same email as above, on purpose
+          email: newAdminEmail,
           password: "anotherPassword",
         });
 
@@ -111,11 +113,46 @@ describe("ADMIN AUTH & CRUD", () => {
     });
   });
 
+  describe("GET /api/admin/users", () => {
+    it("should get a list of all admins as superadmin", async () => {
+      const res = await request(app)
+        .get("/api/admin/users")
+        .set("Authorization", superAdBearerToken);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("GET /api/admin/:id", () => {
+    it("should get admin data by id as superadmin", async () => {
+      const res = await request(app)
+        .get(`/api/admin/${createdAdminId}`)
+        .set("Authorization", superAdBearerToken);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data._id).toBe(createdAdminId);
+    });
+
+    it("should return 404 when getting a non-existent admin id", async () => {
+      const fakeId = new mongoose.Types.ObjectId();
+      const res = await request(app)
+        .get(`/api/admin/${fakeId}`)
+        .set("Authorization", superAdBearerToken);
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+  });
+
   describe("PUT /api/admin/update/:id", () => {
     it("should update admin data by id as superadmin", async () => {
       const res = await request(app)
         .put(`/api/admin/update/${createdAdminId}`)
-        .set("Authorization", bearerToken)
+        .set("Authorization", superAdBearerToken)
         .send({
           username: `${newAdminUsername}_updated`,
           email: `updated_${newAdminEmail}`,
@@ -127,10 +164,10 @@ describe("ADMIN AUTH & CRUD", () => {
 
     it("should return 404 when updating a non-existent admin id", async () => {
       const fakeId = new mongoose.Types.ObjectId();
-   
+
       const res = await request(app)
         .put(`/api/admin/update/${fakeId}`)
-        .set("Authorization", bearerToken)
+        .set("Authorization", superAdBearerToken)
         .send({ username: "ghost" });
 
       expect(res.status).toBe(404);
@@ -139,16 +176,20 @@ describe("ADMIN AUTH & CRUD", () => {
   });
 
   describe("PATCH /api/admin/password/:id", () => {
-    it("should update admin password by id", async () => {
+    it("should update admin password by id using current and new password", async () => {
       const res = await request(app)
         .patch(`/api/admin/password/${createdAdminId}`)
-        .set("Authorization", bearerToken)
+        .set("Authorization", superAdBearerToken)
         .send({
-          password: "admin2Password.updated",
+          currentPassword: currentAdminPassword,
+          newPassword: "admin2Password_updated",
         });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
+
+      // Update the variable so future tests use the new password if needed
+      currentAdminPassword = "admin2Password_updated";
     });
   });
 
@@ -156,12 +197,12 @@ describe("ADMIN AUTH & CRUD", () => {
     it("should delete admin by id as superadmin", async () => {
       const res = await request(app)
         .delete(`/api/admin/delete/${createdAdminId}`)
-        .set("Authorization", bearerToken);
+        .set("Authorization", superAdBearerToken);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
 
-      createdAdminId = null;
+      createdAdminId = null; // prevent afterAll cleanup from running again
     });
 
     it("should return 404 when deleting an already-deleted admin id", async () => {
@@ -169,9 +210,10 @@ describe("ADMIN AUTH & CRUD", () => {
 
       const res = await request(app)
         .delete(`/api/admin/delete/${fakeId}`)
-        .set("Authorization", bearerToken);
+        .set("Authorization", superAdBearerToken);
 
       expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
     });
   });
 });

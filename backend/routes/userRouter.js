@@ -9,7 +9,7 @@ const updateUserById = require("../controllers/users/updateUserById");
 const updateUserPassword = require("../controllers/users/updateUserPassword");
 const deleteUserById = require("../controllers/users/deleteUserById");
 
-// Public routes (No auth needed)
+ 
 userRouter.post("/register", registerNewUser);
 userRouter.post("/login", userLogin);
 
@@ -20,7 +20,6 @@ userRouter.get(
   getAllUsers,
 );
 
-// controllers check if req.params.id === req.user.id (unless they are an admin).
 userRouter.get("/:id", userProtect, getUserById);
 
 userRouter.put("/update/:id", userProtect, updateUserById);

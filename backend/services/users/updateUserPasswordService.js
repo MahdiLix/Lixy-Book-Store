@@ -7,8 +7,9 @@ const updateUserPasswordService = async (id, currentPassword, newPassword) => {
 
   // Verify old password before allowing change
   const isMatch = await user.comparePassword(currentPassword);
+  
   if (!isMatch) {
-    throw createError(401, "Current password is incorrect");
+    return "incrorrect";
   }
 
   user.password = newPassword.trim();

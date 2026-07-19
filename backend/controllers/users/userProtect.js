@@ -26,6 +26,7 @@ const userProtect = async (req, res, next) => {
     }
 
     const user = await decodeUserService(token);
+ 
 
     if (!user) {
       return next(

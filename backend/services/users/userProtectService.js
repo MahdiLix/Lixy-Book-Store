@@ -6,6 +6,8 @@ const decodeUserService = async (token) => {
 
   const currentUser = await userModel.findById(decodeUser.id);
 
+  if (!currentUser) return null;
+
   return currentUser;
 };
 

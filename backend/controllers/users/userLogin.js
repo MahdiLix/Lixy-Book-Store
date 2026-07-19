@@ -12,6 +12,9 @@ const userLogin = async (req, res, next) => {
     // Pass only the specific object for safety
     const userAuth = await loginService({ email, password });
 
+    if (!userAuth || userAuth === "incorrect") {
+      return next(createError(401, "Invalid credentials"));
+    }
     res.status(200).json({
       success: true,
       token: userAuth,

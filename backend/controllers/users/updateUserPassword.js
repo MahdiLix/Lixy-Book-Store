@@ -3,7 +3,7 @@ const updateUserPasswordService = require("../../services/users/updateUserPasswo
 
 const updateUserPassword = async (req, res, next) => {
   try {
-    const id = req.params.id;  
+    const id = req.params.id;
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword?.trim() || !newPassword?.trim()) {
@@ -12,10 +12,18 @@ const updateUserPassword = async (req, res, next) => {
       );
     }
 
-    const user = await updateUserPasswordService(id, currentPassword, newPassword);
+    const user = await updateUserPasswordService(
+      id,
+      currentPassword,
+      newPassword,
+    );
 
     if (!user) return next(createError(404, "User not found"));
- 
+    
+    if (user === "incorrect") {
+      return next(createError(401, "Current password is incorrect"));
+    }
+
     res
       .status(200)
       .json({ success: true, message: "Password updated successfully" });

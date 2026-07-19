@@ -4,9 +4,11 @@
 │   ├── controllers
 │   │   ├── admins
 │   │   │   ├── deleteAdminById.js
+│   │   │   ├── getAdminById.js
+│   │   │   ├── getAllAdmins.js
 │   │   │   ├── registerNewAdmin.js
 │   │   │   ├── updateAdminById.js
-│   │   │   └── updateAdminPassById.js
+│   │   │   └── updateAdminPasswordById.js
 │   │   ├── booksCrud
 │   │   │   ├── deleteBookById.js
 │   │   │   ├── getBookById.js
@@ -14,9 +16,12 @@
 │   │   │   ├── postNewBook.js
 │   │   │   └── updateBookById.js
 │   │   └── users
+│   │       ├── deleteUserById.js
+│   │       ├── getAllUsers.js
 │   │       ├── getUserById.js
 │   │       ├── registerNewUser.js
 │   │       ├── updateUserById.js
+│   │       ├── updateUserPassword.js
 │   │       ├── userLogin.js
 │   │       └── userProtect.js
 │   ├── database.js
@@ -35,17 +40,20 @@
 │   ├── package.json
 │   ├── package-lock.json
 │   ├── routes
-│   │   ├── adminRoutes.js
+│   │   ├── adminRouter.js
 │   │   ├── bookRouter.js
 │   │   └── userRouter.js
-│   ├── seedSuperadmin.js
+│   ├── seed
+│   │   └── seedSuperadmin.js
 │   ├── server.js
 │   ├── services
 │   │   ├── admins
 │   │   │   ├── deleteAdminService.js
+│   │   │   ├── getAdminByIdService.js
+│   │   │   ├── getAllAdminsService.js
 │   │   │   ├── registerNewAdminService.js
 │   │   │   ├── updateAdminByIdService.js
-│   │   │   └── updateAdminPassByIdService.js
+│   │   │   └── updateAdminPasswordByIdService.js
 │   │   ├── booksCrud
 │   │   │   ├── deleteBookByIdService.js
 │   │   │   ├── getBookByIdService.js
@@ -53,9 +61,11 @@
 │   │   │   ├── postNewBookService.js
 │   │   │   └── updateBookByIdService.js
 │   │   └── users
+│   │       ├── deleteUserByIdService.js
 │   │       ├── getUserByIdService.js
 │   │       ├── registerNewUserService.js
-│   │       ├── updateUesrByIdService.js
+│   │       ├── updateUserByIdService.js
+│   │       ├── updateUserPasswordService.js
 │   │       ├── userLoginService.js
 │   │       └── userProtectService.js
 │   ├── tests
@@ -76,25 +86,7 @@
 │       ├── bookImage-1783921281291-511596868.png
 │       ├── bookImage-1783921325693-928966312.png
 │       ├── bookImage-1783921349754-105703289.webp
-│       ├── bookImage-1783963767225-139373595.webp
-│       ├── bookImage-1783970224305-840505984.png
-│       ├── bookImage-1784006932797-447432655.png
-│       ├── bookImage-1784007095065-94865716.webp
-│       ├── bookImage-1784007308759-383642082.jpg
-│       ├── bookImage-1784010468955-491473917.jpg
-│       ├── bookImage-1784010565514-412711199.png
-│       ├── bookImage-1784011270125-468632029.webp
-│       ├── bookImage-1784011515398-424238854.jpg
-│       ├── bookImage-1784011893757-441039136.webp
-│       ├── bookImage-1784038063011-483755848.webp
-│       ├── bookImage-1784041905810-643358883.png
-│       ├── bookImage-1784041947540-499589961.webp
-│       ├── bookImage-1784122176162-137517784.png
-│       ├── bookImage-1784124398120-358764039.png
-│       ├── bookImage-1784198758064-654288316.png
-│       ├── bookImage-1784272613003-599697591.jpg
-│       ├── bookImage-1784287708301-309572452.png
-│       └── bookImage-1784307023949-592496070.png
+|
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
@@ -178,4 +170,4 @@
 │   └── superadmin.md
 └── README.md
 
-40 directories, 139 files
+41 directories, 148 files

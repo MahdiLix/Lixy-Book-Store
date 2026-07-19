@@ -3,21 +3,21 @@ const userModel = require("../../models/userModel");
 
 const updateAdminPasswordByIdService = async (
   id,
-  currentAdminPass,
-  newAdminPass,
+  currentPassword,
+  newPassword,
 ) => {
   const admin = await userModel.findById(id).select("+password");
 
-  if (!admin) {
-    return null;
-  }
+  if (!admin) return null;
+
   // Verify old password before allowing change
   const isMatch = await admin.comparePassword(currentPassword);
+  
   if (!isMatch) {
-    throw createError(401, "Current password is incorrect");
+    return "incrorrect";
   }
 
-  admin.password = newAdminPass.trim();
+  admin.password = newPassword.trim();
   await admin.save();
 
   return admin;

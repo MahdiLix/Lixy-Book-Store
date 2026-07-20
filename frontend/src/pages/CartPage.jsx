@@ -1,17 +1,26 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, Trash2, Minus, Plus } from "lucide-react";
-import Header from "../components/Header";
+import Header from "../components/Layout/Header";
 import BookCover from "../components/Books/BookCover";
 import { useCart } from "../context/CartContext";
 import { ui } from "../styles/ui";
 
 export default function CartPage() {
-  const { cart, cartCount, cartTotal, cartSubtotal, cartSavings, updateQuantity, removeFromCart } = useCart();
+  const {
+    cart,
+    cartCount,
+    cartTotal,
+    cartSubtotal,
+    cartSavings,
+    updateQuantity,
+    removeFromCart,
+  } = useCart();
 
   const getBookId = (book) => book._id ?? book.id;
 
   // Overall discount percentage for the entire cart
-  const overallDiscountPercent = cartSubtotal > 0 ? Math.round((cartSavings / cartSubtotal) * 100) : 0;
+  const overallDiscountPercent =
+    cartSubtotal > 0 ? Math.round((cartSavings / cartSubtotal) * 100) : 0;
 
   return (
     <main className={ui.page}>
@@ -21,7 +30,9 @@ export default function CartPage() {
         <div className={ui.homeContainer}>
           {cart.length === 0 ? (
             <div className={ui.card}>
-              <div className={`${ui.cardBody} flex flex-col items-center gap-4 py-16`}>
+              <div
+                className={`${ui.cardBody} flex flex-col items-center gap-4 py-16`}
+              >
                 <div className={ui.cartEmptyIcon}>
                   <ShoppingCart size={40} />
                 </div>
@@ -41,24 +52,31 @@ export default function CartPage() {
               </h1>
 
               <div className={ui.cartLayout}>
-                {/* Items list */}
                 <div className={ui.cartItems}>
                   {cart.map(({ book, quantity }) => {
                     const finalPrice = book.price ?? 0;
                     const originalPrice = book.originalPrice ?? finalPrice;
                     const hasDiscount = originalPrice > finalPrice;
-                    const itemDiscount = hasDiscount ? Math.round(((originalPrice - finalPrice) / originalPrice) * 100) : 0;
+                    const itemDiscount = hasDiscount
+                      ? Math.round(
+                          ((originalPrice - finalPrice) / originalPrice) * 100,
+                        )
+                      : 0;
 
                     return (
                       <div key={getBookId(book)} className={ui.cartItem}>
                         <div className={ui.cartItemCover}>
-                          <BookCover image={book.bookImage} title={book.title} size="sm" />
+                          <BookCover
+                            image={book.bookImage}
+                            title={book.title}
+                            size="sm"
+                          />
                         </div>
 
                         <div className={ui.cartItemInfo}>
                           <h3 className={ui.cartItemTitle}>{book.title}</h3>
                           <p className={ui.cartItemSub}>{book.author}</p>
-                          
+
                           {/* Price logic for individual cart item */}
                           <div className="mt-1 flex items-center gap-2">
                             <span className={ui.cartItemPrice}>
@@ -80,7 +98,9 @@ export default function CartPage() {
                         <div className={ui.cartQtyControl}>
                           <button
                             type="button"
-                            onClick={() => updateQuantity(getBookId(book), quantity - 1)}
+                            onClick={() =>
+                              updateQuantity(getBookId(book), quantity - 1)
+                            }
                             className={ui.cartQtyBtn}
                             aria-label="Decrease quantity"
                           >
@@ -89,7 +109,9 @@ export default function CartPage() {
                           <span className={ui.cartQtyValue}>{quantity}</span>
                           <button
                             type="button"
-                            onClick={() => updateQuantity(getBookId(book), quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(getBookId(book), quantity + 1)
+                            }
                             className={ui.cartQtyBtn}
                             aria-label="Increase quantity"
                           >
@@ -125,7 +147,7 @@ export default function CartPage() {
                   {cartSavings > 0 && (
                     <div className={ui.cartSummaryRow}>
                       <span className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                        Discount 
+                        Discount
                         <span className="rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
                           -{overallDiscountPercent}%
                         </span>
@@ -140,13 +162,18 @@ export default function CartPage() {
                     <span className={ui.sectionSub}>Shipping</span>
                     <span className={ui.cartSummaryValue}>Free</span>
                   </div>
-                  
-                  <div className={`${ui.cartSummaryRow} ${ui.cartSummaryTotal}`}>
+
+                  <div
+                    className={`${ui.cartSummaryRow} ${ui.cartSummaryTotal}`}
+                  >
                     <span>Total</span>
                     <span>${cartTotal.toFixed(2)}</span>
                   </div>
 
-                  <button type="button" className={`${ui.primaryBtn} mt-4 w-full`}>
+                  <button
+                    type="button"
+                    className={`${ui.primaryBtn} mt-4 w-full`}
+                  >
                     Checkout
                   </button>
                   <Link to="/books" className={`${ui.ghostBtn} mt-2 w-full`}>

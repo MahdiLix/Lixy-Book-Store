@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
+import Header from "../components/Layout/Header";
 import BooksGrid from "../components/Books/BooksGrid";
-import Loading from "../components/Shared/Loading";
-import FeedbackMessage from "../components/Shared/FeedbackMessage";
+import Loading from "../components/Ui/Loading";
+import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 
@@ -59,7 +59,6 @@ export default function BooksPage() {
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex flex-col gap-6">
-  
             {loading && <Loading />}
 
             {!loading && (

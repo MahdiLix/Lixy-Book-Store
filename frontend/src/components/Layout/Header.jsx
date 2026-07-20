@@ -9,17 +9,16 @@ import {
   Moon,
   User,
 } from "lucide-react";
-import SearchBookForm from "./Books/SearchBookForm";
-import { clearAuthToken, isLoggedIn } from "../utils/auth";
-import { useTheme } from "../context/ThemeContext";
-import { useCart } from "../context/CartContext";
-import { ui } from "../styles/ui";
+import SearchBookForm from "../Books/SearchBookForm";
+import UserDropdown from "./UserDropdown";
+import { isLoggedIn } from "../../utils/auth";
+import { useTheme } from "../../context/ThemeContext";
+import { useCart } from "../../context/CartContext";
+import { ui } from "../../styles/ui";
 
 const LOGO_SRC = "/lixystoreblue-logo.png";
 
 export default function Header({
-  loginRedirectTo = "/login",
-  logoutRedirectTo = "/",
   searchTerm,
   setSearchTerm,
   onSearch,
@@ -32,17 +31,10 @@ export default function Header({
 
   const [internalTerm, setInternalTerm] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const term = searchTerm !== undefined ? searchTerm : internalTerm;
   const setTerm = setSearchTerm || setInternalTerm;
-
-  function handleAvatarClick() {
-    clearAuthToken();
-    navigate(logoutRedirectTo, { replace: true });
-  }
-
-  function handleLoginClick() {
-    navigate(loginRedirectTo);
-  }
 
   function handleSearchSubmit(e) {
     e.preventDefault();
@@ -60,7 +52,11 @@ export default function Header({
       <header className={ui.homeHeader}>
         <div className={`${ui.homeHeaderRow} relative z-30`}>
           <Link to="/" className={ui.homeLogoLink}>
-            <img src={LOGO_SRC} alt="Lixy Store logo" className={ui.homeLogoImg} />
+            <img
+              src={LOGO_SRC}
+              alt="Lixy Store logo"
+              className={ui.homeLogoImg}
+            />
             <span className={ui.homeLogoText}>Lixy Store</span>
           </Link>
 
@@ -75,13 +71,25 @@ export default function Header({
           />
 
           <div className={ui.homeHeaderActions}>
-            <button type="button" className={ui.homeIconBtn} aria-label="Wishlist">
+            <button
+              type="button"
+              className={ui.homeIconBtn}
+              aria-label="Wishlist"
+            >
               <Heart size={20} />
             </button>
-            <button type="button" className={ui.homeIconBtn} aria-label="Notifications">
+            <button
+              type="button"
+              className={ui.homeIconBtn}
+              aria-label="Notifications"
+            >
               <Bell size={20} />
             </button>
-            <button type="button" className={ui.homeIconBtn} aria-label="Language">
+            <button
+              type="button"
+              className={ui.homeIconBtn}
+              aria-label="Language"
+            >
               <Globe size={20} />
             </button>
             <button
@@ -93,31 +101,37 @@ export default function Header({
               {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            {/* Cart icon with badge */}
             <Link to="/cart" className={ui.cartIconBtn} aria-label="Cart">
               <ShoppingCart size={20} />
-              {cartCount > 0 && <span className={ui.cartBadge}>{cartCount}</span>}
+              {cartCount > 0 && (
+                <span className={ui.cartBadge}>{cartCount}</span>
+              )}
             </Link>
 
-            {loggedIn ? (
+            {/* User Avatar Dropdown Logic */}
+            <div className="relative">
               <button
                 type="button"
-                onClick={handleAvatarClick}
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
                 className={ui.homeAvatarBtn}
-                aria-label="Log out"
-                title="Log out"
+                aria-label="User menu"
               >
                 <User size={20} />
               </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleLoginClick}
-                className={ui.homeLoginBtn}
-              >
-                Login
-              </button>
-            )}
+
+              {isDropdownOpen && (
+                <>
+                  {/* Invisible backdrop to close dropdown when clicking outside */}
+                  <div
+                    className="fixed inset-0 z-30"
+                    onClick={() => setIsDropdownOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 z-40">
+                    <UserDropdown onClose={() => setIsDropdownOpen(false)} />
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>

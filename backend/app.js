@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 // BACKEND SIDE
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // -> for serve photos
 app.use("/api/books", bookRouter);
-app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 
 // ERROR CORE

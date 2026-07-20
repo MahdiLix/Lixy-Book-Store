@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+import { Navigate, useNavigate, Link } from "react-router-dom";
+import Header from "../components/Layout/Header";
 import LoginForm from "../components/Login/LoginForm";
-import FeedbackMessage from "../components/Shared/FeedbackMessage";
-import { loginAdmin } from "../api/authApi";
-import { isLoggedIn, saveAuthToken } from "../utils/auth";
+import FeedbackMessage from "../components/Ui/FeedbackMessage";
+import { loginUser } from "../api/userApi";
+import {
+  isLoggedIn,
+  saveAuthToken,
+  saveUserInfo,
+  getUserRole,
+} from "../utils/auth";
 import { ui } from "../styles/ui";
 
 export default function LoginPage() {
@@ -16,7 +21,13 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   if (isLoggedIn()) {
-    return <Navigate to="/admin/books" replace />;
+    const role = getUserRole();
+    return (
+      <Navigate
+        to={role === "admin" || role === "superadmin" ? "/admin/books" : "/"}
+        replace
+      />
+    );
   }
 
   async function handleSubmit(e) {
@@ -31,12 +42,28 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      const data = await loginAdmin({ email: email.trim(), password });
-      saveAuthToken(data.token);
-      navigate("/admin/books", { replace: true });
-    } catch {
+      const loginData = await loginUser({ email: email.trim(), password });
+
+      saveAuthToken(loginData.token);
+
+      if (loginData.data) {
+        saveUserInfo(loginData.data);
+
+        // Redirect based on role
+        const role = loginData.data.role;
+        if (role === "admin" || role === "superadmin") {
+          navigate("/admin/books", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
+      } else {
+        throw new Error(
+          "Login succeeded but user data is missing from server response.",
+        );
+      }
+    } catch (err) {
       setType("error");
-      setMessage("Login Failed!");
+      setMessage(err.message || "Login Failed! Check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -44,19 +71,32 @@ export default function LoginPage() {
 
   return (
     <main className={ui.page}>
-      {/* redirect to HomePage */}
-      <Header subtitle="Admin Login" logoutRedirectTo="/" />
+      <Header />
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center">
-            <LoginForm
-              email={email}
-              password={password}
-              setEmail={setEmail}
-              setPassword={setPassword}
-              onSubmit={handleSubmit}
-              loading={loading}
-            />
+            <div className="w-full max-w-md">
+              <h1 className={`${ui.sectionTitle} mb-6 text-center text-2xl`}>
+                Login
+              </h1>
+              <LoginForm
+                email={email}
+                password={password}
+                setEmail={setEmail}
+                setPassword={setPassword}
+                onSubmit={handleSubmit}
+                loading={loading}
+              />
+              <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
+                Don't have an account?{" "}
+                <Link
+                  to="/user/register"
+                  className="text-indigo-600 hover:underline dark:text-indigo-400"
+                >
+                  Register here
+                </Link>
+              </p>
+            </div>
           </div>
 
           <div className="mx-auto mt-4 w-full max-w-md">

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
+import Header from "../../components/Layout/Header";
 import BooksTable from "../../components/Books/BooksTable";
-import Loading from "../../components/Shared/Loading";
-import FeedbackMessage from "../../components/Shared/FeedbackMessage";
+import Loading from "../../components/Ui/Loading";
+import FeedbackMessage from "../../components/Ui/FeedbackMessage";
 import { deleteBook, fetchBooks } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
 import { ui } from "../../styles/ui";

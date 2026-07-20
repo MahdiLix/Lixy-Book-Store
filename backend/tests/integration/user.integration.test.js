@@ -32,7 +32,7 @@ describe("USER AUTH & CRUD", () => {
       try {
         // Force cleanup using admin token in case the user didn't delete themselves
         await request(app)
-          .delete(`/api/users/delete/${createdUserId}`)
+          .delete(`/api/user/delete/${createdUserId}`)
           .set("Authorization", superAdBearerToken);
       } catch (error) {
         console.error(`Cleanup failed for user ${createdUserId}:`, error);
@@ -41,11 +41,11 @@ describe("USER AUTH & CRUD", () => {
     await mongoose.disconnect();
   });
 
-  describe("POST /api/users/register", () => {
+  describe("POST /api/user/register", () => {
     it("should register a new normal user without an auth token", async () => {
       currentUserPassword = "userPassword123";
 
-      const res = await request(app).post("/api/users/register").send({
+      const res = await request(app).post("/api/user/register").send({
         username: newUserUsername,
         email: newUserEmail,
         password: currentUserPassword,
@@ -60,7 +60,7 @@ describe("USER AUTH & CRUD", () => {
 
     it("should reject registering a duplicate email", async () => {
       const res = await request(app)
-        .post("/api/users/register")
+        .post("/api/user/register")
         .send({
           username: `${newUserUsername}_dup`,
           email: newUserEmail,
@@ -72,9 +72,9 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("POST /api/users/login", () => {
+  describe("POST /api/user/login", () => {
     it("should log in as a normal user with valid credentials", async () => {
-      const res = await request(app).post("/api/users/login").send({
+      const res = await request(app).post("/api/user/login").send({
         email: newUserEmail,
         password: currentUserPassword,
       });
@@ -87,7 +87,7 @@ describe("USER AUTH & CRUD", () => {
     });
 
     it("should reject login with an incorrect password", async () => {
-      const res = await request(app).post("/api/users/login").send({
+      const res = await request(app).post("/api/user/login").send({
         email: newUserEmail,
         password: "wrong-password-123",
       });
@@ -97,10 +97,10 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("GET /api/users/users", () => {
+  describe("GET /api/user/users", () => {
     it("should reject getting all users if logged in as a normal user", async () => {
       const res = await request(app)
-        .get("/api/users/users")
+        .get("/api/user/users")
         .set("Authorization", userBearerToken);
 
       expect(res.status).toBe(403);  
@@ -109,7 +109,7 @@ describe("USER AUTH & CRUD", () => {
 
     it("should get a list of all users as superadmin", async () => {
       const res = await request(app)
-        .get("/api/users/users")
+        .get("/api/user/users")
         .set("Authorization", superAdBearerToken);
 
       expect(res.status).toBe(200);
@@ -119,10 +119,10 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("GET /api/users/:id", () => {
+  describe("GET /api/user/:id", () => {
     it("should get user data by id with user token", async () => {
       const res = await request(app)
-        .get(`/api/users/${createdUserId}`)
+        .get(`/api/user/${createdUserId}`)
         .set("Authorization", userBearerToken);
 
       expect(res.status).toBe(200);
@@ -133,7 +133,7 @@ describe("USER AUTH & CRUD", () => {
     it("should return 404 when getting a non-existent user id", async () => {
       const fakeId = new mongoose.Types.ObjectId();
       const res = await request(app)
-        .get(`/api/users/${fakeId}`)
+        .get(`/api/user/${fakeId}`)
         .set("Authorization", userBearerToken);
 
       expect(res.status).toBe(404);
@@ -141,10 +141,10 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("PUT /api/users/update/:id", () => {
+  describe("PUT /api/user/update/:id", () => {
     it("should update user data by id and ignore role injection", async () => {
       const res = await request(app)
-        .put(`/api/users/update/${createdUserId}`)
+        .put(`/api/user/update/${createdUserId}`)
         .set("Authorization", userBearerToken)
         .send({
           username: `${newUserUsername}_updated`,
@@ -162,7 +162,7 @@ describe("USER AUTH & CRUD", () => {
       const fakeId = new mongoose.Types.ObjectId();
 
       const res = await request(app)
-        .put(`/api/users/update/${fakeId}`)
+        .put(`/api/user/update/${fakeId}`)
         .set("Authorization", superAdBearerToken)
         .send({ username: "ghost" });
 
@@ -171,10 +171,10 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("PATCH /api/users/password/:id", () => {
+  describe("PATCH /api/user/password/:id", () => {
     it("should update user password by id using current and new password", async () => {
       const res = await request(app)
-        .patch(`/api/users/password/${createdUserId}`)
+        .patch(`/api/user/password/${createdUserId}`)
         .set("Authorization", userBearerToken)
         .send({
           currentPassword: currentUserPassword,
@@ -189,10 +189,10 @@ describe("USER AUTH & CRUD", () => {
     });
   });
 
-  describe("DELETE /api/users/delete/:id", () => {
+  describe("DELETE /api/user/delete/:id", () => {
     it("should delete user by id with user token", async () => {
       const res = await request(app)
-        .delete(`/api/users/delete/${createdUserId}`)
+        .delete(`/api/user/delete/${createdUserId}`)
         .set("Authorization", userBearerToken);
 
       expect(res.status).toBe(200);
@@ -205,7 +205,7 @@ describe("USER AUTH & CRUD", () => {
       const fakeId = new mongoose.Types.ObjectId();
 
       const res = await request(app)
-        .delete(`/api/users/delete/${fakeId}`)
+        .delete(`/api/user/delete/${fakeId}`)
         .set("Authorization", superAdBearerToken);
 
       expect(res.status).toBe(404);

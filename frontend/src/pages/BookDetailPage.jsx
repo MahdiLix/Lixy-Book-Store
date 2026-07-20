@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
-import Header from "../components/Header";
+import Header from "../components/Layout/Header";
 import BookCover from "../components/Books/BookCover";
 import PriceTag from "../components/Books/PriceTag";
-import Loading from "../components/Shared/Loading";
-import FeedbackMessage from "../components/Shared/FeedbackMessage";
+import Loading from "../components/Ui/Loading";
+import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBookById, fetchBooks } from "../api/booksApi";
 import { useCart } from "../context/CartContext";
 import { ui } from "../styles/ui";
@@ -165,7 +165,6 @@ export default function BookDetailPage() {
                     {inStock ? "available" : "Out of stock"}
                   </p>
 
-                  {/* Reusable Price Component */}
                   <div className="mt-4">
                     <PriceTag book={book} size="lg" />
                   </div>

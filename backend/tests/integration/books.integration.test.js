@@ -108,7 +108,7 @@ describe("BOOKS API TESTS", () => {
 
       bookId = res.body.data._id;
       uploadFilePath = res.body.data.bookImage;
-      console.log("uploadFilePath", uploadFilePath);
+ 
     });
   });
 

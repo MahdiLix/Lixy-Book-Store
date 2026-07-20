@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
+import Header from "../components/Layout/Header";
 import GenreBar from "../components/Home/GenreBar";
 import HeroBanner from "../components/Home/HeroBanner";
 import PromoBanner from "../components/Home/PromoBanner";
 import BookCarousel from "../components/Home/BookCarousel";
-import Loading from "../components/Shared/Loading";
-import FeedbackMessage from "../components/Shared/FeedbackMessage";
+import Loading from "../components/Ui/Loading";
+import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
-import promoBannerImage from "../assets/images/promo_banner_1.png"
+import promoBannerImage from "../assets/images/promo_banner_1.png";
 import { ui } from "../styles/ui";
 
 export default function HomePage() {
@@ -43,7 +43,6 @@ export default function HomePage() {
         !activeGenre || activeGenre === "" || activeGenre === "Genres";
       const selectedGenre = "Fiction";
 
-      
       setTopBooks(top.books || []);
       setMustOfferBooks(mustOffer.books || []);
 
@@ -86,7 +85,7 @@ export default function HomePage() {
             // title="This Week's Pick"
             // subtitle="Hand-picked stories our readers can't put down."
           />
- 
+
           {loading && <Loading />}
 
           {!loading && (

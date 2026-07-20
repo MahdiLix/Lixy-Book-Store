@@ -27,5 +27,4 @@ userRouter.put("/update/:id", userProtect, updateUserById);
 userRouter.patch("/password/:id", userProtect, updateUserPassword);
 
 userRouter.delete("/delete/:id", userProtect, deleteUserById);
-
 module.exports = userRouter;

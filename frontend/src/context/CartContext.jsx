@@ -17,7 +17,7 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
-  const getBookId = (book) => book?._id ?? book?.id;
+  const getBookId = (book) => book?._id;
 
   function addToCart(book, quantity = 1) {
     setCart((prev) => {
@@ -27,7 +27,7 @@ export function CartProvider({ children }) {
         return prev.map((item) =>
           getBookId(item.book) === id
             ? { ...item, quantity: item.quantity + quantity }
-            : item
+            : item,
         );
       }
       return [...prev, { book, quantity }];
@@ -45,8 +45,8 @@ export function CartProvider({ children }) {
     }
     setCart((prev) =>
       prev.map((item) =>
-        getBookId(item.book) === id ? { ...item, quantity } : item
-      )
+        getBookId(item.book) === id ? { ...item, quantity } : item,
+      ),
     );
   }
 
@@ -56,7 +56,7 @@ export function CartProvider({ children }) {
 
   const cartCount = useMemo(
     () => cart.reduce((sum, item) => sum + item.quantity, 0),
-    [cart]
+    [cart],
   );
 
   // The final price the user pays (uses discountedPrice if available)
@@ -64,10 +64,11 @@ export function CartProvider({ children }) {
     () =>
       cart.reduce(
         (sum, item) =>
-          sum + (item.book.discountedPrice ?? item.book.price ?? 0) * item.quantity,
-        0
+          sum +
+          (item.book.discountedPrice ?? item.book.price ?? 0) * item.quantity,
+        0,
       ),
-    [cart]
+    [cart],
   );
 
   // Subtotal based on original price (before discounts)
@@ -75,15 +76,15 @@ export function CartProvider({ children }) {
     () =>
       cart.reduce(
         (sum, item) => sum + (item.book.price ?? 0) * item.quantity,
-        0
+        0,
       ),
-    [cart]
+    [cart],
   );
 
   // Money saved from discounts
   const cartSavings = useMemo(
     () => cartSubtotal - cartTotal,
-    [cartSubtotal, cartTotal]
+    [cartSubtotal, cartTotal],
   );
 
   return (

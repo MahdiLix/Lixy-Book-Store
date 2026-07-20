@@ -62,6 +62,7 @@
 │   │   │   └── updateBookByIdService.js
 │   │   └── users
 │   │       ├── deleteUserByIdService.js
+│   │       ├── getAllUsersService.js
 │   │       ├── getUserByIdService.js
 │   │       ├── registerNewUserService.js
 │   │       ├── updateUserByIdService.js
@@ -77,41 +78,45 @@
 │   │   │   └── userLoginAuth.js
 │   │   └── integration
 │   │       ├── admin.integration.test.js
-│   │       └── books.integration.test.js
+│   │       ├── books.integration.test.js
+│   │       └── user.integration.test.js
 │   └── uploads
 │       ├── bookImage-1783919469896-747222574.jpg
 │       ├── bookImage-1783919495872-138255262.png
 │       ├── bookImage-1783919530557-122105064.jpg
 │       ├── bookImage-1783920341019-188531643.png
-│       ├── bookImage-1783921281291-511596868.png
-│       ├── bookImage-1783921325693-928966312.png
-│       ├── bookImage-1783921349754-105703289.webp
-|
+ 
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── postcss.config.js
 │   ├── public
 │   │   ├── index.html
 │   │   └── lixystoreblue-logo.png
 │   ├── src
 │   │   ├── api
+│   │   │   ├── adminApi.js
 │   │   │   ├── authApi.js
-│   │   │   └── booksApi.js
+│   │   │   ├── booksApi.js
+│   │   │   └── userApi.js
 │   │   ├── App.jsx
 │   │   ├── assets
+│   │   │   ├── AdminHeader.jsx
 │   │   │   └── images
 │   │   │       └── promo_banner_1.png
 │   │   ├── components
 │   │   │   ├── Admin
 │   │   │   │   ├── AddBookForm.jsx
-│   │   │   │   ├── AdminHeader.jsx
+│   │   │   │   ├── AddUserForm.jsx
+│   │   │   │   ├── AdminTable.jsx
 │   │   │   │   ├── BookFormFields.jsx
 │   │   │   │   ├── BookImagePicker.jsx
-│   │   │   │   └── EditBook
-│   │   │   │       └── EditBookForm.jsx
+│   │   │   │   ├── EditBook
+│   │   │   │   │   └── EditBookForm.jsx
+│   │   │   │   ├── EditUserForm.jsx
+│   │   │   │   ├── UserFormFields.jsx
+│   │   │   │   └── UsersTable.jsx
 │   │   │   ├── Books
 │   │   │   │   ├── BookCard.jsx
 │   │   │   │   ├── BookCover.jsx
@@ -120,7 +125,9 @@
 │   │   │   │   ├── BooksTable.jsx
 │   │   │   │   ├── PriceTag.jsx
 │   │   │   │   └── SearchBookForm.jsx
-│   │   │   ├── Header.jsx
+│   │   │   ├── Header
+│   │   │   │   ├── Header.jsx
+│   │   │   │   └── UserDropdown.jsx
 │   │   │   ├── Home
 │   │   │   │   ├── BookCarousel.jsx
 │   │   │   │   ├── CategorySidebar.jsx
@@ -150,19 +157,25 @@
 │   │   │   ├── admin
 │   │   │   │   ├── AddBookPage.jsx
 │   │   │   │   ├── AdminBooksPage.jsx
-│   │   │   │   └── EditBookPage.jsx
+│   │   │   │   ├── AdminsManagementPage.jsx
+│   │   │   │   ├── EditBookPage.jsx
+│   │   │   │   └── UsersManagementPage.jsx
 │   │   │   ├── BookDetailPage.jsx
 │   │   │   ├── BooksPage.jsx
 │   │   │   ├── BooksSearchPage.jsx
 │   │   │   ├── CartPage.jsx
 │   │   │   ├── HomePage.jsx
-│   │   │   └── LoginPage.jsx
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── UserProfilePage.jsx
+│   │   │   ├── UserRegisterPage.jsx
+│   │   │   └── UserUpdatePage.jsx
 │   │   ├── styles
 │   │   │   └── ui.js
 │   │   └── utils
 │   │       ├── auth.js
 │   │       ├── bookForm.js
-│   │       └── inputGuards.js
+│   │       ├── inputGuards.js
+│   │       └── postcss.config.js
 │   └── tailwind.config.js
 ├── note
 │   ├── env.md
@@ -170,4 +183,4 @@
 │   └── superadmin.md
 └── README.md
 
-41 directories, 148 files
+42 directories, 163 files

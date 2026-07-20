@@ -20,7 +20,10 @@ const loginService = async ({ email, password }) => {
   // remove pass for more security
   user.password = undefined;
 
-  return authToken(user._id); //db id is like: 6a084fa00291285802ad12d8
+  return {
+    token: authToken(user._id), //db id is like: 6a084fa00291285802ad12d8 ,
+    user,
+  };
 };
 
 module.exports = loginService;

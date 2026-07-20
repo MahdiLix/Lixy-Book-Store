@@ -1,6 +1,6 @@
-import BookFormFields from "../BookFormFields";
-import BookImagePicker from "../BookImagePicker";
-import { ui } from "../../../styles/ui";
+import BookFormFields from "./BookFormFields";
+import BookImagePicker from "./BookImagePicker";
+import { ui } from "../../styles/ui";
 
 export default function EditBookForm({
   bookForm,

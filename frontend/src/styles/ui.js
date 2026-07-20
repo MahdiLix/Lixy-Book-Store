@@ -216,4 +216,14 @@ export const ui = {
   detailCartControls: "flex items-center gap-3 flex-wrap",
   detailRemoveBtn:
     "flex h-10 w-10 items-center justify-center rounded-xl border border-rose-300 text-rose-600 transition hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/40",
+
+  // ===== User Dropdown =====
+  dropdownPanel:
+    "w-64 rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 p-2 dark:bg-slate-900 dark:ring-slate-800",
+  dropdownHeader: "px-3 py-2",
+  dropdownName: "text-sm font-semibold text-slate-900 dark:text-white",
+  dropdownEmail: "text-xs text-slate-500 dark:text-slate-400 truncate",
+  dropdownDivider: "my-1 border-t border-slate-200 dark:border-slate-800",
+  dropdownItem:
+    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition w-full text-left cursor-pointer",
 };

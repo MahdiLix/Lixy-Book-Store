@@ -15,9 +15,11 @@ const userLogin = async (req, res, next) => {
     if (!userAuth || userAuth === "incorrect") {
       return next(createError(401, "Invalid credentials"));
     }
+    console.log('auth token and user from backend ', userAuth)
     res.status(200).json({
       success: true,
-      token: userAuth,
+      token: userAuth.token,
+      data: userAuth.user,
     });
   } catch (error) {
     next(error);

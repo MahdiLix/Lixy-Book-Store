@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Header from "../components/Header";
+import Header from "../components/Layout/Header";
 import GenreBar from "../components/Home/GenreBar";
 import CategorySidebar from "../components/Home/CategorySidebar";
 import BooksGrid from "../components/Books/BooksGrid";
-import Loading from "../components/Shared/Loading";
-import FeedbackMessage from "../components/Shared/FeedbackMessage";
+import Loading from "../components/Ui/Loading";
+import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 

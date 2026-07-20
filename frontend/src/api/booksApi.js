@@ -33,7 +33,6 @@ export async function fetchBooks({
   };
 }
 
-
 export async function fetchBookById(id) {
   const res = await fetch(`/api/books/${id}`);
   if (!res.ok) {
@@ -53,7 +52,6 @@ export async function addBook(bookData, authHeader) {
     },
     body: isFormData ? bookData : JSON.stringify(bookData),
   });
-  console.log("form data send to db", bookData);
 
   const data = await res.json();
 
@@ -62,8 +60,6 @@ export async function addBook(bookData, authHeader) {
 
   return data;
 }
-
-
 
 export async function updateBook(id, bookData, authHeader) {
   const isFormData = bookData instanceof FormData;
@@ -84,8 +80,6 @@ export async function updateBook(id, bookData, authHeader) {
 
   return data;
 }
-
-
 
 export async function deleteBook(id, authHeader) {
   const res = await fetch(`/api/books/delete/${id}`, {

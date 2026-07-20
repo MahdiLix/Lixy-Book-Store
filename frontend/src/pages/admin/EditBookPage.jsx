@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "../../components/Header";
-import EditBookForm from "../../components/Admin/EditBook/EditBookForm";
-import Loading from "../../components/Shared/Loading";
-import FeedbackMessage from "../../components/Shared/FeedbackMessage";
+import Header from "../../components/Layout/Header";
+import EditBookForm from "../../components/Admin/EditBookForm";
+import Loading from "../../components/Ui/Loading";
+import FeedbackMessage from "../../components/Ui/FeedbackMessage";
 import { fetchBookById, updateBook } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
 import { buildBookPayload, createEmptyBookForm } from "../../utils/bookForm";

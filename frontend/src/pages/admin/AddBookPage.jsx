@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
+import Header from "../../components/Layout/Header";
 import AddBookForm from "../../components/Admin/AddBookForm";
-import FeedbackMessage from "../../components/Shared/FeedbackMessage";
+import FeedbackMessage from "../../components/Ui/FeedbackMessage";
 import { addBook } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
 import { createEmptyBookForm } from "../../utils/bookForm";
@@ -49,7 +49,7 @@ export default function AddBookPage() {
       const formData = new FormData();
       formData.append("title", bookForm.title.trim());
       formData.append("author", bookForm.author.trim());
-      
+
       if (bookForm.description) {
         formData.append("description", bookForm.description.trim());
       }

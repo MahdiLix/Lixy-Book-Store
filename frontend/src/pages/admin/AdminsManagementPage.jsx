@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import UsersTable from "../../components/Admin/UsersTable";
 import AddUserForm from "../../components/Admin/AddUserForm";
-import EditUserForm from "../../components/Admin/EditUserForm";
+import UpdateAccountForm from "../../components/Account/UpdateAccountForm";
 import Loading from "../../components/Ui/Loading";
 import FeedbackMessage from "../../components/Ui/FeedbackMessage";
 import {
@@ -21,7 +21,6 @@ export default function AdminsManagementPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("notice");
-
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState(null);
   const [formData, setFormData] = useState({
@@ -32,104 +31,142 @@ export default function AdminsManagementPage() {
     newPassword: "",
   });
 
+  const isMounted = useRef(true);
+  const messageTimeout = useRef(null);
+
   useEffect(() => {
     loadAdmins();
+    return () => {
+      isMounted.current = false;
+      if (messageTimeout.current) clearTimeout(messageTimeout.current);
+    };
   }, []);
 
   async function loadAdmins() {
     setLoading(true);
     try {
       const res = await getAllAdmins(getAuthToken());
-      setAdmins(res.admins || res.data || []);
+      if (isMounted.current) {
+        setAdmins(res.data || []);
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
-      if (err.message === "UNAUTHORIZED") {
-        clearAuthToken();
-        navigate("/login");
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+        if (err.message === "UNAUTHORIZED") {
+          clearAuthToken();
+          navigate("/login");
+        }
       }
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   }
 
-  function handleEditClick(admin) {
+  function handleEditClick(adminId) {
+    const admin = admins.find((a) => a._id === adminId);
+    if (!admin) return;
     setEditingAdmin(admin);
+    setShowAddForm(false);
     setFormData({
-      username: admin.username,
-      email: admin.email,
-      role: admin.role,
+      username: admin.username || "",
+      email: admin.email || "",
+      role: admin.role || "admin",
       newPassword: "",
+      password: "",
     });
   }
 
   async function handleUpdateSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
       const payload = {
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         role: formData.role,
       };
-      if (formData.newPassword) payload.newPassword = formData.newPassword;
       await updateAdminProfile(editingAdmin._id, getAuthToken(), payload);
-      setEditingAdmin(null);
-      await loadAdmins();
-      setType("success");
-      setMessage("Admin updated.");
+      if (isMounted.current) {
+        setEditingAdmin(null);
+        await loadAdmins();
+        setType("success");
+        setMessage("Admin updated.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   async function handleAddSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
       await registerAdmin(getAuthToken(), {
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password,
         role: formData.role || "admin",
       });
-      setShowAddForm(false);
-      await loadAdmins();
-      setType("success");
-      setMessage("Admin added.");
+      if (isMounted.current) {
+        setShowAddForm(false);
+        await loadAdmins();
+        setType("success");
+        setMessage("Admin added.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   async function handleRemove(id) {
     if (!window.confirm("Remove this admin?")) return;
+    setLoading(true);
     try {
-      setLoading(true);
       await deleteAdmin(id, getAuthToken());
-      setAdmins((prev) => prev.filter((a) => a._id !== id));
-      setType("success");
-      setMessage("Admin removed.");
+      if (isMounted.current) {
+        setAdmins((prev) => prev.filter((a) => a._id !== id));
+        setType("success");
+        setMessage("Admin removed.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   return (
     <main className={ui.page}>
-      <Header logoutRedirectTo="/login" />
+      <Header />
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex flex-col gap-6">
@@ -144,6 +181,7 @@ export default function AdminsManagementPage() {
                       email: "",
                       password: "",
                       role: "admin",
+                      newPassword: "",
                     });
                   }}
                   className={ui.primaryBtn}
@@ -165,11 +203,28 @@ export default function AdminsManagementPage() {
             )}
 
             {editingAdmin && (
-              <EditUserForm
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleUpdateSubmit}
-                onCancel={() => setEditingAdmin(null)}
+              <UpdateAccountForm
+                username={formData.username}
+                email={formData.email}
+                role={formData.role}
+                newPassword={formData.newPassword}
+                setUsername={(val) =>
+                  setFormData((prev) => ({ ...prev, username: val }))
+                }
+                setEmail={(val) =>
+                  setFormData((prev) => ({ ...prev, email: val }))
+                }
+                setRole={(val) =>
+                  setFormData((prev) => ({ ...prev, role: val }))
+                }
+                setNewPassword={(val) =>
+                  setFormData((prev) => ({ ...prev, newPassword: val }))
+                }
+                handleSubmit={handleUpdateSubmit}
+                loading={loading}
+                showRole={true}
+                requireCurrentPassword={false}
+                submitButtonText="Update Admin"
               />
             )}
 
@@ -180,7 +235,7 @@ export default function AdminsManagementPage() {
                 onEdit={handleEditClick}
               />
             )}
- 
+
             <FeedbackMessage message={message} type={type} />
           </div>
         </div>

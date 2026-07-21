@@ -14,7 +14,7 @@ const updateAdminPasswordByIdService = async (
   const isMatch = await admin.comparePassword(currentPassword);
   
   if (!isMatch) {
-    return "incrorrect";
+    return "incorrect";
   }
 
   admin.password = newPassword.trim();

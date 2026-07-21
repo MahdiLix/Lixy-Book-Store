@@ -20,7 +20,7 @@ adminRouter.post(
   registerNewAdmin,
 );
 
-adminRouter.get("/users", userProtect, authorize("superadmin"), getAllAdmins);
+adminRouter.get("/admins", userProtect, authorize("superadmin"), getAllAdmins);
 
 // Only admins/superadmins should view admin profiles
 adminRouter.get(

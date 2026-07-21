@@ -58,14 +58,14 @@ export default function UserRegisterPage() {
               >
                 <div>
                   <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                    Name
+                    Username
                   </label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={ui.input}
-                    placeholder="John Doe"
+                    placeholder="Jackbavin"
                   />
                 </div>
                 <div>

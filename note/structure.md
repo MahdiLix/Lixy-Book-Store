@@ -85,12 +85,35 @@
 │       ├── bookImage-1783919495872-138255262.png
 │       ├── bookImage-1783919530557-122105064.jpg
 │       ├── bookImage-1783920341019-188531643.png
- 
+│       ├── bookImage-1783921281291-511596868.png
+│       ├── bookImage-1783921325693-928966312.png
+│       ├── bookImage-1783921349754-105703289.webp
+│       ├── bookImage-1783963767225-139373595.webp
+│       ├── bookImage-1783970224305-840505984.png
+│       ├── bookImage-1784006932797-447432655.png
+│       ├── bookImage-1784007095065-94865716.webp
+│       ├── bookImage-1784007308759-383642082.jpg
+│       ├── bookImage-1784010468955-491473917.jpg
+│       ├── bookImage-1784010565514-412711199.png
+│       ├── bookImage-1784011270125-468632029.webp
+│       ├── bookImage-1784011515398-424238854.jpg
+│       ├── bookImage-1784011893757-441039136.webp
+│       ├── bookImage-1784038063011-483755848.webp
+│       ├── bookImage-1784041905810-643358883.png
+│       ├── bookImage-1784041947540-499589961.webp
+│       ├── bookImage-1784122176162-137517784.png
+│       ├── bookImage-1784124398120-358764039.png
+│       ├── bookImage-1784272613003-599697591.jpg
+│       ├── bookImage-1784307023949-592496070.png
+│       ├── bookImage-1784445277830-887003062.jpg
+│       ├── bookImage-1784535840936-432214277.png
+│       └── bookImage-1784552368667-639477511.png
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
 │   ├── package.json
 │   ├── package-lock.json
+│   ├── postcss.config.js
 │   ├── public
 │   │   ├── index.html
 │   │   └── lixystoreblue-logo.png
@@ -112,8 +135,7 @@
 │   │   │   │   ├── AdminTable.jsx
 │   │   │   │   ├── BookFormFields.jsx
 │   │   │   │   ├── BookImagePicker.jsx
-│   │   │   │   ├── EditBook
-│   │   │   │   │   └── EditBookForm.jsx
+│   │   │   │   ├── EditBookForm.jsx
 │   │   │   │   ├── EditUserForm.jsx
 │   │   │   │   ├── UserFormFields.jsx
 │   │   │   │   └── UsersTable.jsx
@@ -125,19 +147,18 @@
 │   │   │   │   ├── BooksTable.jsx
 │   │   │   │   ├── PriceTag.jsx
 │   │   │   │   └── SearchBookForm.jsx
-│   │   │   ├── Header
-│   │   │   │   ├── Header.jsx
-│   │   │   │   └── UserDropdown.jsx
 │   │   │   ├── Home
 │   │   │   │   ├── BookCarousel.jsx
 │   │   │   │   ├── CategorySidebar.jsx
 │   │   │   │   ├── GenreBar.jsx
 │   │   │   │   ├── HeroBanner.jsx
 │   │   │   │   └── PromoBanner.jsx
+│   │   │   ├── Layout
+│   │   │   │   ├── Header.jsx
+│   │   │   │   └── UserDropdown.jsx
 │   │   │   ├── Login
 │   │   │   │   └── LoginForm.jsx
-│   │   │   ├── SearchBookForm.jsx
-│   │   │   └── Shared
+│   │   │   └── Ui
 │   │   │       ├── Card.jsx
 │   │   │       ├── ErrorMessage.jsx
 │   │   │       ├── FeedbackMessage.jsx
@@ -174,8 +195,7 @@
 │   │   └── utils
 │   │       ├── auth.js
 │   │       ├── bookForm.js
-│   │       ├── inputGuards.js
-│   │       └── postcss.config.js
+│   │       └── inputGuards.js
 │   └── tailwind.config.js
 ├── note
 │   ├── env.md
@@ -183,4 +203,4 @@
 │   └── superadmin.md
 └── README.md
 
-42 directories, 163 files
+41 directories, 163 files

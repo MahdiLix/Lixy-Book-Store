@@ -1,9 +1,19 @@
-import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Navigate } from "react-router-dom";
 import Header from "../components/Layout/Header";
+import Loading from "../components/Ui/Loading";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
-import { updateUserProfile } from "../api/userApi";
-import { updateAdminProfile } from "../api/adminApi";
+import UpdateAccountForm from "../components/Account/UpdateAccountForm";
+import {
+  updateUserProfile,
+  updateUserPassword,
+  getUserProfile,
+} from "../api/userApi";
+import {
+  updateAdminProfile,
+  updateAdminPassword,
+  getAdminProfile,
+} from "../api/adminApi";
 import {
   isLoggedIn,
   getUserInfo,
@@ -14,7 +24,6 @@ import {
 import { ui } from "../styles/ui";
 
 export default function UserUpdatePage() {
-  const navigate = useNavigate();
   const loggedIn = isLoggedIn();
   const currentUser = getUserInfo();
   const role = getUserRole();
@@ -23,10 +32,19 @@ export default function UserUpdatePage() {
   const [email, setEmail] = useState(currentUser?.email || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
   const [message, setMessage] = useState("");
   const [type, setType] = useState("error");
   const [loading, setLoading] = useState(false);
+
+  const isMounted = useRef(true);
+  const messageTimeout = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+      if (messageTimeout.current) clearTimeout(messageTimeout.current);
+    };
+  }, []);
 
   if (!loggedIn) return <Navigate to="/login" replace />;
 
@@ -40,45 +58,95 @@ export default function UserUpdatePage() {
       return;
     }
 
-    try {
-      setLoading(true);
-      const token = getAuthToken();
-      const userId = currentUser._id || currentUser.id;
-      const payload = { username: username.trim(), email: email.trim() };
-
-      // Only include password fields if the user typed something in
-      if (currentPassword && newPassword) {
-        payload.currentPassword = currentPassword;
-        payload.newPassword = newPassword;
-      }
-
-      let updatedUserRes;
-      if (role === "admin" || role === "superadmin") {
-        updatedUserRes = await updateAdminProfile(userId, token, payload);
-      } else {
-        updatedUserRes = await updateUserProfile(userId, token, payload);
-      }
-
-      // Extract the updated user data from standard backend response shapes
-      const updatedUserData =
-        updatedUserRes.data?.user ||
-        updatedUserRes.data ||
-        updatedUserRes.user ||
-        updatedUserRes;
-      saveUserInfo(updatedUserData);
-
-      setType("success");
-      setMessage("Account updated successfully!");
-      setCurrentPassword("");
-      setNewPassword("");
-      setTimeout(() => setMessage(""), 3000);
-    } catch (err) {
+    if (
+      (currentPassword && !newPassword?.trim()) ||
+      (!currentPassword?.trim() && newPassword)
+    ) {
       setType("error");
-      setMessage(
-        err.message || "Failed to update account. Check your current password.",
-      );
+      setMessage("Please provide both Current Password and New Password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const token = getAuthToken();
+      const userId = currentUser._id;
+
+      const profilePayload = {
+        username: username.trim(),
+        email: email.trim(),
+        currentPassword: currentPassword,
+      };
+
+      if (role === "admin" || role === "superadmin") {
+        await updateAdminProfile(userId, token, profilePayload);
+      } else {
+        await updateUserProfile(userId, token, profilePayload);
+      }
+
+      if (currentPassword && newPassword) {
+        try {
+          const passwordPayload = { currentPassword, newPassword };
+          if (role === "admin" || role === "superadmin") {
+            await updateAdminPassword(userId, token, passwordPayload);
+          } else {
+            await updateUserPassword(userId, token, passwordPayload);
+          }
+        } catch (passwordErr) {
+          // Password update failed → re‑fetch profile from server to stay in sync
+          let freshUser;
+          if (role === "admin" || role === "superadmin") {
+            const res = await getAdminProfile(userId, token);
+            freshUser = res.data;
+          } else {
+            const res = await getUserProfile(userId, token);
+            freshUser = res.data;
+          }
+          if (isMounted.current && freshUser) {
+            saveUserInfo(freshUser);
+            setUsername(freshUser.username || "");
+            setEmail(freshUser.email || "");
+            setType("error");
+            setMessage(
+              "Profile updated, but password change failed. Data re‑synced.",
+            );
+            setCurrentPassword("");
+            setNewPassword("");
+            return;
+          }
+          throw new Error("Failed to re‑sync profile after password error.");
+        }
+      }
+
+      // Both operations succeeded → save local info
+      const updatedUser = {
+        ...currentUser,
+        username: username.trim(),
+        email: email.trim(),
+      };
+      if (isMounted.current) {
+        saveUserInfo(updatedUser);
+        setType("success");
+        setMessage("Account updated successfully!");
+        setCurrentPassword("");
+        setNewPassword("");
+      }
+    } catch (err) {
+      if (isMounted.current) {
+        setType("error");
+        setMessage(
+          err.message ||
+            "Failed to update account. Check your current password.",
+        );
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
@@ -92,71 +160,24 @@ export default function UserUpdatePage() {
               Update Account
             </h1>
 
-            <form
-              onSubmit={handleSubmit}
-              className={`${ui.card} ${ui.cardBody} flex flex-col gap-4`}
-            >
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className={ui.input}
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={ui.input}
-                />
-              </div>
+            {loading && <Loading />}
 
-              <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-800">
-                <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Change Password (Optional)
-                </p>
-                <div className="mb-4">
-                  <label className="mb-1 block text-sm text-slate-500 dark:text-slate-400">
-                    Current Password
-                  </label>
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className={ui.input}
-                    placeholder="******"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm text-slate-500 dark:text-slate-400">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className={ui.input}
-                    placeholder="******"
-                  />
-                </div>
-              </div>
+            <UpdateAccountForm
+              username={username}
+              email={email}
+              currentPassword={currentPassword}
+              newPassword={newPassword}
+              setUsername={setUsername}
+              setEmail={setEmail}
+              setCurrentPassword={setCurrentPassword}
+              setNewPassword={setNewPassword}
+              handleSubmit={handleSubmit}
+              loading={loading}
+              showRole={false}
+              requireCurrentPassword={true}
+              submitButtonText="Update Account"
+            />
 
-              <button
-                type="submit"
-                disabled={loading}
-                className={`${ui.primaryBtn} mt-4`}
-              >
-                {loading ? "Updating..." : "Update Account"}
-              </button>
-            </form>
             <div className="mx-auto mt-4 w-full max-w-md">
               <FeedbackMessage message={message} type={type} />
             </div>

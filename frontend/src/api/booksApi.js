@@ -1,3 +1,5 @@
+const BASE_URL = "/api/books";
+
 export async function fetchBooks({
   searchTerm = "",
   genre = "",
@@ -34,7 +36,7 @@ export async function fetchBooks({
 }
 
 export async function fetchBookById(id) {
-  const res = await fetch(`/api/books/${id}`);
+  const res = await fetch(`${BASE_URL}/${id}`);
   if (!res.ok) {
     throw new Error(`Server Error: ${res.status}`);
   }
@@ -45,7 +47,7 @@ export async function fetchBookById(id) {
 export async function addBook(bookData, authHeader) {
   const isFormData = bookData instanceof FormData;
 
-  const res = await fetch("/api/books/add", {
+  const res = await fetch(`${BASE_URL}/add`, {
     method: "POST",
     headers: {
       Authorization: authHeader,
@@ -64,7 +66,7 @@ export async function addBook(bookData, authHeader) {
 export async function updateBook(id, bookData, authHeader) {
   const isFormData = bookData instanceof FormData;
 
-  const res = await fetch(`/api/books/update/${id}`, {
+  const res = await fetch(`${BASE_URL}/update/${id}`, {
     method: "PUT",
     headers: {
       Authorization: authHeader,
@@ -82,7 +84,7 @@ export async function updateBook(id, bookData, authHeader) {
 }
 
 export async function deleteBook(id, authHeader) {
-  const res = await fetch(`/api/books/delete/${id}`, {
+  const res = await fetch(`${BASE_URL}/delete/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: authHeader,

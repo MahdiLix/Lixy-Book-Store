@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import UsersTable from "../../components/Admin/UsersTable";
 import AddUserForm from "../../components/Admin/AddUserForm";
-import EditUserForm from "../../components/Admin/EditUserForm";
+import UpdateAccountForm from "../../components/Account/UpdateAccountForm";
 import Loading from "../../components/Ui/Loading";
 import FeedbackMessage from "../../components/Ui/FeedbackMessage";
 import {
@@ -21,10 +21,8 @@ export default function UsersManagementPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("notice");
-
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -33,8 +31,15 @@ export default function UsersManagementPage() {
     newPassword: "",
   });
 
+  const isMounted = useRef(true);
+  const messageTimeout = useRef(null);
+
   useEffect(() => {
     loadUsers();
+    return () => {
+      isMounted.current = false;
+      if (messageTimeout.current) clearTimeout(messageTimeout.current);
+    };
   }, []);
 
   async function loadUsers() {
@@ -42,98 +47,127 @@ export default function UsersManagementPage() {
     try {
       const token = getAuthToken();
       const res = await getAllUsers(token);
-      setUsers(res.users || res.data || []);
+      if (isMounted.current) {
+        setUsers(res.data || []);
+      }
     } catch (err) {
-      setType("error");
-      setMessage(`Failed to load users: ${err.message}`);
-      if (err.message === "UNAUTHORIZED") {
-        clearAuthToken();
-        navigate("/login");
+      if (isMounted.current) {
+        setType("error");
+        setMessage(`Failed to load users: ${err.message}`);
+        if (err.message === "UNAUTHORIZED") {
+          clearAuthToken();
+          navigate("/login");
+        }
       }
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   }
 
-  function handleEditClick(user) {
+  function handleEditClick(userId) {
+    const user = users.find((u) => u._id === userId);
+    if (!user) return;
     setEditingUser(user);
     setShowAddForm(false);
     setFormData({
-      username: user.username,
-      email: user.email,
-      role: user.role,
+      username: user.username || "",
+      email: user.email || "",
+      role: user.role || "user",
       newPassword: "",
+      password: "",
     });
   }
 
   async function handleUpdateSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
       const token = getAuthToken();
       const payload = {
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         role: formData.role,
       };
-      if (formData.newPassword) payload.newPassword = formData.newPassword;
-
       await updateUserProfile(editingUser._id, token, payload);
-      setEditingUser(null);
-      await loadUsers();
-      setType("success");
-      setMessage("User updated successfully.");
+      if (isMounted.current) {
+        setEditingUser(null);
+        await loadUsers();
+        setType("success");
+        setMessage("User updated successfully.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   async function handleAddSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
       await registerUser({
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password,
       });
-      setShowAddForm(false);
-      await loadUsers();
-      setType("success");
-      setMessage("User added successfully.");
+      if (isMounted.current) {
+        setShowAddForm(false);
+        await loadUsers();
+        setType("success");
+        setMessage("User added successfully.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   async function handleRemove(userId) {
     if (!window.confirm("Remove this user?")) return;
+    setLoading(true);
     try {
-      setLoading(true);
       await deleteUser(userId, getAuthToken());
-      setUsers((prev) => prev.filter((u) => u._id !== userId));
-      setType("success");
-      setMessage("User removed.");
+      if (isMounted.current) {
+        setUsers((prev) => prev.filter((u) => u._id !== userId));
+        setType("success");
+        setMessage("User removed.");
+      }
     } catch (err) {
-      setType("error");
-      setMessage(err.message);
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message);
+      }
     } finally {
-      setLoading(false);
-      setTimeout(() => setMessage(""), 3000);
+      if (isMounted.current) {
+        setLoading(false);
+        messageTimeout.current = setTimeout(() => {
+          if (isMounted.current) setMessage("");
+        }, 3000);
+      }
     }
   }
 
   return (
     <main className={ui.page}>
-      <Header logoutRedirectTo="/login" />
+      <Header />
       <div className={ui.pageTopSpace}>
         <div className={ui.container}>
           <div className="flex flex-col gap-6">
@@ -143,7 +177,13 @@ export default function UsersManagementPage() {
                 <button
                   onClick={() => {
                     setShowAddForm(true);
-                    setFormData({ username: "", email: "", password: "" });
+                    setFormData({
+                      username: "",
+                      email: "",
+                      password: "",
+                      role: "user",
+                      newPassword: "",
+                    });
                   }}
                   className={ui.primaryBtn}
                 >
@@ -164,11 +204,28 @@ export default function UsersManagementPage() {
             )}
 
             {editingUser && (
-              <EditUserForm
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleUpdateSubmit}
-                onCancel={() => setEditingUser(null)}
+              <UpdateAccountForm
+                username={formData.username}
+                email={formData.email}
+                role={formData.role}
+                newPassword={formData.newPassword}
+                setUsername={(val) =>
+                  setFormData((prev) => ({ ...prev, username: val }))
+                }
+                setEmail={(val) =>
+                  setFormData((prev) => ({ ...prev, email: val }))
+                }
+                setRole={(val) =>
+                  setFormData((prev) => ({ ...prev, role: val }))
+                }
+                setNewPassword={(val) =>
+                  setFormData((prev) => ({ ...prev, newPassword: val }))
+                }
+                handleSubmit={handleUpdateSubmit}
+                loading={loading}
+                showRole={true}
+                requireCurrentPassword={false}
+                submitButtonText="Update User"
               />
             )}
 

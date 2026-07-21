@@ -9,7 +9,7 @@ const updateUserPasswordService = async (id, currentPassword, newPassword) => {
   const isMatch = await user.comparePassword(currentPassword);
   
   if (!isMatch) {
-    return "incrorrect";
+    return "incorrect";
   }
 
   user.password = newPassword.trim();

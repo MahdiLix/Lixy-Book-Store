@@ -54,6 +54,20 @@ export async function updateUserProfile(id, token, payload) {
   return data;
 }
 
+export async function updateUserPassword(id, token, payload) {
+  const res = await fetch(`${BASE_URL}/password/${id}`, {
+    method: "PATCH",
+    headers: { 
+      "Content-Type": "application/json",
+      Authorization: token 
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Server Error ${res.status}`);
+  return data;
+}
+
 export async function getAllUsers(token) {
   const res = await fetch(`${BASE_URL}/users`, {
     headers: { Authorization: token },
@@ -76,3 +90,4 @@ export async function deleteUser(id, token) {
 
   return data;
 }
+

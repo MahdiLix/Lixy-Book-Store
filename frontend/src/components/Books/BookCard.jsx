@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+ import { useNavigate } from "react-router-dom";
 import BookCover from "./BookCover";
 import { ui } from "../../styles/ui";
 
@@ -46,6 +46,7 @@ export default function BookCard({ book, onSelect }) {
       </h3>
       {author && <p className={ui.bookCardSub}>{author}</p>}
 
+      {/* The mt-auto in bookCardFooter pushes this section to the bottom */}
       <div className={ui.bookCardFooter}>
         <div className={ui.bookCardPriceWrap}>
           {hasDiscount && (
@@ -62,6 +63,7 @@ export default function BookCard({ book, onSelect }) {
         )}
       </div>
 
+      {/* w-fit ensures the badge doesn't stretch the full width of the card */}
       <span className={inStock ? ui.bookCardStock : ui.bookCardOutOfStock}>
         {inStock ? `in stock` : "Out of stock"}
       </span>

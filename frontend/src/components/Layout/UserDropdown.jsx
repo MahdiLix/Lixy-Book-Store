@@ -9,6 +9,8 @@ import {
   Users,
   BookOpen,
   ShieldCheck,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   clearAuthToken,
@@ -16,10 +18,12 @@ import {
   isLoggedIn,
   getUserRole,
 } from "../../utils/auth";
+import { useTheme } from "../../context/ThemeContext";
 import { ui } from "../../styles/ui";
 
 export default function UserDropdown({ onClose }) {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const loggedIn = isLoggedIn();
   const user = getUserInfo();
   const role = getUserRole();
@@ -30,8 +34,12 @@ export default function UserDropdown({ onClose }) {
     navigate("/", { replace: true });
   }
 
+  function handleThemeToggle() {
+    toggleTheme();
+  }
+
   return (
-    <div className={ui.dropdownPanel}>
+    <>
       {loggedIn ? (
         <>
           <div className={ui.dropdownHeader}>
@@ -39,6 +47,15 @@ export default function UserDropdown({ onClose }) {
             <p className={ui.dropdownEmail}>{user?.email || ""}</p>
           </div>
           <div className={ui.dropdownDivider} />
+
+          {/* Theme Toggle: Only visible on screens 640px and below */}
+          <button
+            onClick={handleThemeToggle}
+            className={`${ui.dropdownItem} sm:hidden`}
+          >
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          </button>
 
           <Link to="/cart" onClick={onClose} className={ui.dropdownItem}>
             <ShoppingCart size={16} /> Shopping Cart
@@ -105,6 +122,16 @@ export default function UserDropdown({ onClose }) {
             <p className={ui.dropdownEmail}>Access your account features</p>
           </div>
           <div className={ui.dropdownDivider} />
+
+          {/* Theme Toggle: Only visible on screens 640px and below */}
+          <button
+            onClick={handleThemeToggle}
+            className={`${ui.dropdownItem} sm:hidden`}
+          >
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          </button>
+
           <Link to="/login" onClick={onClose} className={ui.dropdownItem}>
             <LogIn size={16} /> Login
           </Link>
@@ -117,6 +144,6 @@ export default function UserDropdown({ onClose }) {
           </Link>
         </>
       )}
-    </div>
+    </>
   );
 }

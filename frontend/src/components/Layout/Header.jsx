@@ -71,23 +71,24 @@ export default function Header({
           />
 
           <div className={ui.homeHeaderActions}>
+            {/* Hidden on small screens to keep only search & profile */}
             <button
               type="button"
-              className={ui.homeIconBtn}
+              className={`${ui.homeIconBtn} hidden sm:flex`}
               aria-label="Wishlist"
             >
               <Heart size={20} />
             </button>
             <button
               type="button"
-              className={ui.homeIconBtn}
+              className={`${ui.homeIconBtn} hidden sm:flex`}
               aria-label="Notifications"
             >
               <Bell size={20} />
             </button>
             <button
               type="button"
-              className={ui.homeIconBtn}
+              className={`${ui.homeIconBtn} hidden sm:flex`}
               aria-label="Language"
             >
               <Globe size={20} />
@@ -95,7 +96,7 @@ export default function Header({
             <button
               type="button"
               onClick={toggleTheme}
-              className={ui.homeIconBtn}
+              className={`${ui.homeIconBtn} hidden sm:flex`}
               aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
@@ -126,7 +127,8 @@ export default function Header({
                     className="fixed inset-0 z-30"
                     onClick={() => setIsDropdownOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 z-40">
+                  {/* The dropdownPanel class in ui.js now handles right-0 and z-40 */}
+                  <div className={ui.dropdownPanel}>
                     <UserDropdown onClose={() => setIsDropdownOpen(false)} />
                   </div>
                 </>

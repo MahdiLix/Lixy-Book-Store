@@ -6,8 +6,19 @@ import { ui } from "../../styles/ui";
 export default function BookCarousel({ title, books = [], viewAllHref }) {
   const trackRef = useRef(null);
 
-  function scrollBy(amount) {
-    trackRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  // FIXED: Dynamic scroll amount based on actual track width
+  function handleScroll(direction) {
+    const track = trackRef.current;
+    if (!track) return;
+
+    // Scroll by roughly 80% of the visible track width.
+    // This ensures it scrolls smoothly without jumping too many books on mobile.
+    const scrollAmount = track.clientWidth * 0.8 * direction;
+    
+    track.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
   }
 
   if (!books.length) return null;
@@ -28,7 +39,7 @@ export default function BookCarousel({ title, books = [], viewAllHref }) {
       <div className="relative">
         <button
           type="button"
-          onClick={() => scrollBy(-700)}
+          onClick={() => handleScroll(-1)} // Pass -1 for left
           className={`${ui.carouselArrowBtn} -left-5`}
           aria-label="Scroll left"
         >
@@ -45,7 +56,7 @@ export default function BookCarousel({ title, books = [], viewAllHref }) {
 
         <button
           type="button"
-          onClick={() => scrollBy(700)}
+          onClick={() => handleScroll(1)} // Pass 1 for right
           className={`${ui.carouselArrowBtn} -right-5`}
           aria-label="Scroll right"
         >

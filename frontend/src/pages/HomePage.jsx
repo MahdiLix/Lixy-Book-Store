@@ -76,16 +76,15 @@ export default function HomePage() {
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <div className={ui.pageTopSpace}>
+        {/* GenreBar uses ui.genreBar which has the 400px-640px padding rule */}
         <GenreBar onSelectGenre={handleGenreSelect} activeGenre={activeGenre} />
 
+ 
         <div className={`${ui.homeContainer} flex flex-col gap-10 py-8`}>
           <HeroBanner books={heroBooks} />
 
-          <PromoBanner
-            image={promoBannerImage}
-            // title="This Week's Pick"
-            // subtitle="Hand-picked stories our readers can't put down."
-          />
+          {/* PromoBanner is hidden on screens smaller than 768px (md:block) */}
+          <PromoBanner image={promoBannerImage} />
 
           {loading && <Loading />}
 
@@ -112,6 +111,7 @@ export default function HomePage() {
           <FeedbackMessage message={error} type="error" />
         </div>
       </div>
+
       <Footer />
     </main>
   );

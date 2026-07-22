@@ -12,21 +12,22 @@ function getImageSrc(bookImage) {
     return bookImage;
   }
 
-  // Anything else is a relative path stored by the backend (e.g.
-  // "/uploads/xyz.jpg" or "uploads/xyz.jpg") — needs the API base.
+  // Prevent double slashes when API_BASE_URL ends with '/'
+  const base = API_BASE_URL.replace(/\/+$/, "");
   const path = bookImage.startsWith("/") ? bookImage : `/${bookImage}`;
-  return `${API_BASE_URL}${path}`;
+  return `${base}${path}`;
 }
 
 export default function BookCover({ image, title, size = "sm" }) {
   const src = getImageSrc(image);
 
+  // FIXED: removed max-h-52 from 'lg', and replaced w-18 with w-20
   const sizeClass =
     size === "xl"
       ? "h-full w-full max-h-[520px]"
       : size === "lg"
-      ? "h-full w-full max-h-52"
-      : "h-24 w-18";
+        ? "h-full w-full"
+        : "h-24 w-20";
 
   if (!src) {
     return (

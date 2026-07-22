@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import GenreBar from "../components/Home/GenreBar";
@@ -8,24 +8,42 @@ import Loading from "../components/Ui/Loading";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
+import Footer from "../components/Layout/Footer";
 
 export default function BooksSearchPage() {
   const [params, setParams] = useSearchParams();
   const urlSearchTerm = params.get("search") || "";
+  const urlGenre = params.get("genre") || "";
 
   const [searchTerm, setSearchTerm] = useState(urlSearchTerm);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [activeGenre, setActiveGenre] = useState("");
+
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (urlSearchTerm) {
       setSearchTerm(urlSearchTerm);
       loadResults(urlSearchTerm);
+    } else if (urlGenre) {
+      handleGenreSelect(urlGenre);
     }
-  }, [urlSearchTerm]);
+  }, [urlSearchTerm, urlGenre]);
+
+  //  auto‑load Fiction on first visit
+  useEffect(() => {
+    if (!urlSearchTerm && !urlGenre) {
+      handleGenreSelect("Fiction");
+    }
+  }, []);
 
   async function loadResults(term) {
     setError("");
@@ -33,11 +51,17 @@ export default function BooksSearchPage() {
 
     try {
       const res = await fetchBooks({ searchTerm: term, limit: 40 });
-      setBooks(res.books || []);
+      if (isMounted.current) {
+        setBooks(res.books || []);
+      }
     } catch (err) {
-      setError(`Failed to load search results: ${err.message}`);
+      if (isMounted.current) {
+        setError(`Failed to load search results: ${err.message}`);
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   }
 
@@ -46,24 +70,28 @@ export default function BooksSearchPage() {
     setParams({ search: searchTerm.trim() });
   }
 
-  // Genre bar and Category send selected genre to this function and handle hear
   async function handleGenreSelect(genre) {
     setActiveGenre(genre);
     setSearchTerm("");
-    setParams({});
+    setParams({}); // set genre in URL params
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetchBooks({
-        genre,
-        limit: 40,
-      });
-      setBooks(res.books || []);
+      const res = await fetchBooks({ genre, limit: 40 });
+      if (isMounted.current) {
+        setBooks(res.books || []);
+      }
+
+      console.log("genre books", res.books);
     } catch (err) {
-      setError(`Failed to load "${genre}" books: ${err.message}`);
+      if (isMounted.current) {
+        setError(`Failed to load "${genre}" books: ${err.message}`);
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   }
 
@@ -103,6 +131,7 @@ export default function BooksSearchPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

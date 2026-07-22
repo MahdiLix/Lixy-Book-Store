@@ -7,6 +7,8 @@ import {
   UserPlus,
   Settings,
   Users,
+  BookOpen,
+  ShieldCheck,
 } from "lucide-react";
 import {
   clearAuthToken,
@@ -37,6 +39,7 @@ export default function UserDropdown({ onClose }) {
             <p className={ui.dropdownEmail}>{user?.email || ""}</p>
           </div>
           <div className={ui.dropdownDivider} />
+
           <Link to="/cart" onClick={onClose} className={ui.dropdownItem}>
             <ShoppingCart size={16} /> Shopping Cart
           </Link>
@@ -55,13 +58,35 @@ export default function UserDropdown({ onClose }) {
             <Settings size={16} /> Update Account
           </Link>
 
+          {/* Admin & SuperAdmin Management Links */}
           {(role === "admin" || role === "superadmin") && (
+            <>
+              <div className={ui.dropdownDivider} />
+              <Link
+                to="/admin/books"
+                onClick={onClose}
+                className={ui.dropdownItem}
+              >
+                <BookOpen size={16} /> Manage Books
+              </Link>
+              <Link
+                to="/user/users"
+                onClick={onClose}
+                className={ui.dropdownItem}
+              >
+                <Users size={16} /> Manage Users
+              </Link>
+            </>
+          )}
+
+          {/* SuperAdmin ONLY Management Link */}
+          {role === "superadmin" && (
             <Link
-              to="/user/users"
+              to="/admin/admins"
               onClick={onClose}
               className={ui.dropdownItem}
             >
-              <Users size={16} /> Manage Users
+              <ShieldCheck size={16} /> Manage Admins
             </Link>
           )}
 
@@ -80,7 +105,6 @@ export default function UserDropdown({ onClose }) {
             <p className={ui.dropdownEmail}>Access your account features</p>
           </div>
           <div className={ui.dropdownDivider} />
-
           <Link to="/login" onClick={onClose} className={ui.dropdownItem}>
             <LogIn size={16} /> Login
           </Link>

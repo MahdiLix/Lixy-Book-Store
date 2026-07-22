@@ -4,6 +4,7 @@ import Header from "../components/Layout/Header";
 import BookCover from "../components/Books/BookCover";
 import { useCart } from "../context/CartContext";
 import { ui } from "../styles/ui";
+import Footer from "../components/Layout/Footer";
 
 export default function CartPage() {
   const {
@@ -185,6 +186,7 @@ export default function CartPage() {
           )}
         </div>
       </div>
+      <Footer/>
     </main>
   );
 }

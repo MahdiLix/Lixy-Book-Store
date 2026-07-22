@@ -224,6 +224,24 @@ export const ui = {
   dropdownName: "text-sm font-semibold text-slate-900 dark:text-white",
   dropdownEmail: "text-xs text-slate-500 dark:text-slate-400 truncate",
   dropdownDivider: "my-1 border-t border-slate-200 dark:border-slate-800",
+
+  // HOVER COLORS HERE:
   dropdownItem:
-    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition w-full text-left cursor-pointer",
+    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700 transition w-full text-left cursor-pointer",
+
+  // ===== Footer =====
+  footer:
+    "bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 mt-10",
+  footerHeading:
+    "text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white",
+  footerLink:
+    "text-sm text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition",
+  footerSocialIcon:
+    "flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition hover:bg-indigo-600 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-indigo-600 dark:hover:text-white",
+
+  //  layout stick to the bottom
+  page: "min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100",
+
+  // Added "flex-grow" so this section pushes the footer down
+  pageTopSpace: "pt-24 sm:pt-28 flex-grow",
 };

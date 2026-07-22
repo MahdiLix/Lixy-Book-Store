@@ -10,6 +10,7 @@ import { fetchBookById, fetchBooks } from "../api/booksApi";
 import { useCart } from "../context/CartContext";
 import { ui } from "../styles/ui";
 import BookCarousel from "../components/Home/BookCarousel";
+import Footer from "../components/Layout/Footer";
 
 export default function BookDetailPage() {
   const { id } = useParams();
@@ -239,6 +240,8 @@ export default function BookDetailPage() {
           <FeedbackMessage message={error} type="error" />
         </div>
       </div>
+      
+      <Footer />
     </main>
   );
 }

@@ -9,6 +9,7 @@ import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
 import promoBannerImage from "../assets/images/promo_banner_1.png";
 import { ui } from "../styles/ui";
+import Footer from "../components/Layout/Footer";
 
 export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -111,6 +112,7 @@ export default function HomePage() {
           <FeedbackMessage message={error} type="error" />
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

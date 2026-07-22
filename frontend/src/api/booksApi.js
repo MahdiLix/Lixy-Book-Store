@@ -4,7 +4,7 @@ export async function fetchBooks({
   searchTerm = "",
   genre = "",
   page = 1,
-  limit = 10,
+  limit = 12,
   latest = false,
   top = false,
   mustOffer = false,

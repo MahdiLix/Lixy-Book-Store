@@ -232,6 +232,13 @@ export const ui = {
   dropdownItem:
     "flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700 transition w-full text-left cursor-pointer",
 
+  // ===== Pagination =====
+  paginationWrap: "flex justify-center items-center gap-2 mt-10 flex-wrap",
+  pageBtn:
+    "flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent dark:disabled:hover:bg-transparent",
+  pageBtnActive:
+    "bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:border-indigo-500 dark:hover:bg-indigo-400", // ===== Footer =====
+
   // ===== Footer =====
   footer:
     "bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 mt-10",

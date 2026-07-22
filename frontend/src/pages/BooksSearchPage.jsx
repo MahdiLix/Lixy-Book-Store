@@ -4,6 +4,7 @@ import Header from "../components/Layout/Header";
 import GenreBar from "../components/Home/GenreBar";
 import CategorySidebar from "../components/Home/CategorySidebar";
 import BooksGrid from "../components/Books/BooksGrid";
+import Pagination from "../components/Ui/Pagination";
 import Loading from "../components/Ui/Loading";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
@@ -17,6 +18,7 @@ export default function BooksSearchPage() {
 
   const [searchTerm, setSearchTerm] = useState(urlSearchTerm);
   const [books, setBooks] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeGenre, setActiveGenre] = useState("");
@@ -45,14 +47,15 @@ export default function BooksSearchPage() {
     }
   }, []);
 
-  async function loadResults(term) {
+  async function loadResults(term, page = 1) {
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetchBooks({ searchTerm: term, limit: 40 });
+      const res = await fetchBooks({ searchTerm: term, limit: 12, page });
       if (isMounted.current) {
         setBooks(res.books || []);
+        setPagination(res.pagination);
       }
     } catch (err) {
       if (isMounted.current) {
@@ -70,7 +73,7 @@ export default function BooksSearchPage() {
     setParams({ search: searchTerm.trim() });
   }
 
-  async function handleGenreSelect(genre) {
+  async function handleGenreSelect(genre, page = 1) {
     setActiveGenre(genre);
     setSearchTerm("");
     setParams({}); // set genre in URL params
@@ -78,9 +81,10 @@ export default function BooksSearchPage() {
     setLoading(true);
 
     try {
-      const res = await fetchBooks({ genre, limit: 40 });
+      const res = await fetchBooks({ genre, limit: 12, page });
       if (isMounted.current) {
         setBooks(res.books || []);
+        setPagination(res.pagination);
       }
 
       console.log("genre books", res.books);
@@ -93,6 +97,15 @@ export default function BooksSearchPage() {
         setLoading(false);
       }
     }
+  }
+
+  async function handlePageChange(page) {
+    if (urlSearchTerm) {
+      await loadResults(urlSearchTerm, page);
+    } else if (activeGenre) {
+      await handleGenreSelect(activeGenre, page);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -125,6 +138,11 @@ export default function BooksSearchPage() {
               {loading && <Loading />}
 
               {!loading && <BooksGrid books={books} />}
+
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+              />
 
               <FeedbackMessage message={error} type="error" />
             </div>

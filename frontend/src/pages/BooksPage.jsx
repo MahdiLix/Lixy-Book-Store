@@ -3,6 +3,7 @@ import Header from "../components/Layout/Header";
 import BooksGrid from "../components/Books/BooksGrid";
 import Loading from "../components/Ui/Loading";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
+import Pagination from "../components/Ui/Pagination"; 
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 import Footer from "../components/Layout/Footer";
@@ -10,6 +11,7 @@ import GenreBar from "../components/Home/GenreBar";
 
 export default function BooksPage() {
   const [books, setBooks] = useState([]);
+  const [pagination, setPagination] = useState(null); 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeGenre, setActiveGenre] = useState("");
   const [error, setError] = useState("");
@@ -23,23 +25,30 @@ export default function BooksPage() {
   }, []);
 
   useEffect(() => {
-    loadBooks();
+    loadBooks(1); // Load first page on mount
   }, []);
 
-  async function loadBooks({
-    searchTerm = "",
+  async function loadBooks(
     page = 1,
-    limit = 40,
-    latest = false,
-  } = {}) {
+    currentSearch = searchTerm,
+    currentGenre = activeGenre,
+  ) {
     if (!isMounted.current) return;
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetchBooks({ searchTerm, page, limit, latest });
+      const res = await fetchBooks({
+        searchTerm: currentSearch.trim(),
+        genre: currentGenre,
+        page,
+        limit: 12,
+        latest: false,
+      });
+
       if (isMounted.current) {
         setBooks(res.books || []);
+        setPagination(res.pagination);
       }
     } catch (err) {
       if (isMounted.current) {
@@ -55,35 +64,19 @@ export default function BooksPage() {
   async function handleSearch(e) {
     e.preventDefault();
     setActiveGenre("");
-    await loadBooks({
-      searchTerm: searchTerm.trim(),
-      page: 1,
-      limit: 40,
-      latest: false,
-    });
+    await loadBooks(1, searchTerm, ""); // Reset to page 1 on new search
   }
 
   async function handleGenreSelect(genre) {
     if (!isMounted.current) return;
     setActiveGenre(genre);
     setSearchTerm("");
-    setError("");
-    setLoading(true);
+    await loadBooks(1, "", genre); // Reset to page 1 on new genre
+  }
 
-    try {
-      const res = await fetchBooks({ genre, limit: 40 });
-      if (isMounted.current) {
-        setBooks(res.books || []);
-      }
-    } catch (err) {
-      if (isMounted.current) {
-        setError(`Failed to load "${genre}" books: ${err.message}`);
-      }
-    } finally {
-      if (isMounted.current) {
-        setLoading(false);
-      }
-    }
+  async function handlePageChange(page) {
+    await loadBooks(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -115,6 +108,11 @@ export default function BooksPage() {
             {!loading && books.length > 0 && (
               <div className="relative z-10">
                 <BooksGrid books={books} />
+
+                <Pagination
+                  pagination={pagination}
+                  onPageChange={handlePageChange}
+                />
               </div>
             )}
 

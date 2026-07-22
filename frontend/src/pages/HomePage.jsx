@@ -7,7 +7,7 @@ import BookCarousel from "../components/Home/BookCarousel";
 import Loading from "../components/Ui/Loading";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
 import { fetchBooks } from "../api/booksApi";
-import promoBannerImage from "../assets/images/promo_banner_1.png";
+import promoBannerImage from "../assets/images/promo_banner_2.png";
 import { ui } from "../styles/ui";
 import Footer from "../components/Layout/Footer";
 

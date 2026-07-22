@@ -1,9 +1,11 @@
 export const ui = {
-  page: "min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100",
+  // Merged layout styles here (removed duplicates from bottom)
+  page: "min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100",
   container: "mx-auto w-full max-w-7xl px-4",
   fixedHeader:
     "fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95",
-  pageTopSpace: "pt-24 sm:pt-28",
+  pageTopSpace: "pt-24 sm:pt-28 flex-grow",
+
   card: "rounded-2xl bg-white shadow-soft ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800",
   cardBody: "p-4 sm:p-6",
   sectionTitle: "text-xl font-bold text-slate-900 dark:text-white",
@@ -111,13 +113,14 @@ export const ui = {
   heroCardBtn:
     "mt-1 inline-flex w-fit items-center justify-center rounded-lg border border-white/70 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10",
 
-  // // Promo banner (extra big image section)
-  promoBanner: "overflow-hidden rounded-2xl bg-slate-800 relative h-48 sm:h-64",
-  promoBannerImg:
-    "absolute inset-0 h-full w-full object-cover object-[center_35%]",
+  // ===== Promo banner (No Zoom) =====
+  promoBanner:
+    "relative overflow-hidden rounded-2xl w-full max-w-[1700px] mx-auto h-[350px]",
+
+  promoBannerImg: "absolute inset-0 w-full h-full rounded-2xl",
 
   promoBannerOverlay:
-    "absolute inset-0 flex flex-col items-start justify-center gap-2 bg-gradient-to-r from-slate-950/80 via-slate-950/40 to-transparent px-8",
+    "absolute inset-0 flex flex-col items-start justify-center gap-2 bg-gradient-to-r from-slate-950/70 via-slate-950/30 to-transparent px-8 rounded-2xl",
   promoBannerTitle: "text-2xl sm:text-3xl font-bold text-white",
   promoBannerSub: "text-sm text-white/80 max-w-md",
 
@@ -238,10 +241,4 @@ export const ui = {
     "text-sm text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition",
   footerSocialIcon:
     "flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition hover:bg-indigo-600 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-indigo-600 dark:hover:text-white",
-
-  //  layout stick to the bottom
-  page: "min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100",
-
-  // Added "flex-grow" so this section pushes the footer down
-  pageTopSpace: "pt-24 sm:pt-28 flex-grow",
 };

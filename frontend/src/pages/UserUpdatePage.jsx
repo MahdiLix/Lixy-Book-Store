@@ -23,6 +23,7 @@ import {
 } from "../utils/auth";
 import { ui } from "../styles/ui";
 
+
 export default function UserUpdatePage() {
   const loggedIn = isLoggedIn();
   const currentUser = getUserInfo();

@@ -47,9 +47,13 @@ export const ui = {
   headerTitle:
     "text-lg font-bold tracking-wide text-slate-900 dark:text-white sm:text-2xl",
 
-  // Book card grid - FIXED: 1 column on mobile to match design
+  // Book card grid - Added horizontal padding at 600px and 930px to prevent stretching
   booksGrid:
-    "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5",
+    "grid grid-cols-1 min-[600px]:grid-cols-2 min-[930px]:grid-cols-3 lg:grid-cols-4 gap-5 min-[600px]:px-15  min-[400px]:px-8 min-[930px]:px-16 lg:px-0",
+
+  // Search results grid - Added horizontal padding at 600px and 930px to prevent stretching
+  searchResultsGrid:
+    "grid grid-cols-1 min-[600px]:grid-cols-2 min-[930px]:grid-cols-3 lg:grid-cols-4 gap-5  min-[600px]:px-15  min-[400px]:px-8 min-[930px]:px-16 lg:px-0",
 
   //  Added h-full so all cards in a row stretch to the same height
   bookCard:
@@ -184,8 +188,8 @@ export const ui = {
   searchResultsHeading:
     "mb-5 text-lg font-semibold text-slate-900 dark:text-white",
   //  1 column on mobile
-  searchResultsGrid:
-    "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5",
+  // searchResultsGrid:
+  //   "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5",
 
   // Book detail page
   detailLayout: "flex flex-col gap-10 md:flex-row md:items-start",

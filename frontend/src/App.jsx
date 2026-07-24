@@ -15,6 +15,7 @@ import AdminBooksPage from "./pages/admin/AdminBooksPage";
 import AddBookPage from "./pages/admin/AddBookPage";
 import EditBookPage from "./pages/admin/EditBookPage";
 import ProtectedRoute from "./components/Ui/ProtectedRoute";
+import NotFoundPage from "./pages/404";
 
 export default function App() {
   return (
@@ -77,7 +78,7 @@ export default function App() {
           }
         />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </CartProvider>
   );

@@ -16,7 +16,7 @@ services:
     ports:
       - "5000:5000"
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       UPLOAD_ROOT: /app/uploads # overrides the host path in .env
       NODE_ENV: development

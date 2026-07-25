@@ -107,7 +107,10 @@
 │       ├── bookImage-1784307023949-592496070.png
 │       ├── bookImage-1784445277830-887003062.jpg
 │       ├── bookImage-1784535840936-432214277.png
-│       └── bookImage-1784552368667-639477511.png
+│       ├── bookImage-1784552368667-639477511.png
+│       ├── bookImage-1784739230237-109920492.jpg
+│       ├── bookImage-1784739248743-830846187.jpg
+│       └── bookImage-1784739262951-513531495.jpg
 ├── docker-compose.yml
 ├── frontend
 │   ├── Dockerfile
@@ -127,8 +130,10 @@
 │   │   ├── assets
 │   │   │   ├── AdminHeader.jsx
 │   │   │   └── images
-│   │   │       └── promo_banner_1.png
+│   │   │       └── promo_banner_2.png
 │   │   ├── components
+│   │   │   ├── Account
+│   │   │   │   └── UpdateAccountForm.jsx
 │   │   │   ├── Admin
 │   │   │   │   ├── AddBookForm.jsx
 │   │   │   │   ├── AddUserForm.jsx
@@ -154,6 +159,7 @@
 │   │   │   │   ├── HeroBanner.jsx
 │   │   │   │   └── PromoBanner.jsx
 │   │   │   ├── Layout
+│   │   │   │   ├── Footer.jsx
 │   │   │   │   ├── Header.jsx
 │   │   │   │   └── UserDropdown.jsx
 │   │   │   ├── Login
@@ -164,6 +170,7 @@
 │   │   │       ├── FeedbackMessage.jsx
 │   │   │       ├── Loading.jsx
 │   │   │       ├── PageShell.jsx
+│   │   │       ├── Pagination.jsx
 │   │   │       ├── ProtectedRoute.jsx
 │   │   │       ├── SearchPanel.jsx
 │   │   │       └── SectionTitle.jsx
@@ -175,6 +182,7 @@
 │   │   ├── index.css
 │   │   ├── index.js
 │   │   ├── pages
+│   │   │   ├── 404.jsx
 │   │   │   ├── admin
 │   │   │   │   ├── AddBookPage.jsx
 │   │   │   │   ├── AdminBooksPage.jsx
@@ -190,6 +198,9 @@
 │   │   │   ├── UserProfilePage.jsx
 │   │   │   ├── UserRegisterPage.jsx
 │   │   │   └── UserUpdatePage.jsx
+│   │   ├── routes
+│   │   │   ├── AdminRoutes.jsx
+│   │   │   └── PublicRoutes.jsx
 │   │   ├── styles
 │   │   │   └── ui.js
 │   │   └── utils
@@ -203,4 +214,4 @@
 │   └── superadmin.md
 └── README.md
 
-41 directories, 163 files
+43 directories, 172 files

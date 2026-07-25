@@ -9,34 +9,42 @@ export default function LoginForm({
   loading,
 }) {
   return (
-    <div className="w-full max-w-md">
-      <div className={ui.card}>
-        <div className={ui.cardBody}>
-          <h1 className={ui.sectionTitle}>Admin Login</h1>
-          <p className={ui.sectionSub}>Login to manage books.</p>
+    <div className={ui.card}>
+      <div className={ui.cardBody}>
+        <h1 className={ui.sectionTitle}>Login to Lixy Store</h1>
+        <p className={ui.sectionSub}>Access your account to continue.</p>
 
-          <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
+        <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Email
+            </label>
             <input
               className={ui.input}
               type="email"
-              placeholder="Email"
+              placeholder="user@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+          </div>
 
+          <div>
+            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Password
+            </label>
             <input
               className={ui.input}
               type="password"
-              placeholder="Password"
+              placeholder="******"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+          </div>
 
-            <button type="submit" className={ui.primaryBtn} disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-        </div>
+          <button type="submit" className={ui.primaryBtn} disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
       </div>
     </div>
   );

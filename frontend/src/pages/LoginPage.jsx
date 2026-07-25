@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import LoginForm from "../components/Login/LoginForm";
@@ -20,6 +20,13 @@ export default function LoginPage() {
   const [type, setType] = useState("error");
   const [loading, setLoading] = useState(false);
 
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   if (isLoggedIn()) {
     const role = getUserRole();
     return (
@@ -32,40 +39,45 @@ export default function LoginPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setMessage("");
+    if (isMounted.current) setMessage("");
 
     if (!email?.trim() || !password?.trim()) {
-      setType("error");
-      setMessage("Provide Email and Password");
+      if (isMounted.current) {
+        setType("error");
+        setMessage("Provide Email and Password");
+      }
       return;
     }
 
     try {
-      setLoading(true);
+      if (isMounted.current) setLoading(true);
       const loginData = await loginUser({ email: email.trim(), password });
 
-      saveAuthToken(loginData.token);
+      // Save token immediately
+      if (loginData.token) {
+        saveAuthToken(loginData.token);
+      }
 
       if (loginData.data) {
         saveUserInfo(loginData.data);
-
-        // Redirect based on role
+        // Redirect based on role (navigation will unmount, no need for guard)
         const role = loginData.data.role;
-        if (role === "admin" || role === "superadmin") {
-          navigate("/admin/books", { replace: true });
-        } else {
-          navigate("/", { replace: true });
-        }
+        navigate(
+          role === "admin" || role === "superadmin" ? "/admin/books" : "/",
+          { replace: true },
+        );
       } else {
         throw new Error(
           "Login succeeded but user data is missing from server response.",
         );
       }
     } catch (err) {
-      setType("error");
-      setMessage(err.message || "Login Failed! Check your credentials.");
+      if (isMounted.current) {
+        setType("error");
+        setMessage(err.message || "Login Failed! Check your credentials.");
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   }
 
@@ -76,9 +88,6 @@ export default function LoginPage() {
         <div className={ui.container}>
           <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center">
             <div className="w-full max-w-md">
-              <h1 className={`${ui.sectionTitle} mb-6 text-center text-2xl`}>
-                Login
-              </h1>
               <LoginForm
                 email={email}
                 password={password}

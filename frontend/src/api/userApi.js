@@ -39,6 +39,7 @@ export async function getUserProfile(id, token) {
 }
 
 export async function updateUserProfile(id, token, payload) {
+  console.log('payload for update', payload)
   const res = await fetch(`${BASE_URL}/update/${id}`, {
     method: "PUT",
     headers: {

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import FeedbackMessage from "../components/Ui/FeedbackMessage";
-import { registerUser } from "../api/userApi";
+import { registerUser, loginUser } from "../api/userApi";
+import { saveAuthToken, saveUserInfo } from "../utils/auth";
 import { ui } from "../styles/ui";
 
 export default function UserRegisterPage() {
@@ -14,30 +15,57 @@ export default function UserRegisterPage() {
   const [type, setType] = useState("error");
   const [loading, setLoading] = useState(false);
 
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
-    setMessage("");
+    if (isMounted.current) setMessage("");
 
     if (!name?.trim() || !email?.trim() || !password?.trim()) {
-      setType("error");
-      setMessage("Please fill in all fields");
+      if (isMounted.current) {
+        setType("error");
+        setMessage("Please fill in all fields");
+      }
       return;
     }
 
     try {
-      setLoading(true);
+      if (isMounted.current) setLoading(true);
 
+      // Register the user
       await registerUser({
         username: name.trim(),
         email: email.trim(),
         password,
       });
-      navigate("/user/login", { replace: true });
+
+      //  Automatically login the user
+      const loginData = await loginUser({ email: email.trim(), password });
+
+      if (loginData.token) {
+        saveAuthToken(loginData.token);
+      }
+      if (loginData.data) {
+        saveUserInfo(loginData.data);
+      }
+
+      navigate("/", { replace: true });
     } catch (err) {
-      setType("error");
-      setMessage(err.message || "Registration Failed!");
+      if (isMounted.current) {
+        setType("error");
+
+        setMessage(
+          err.message ||
+            "Registration succeeded, but auto-login failed. Please log in manually.",
+        );
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   }
 
@@ -49,7 +77,7 @@ export default function UserRegisterPage() {
           <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center">
             <div className="w-full max-w-md">
               <h1 className={`${ui.sectionTitle} mb-6 text-center text-2xl`}>
-                Create Account
+                Create Your Account
               </h1>
 
               <form
@@ -97,14 +125,14 @@ export default function UserRegisterPage() {
                   disabled={loading}
                   className={ui.primaryBtn}
                 >
-                  {loading ? "Registering..." : "Register"}
+                  {loading ? "Creating Account..." : "Register"}
                 </button>
               </form>
 
               <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
                 Already have an account?{" "}
                 <Link
-                  to="/user/login"
+                  to="/login"
                   className="text-indigo-600 hover:underline dark:text-indigo-400"
                 >
                   Login here

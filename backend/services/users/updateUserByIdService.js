@@ -1,12 +1,12 @@
 const userModel = require("../../models/userModel");
 
-const updateUserByIdService = async (id, { username, email }) => {
+const updateUserByIdService = async (id, updatedData) => {
   return await userModel
-    .findByIdAndUpdate(
-      id,
-      { username, email },
-      { runValidators: true, returnDocument: "after" },
-    )
+    .findByIdAndUpdate(id, updatedData, {
+      runValidators: true,
+      returnDocument: "after",
+    })
     .select("-password");
 };
+
 module.exports = updateUserByIdService;

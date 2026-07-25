@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      unique: true,
       required: [true, "password is required!"],
       minlength: 6,
       select: false,
@@ -40,8 +39,8 @@ userSchema.pre("save", async function () {
 });
 
 
-userSchema.methods.comparePassword = async function (condidatePassword) {
-  return bcrypt.compare(condidatePassword, this.password);
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 module.exports = mongoose.model("User", userSchema);

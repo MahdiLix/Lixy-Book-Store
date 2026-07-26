@@ -16,9 +16,9 @@ services:
     ports:
       - "5000:5000"
     env_file:
-      - ./backend/.env
+      - ./backend/.env.docker
     environment:
-      UPLOAD_ROOT: /app/uploads # overrides the host path in .env
+      UPLOAD_ROOT: /app/src/uploads # OVERRITE THE HOST PATH .env.docker
       NODE_ENV: development
 
     volumes:

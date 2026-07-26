@@ -2,20 +2,26 @@
 .env
 .env.local
 .env.docker
+backend/.env
+backend/.env.local
+backend/.env.docker
+frontend/.env
+frontend/.env.local
+frontend/.env.docker
 
 # dependencies
 node_modules/
 
 # logs
-logs
+logs/
 *.log
 npm-debug.log*
-
-
 
 # build folders
 dist/
 build/
+frontend/dist/
+frontend/build/
 
 # cache
 .cache/
@@ -28,10 +34,6 @@ Thumbs.db
 .vscode/
 .idea/
 
-# frontend build
-frontend/dist/
-frontend/build/
-
-# backend temp
+# uploads and temp files
 backend/src/uploads/
-backend/src/temp
+backend/src/temp/

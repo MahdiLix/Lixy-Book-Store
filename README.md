@@ -1,101 +1,194 @@
 # Lixy Book Store
 
-Lixy Book Store is a full-stack book management app built with **React**, **Express.js**, **MongoDB**, **JWT**, **Tailwind CSS**, **Docker**, and **Docker Compose**.
+Lixy Book Store is a full-stack book management application built with React on the frontend and Express.js, MongoDB, JWT, and Docker on the backend. It supports public browsing, role-based authentication, book management, user management, admin management, shopping cart access, and responsive book discovery pages.
 
-The app includes a public book catalog, authentication, and admin features for managing books and admins.
+## Project Overview
+
+The app is organized as a monorepo with two main parts:
+
+- `backend/` for the API, authentication, database access, uploads, tests, and seeding
+- `frontend/` for the React UI, pages, shared components, routing, and client-side state
+
+The current structure includes:
+
+- role-based routes for public users, admins, and superadmins
+- book search, category and genre browsing, and book detail pages
+- user profile and account update flows
+- admin pages for managing books, users, and admins
+- integration tests for books, users, and admins
+- Docker support for local development
 
 ## Features
 
-* Public book listing page
-* Smart search by **title**, **author**, or **genre**
-* Add, edit, and remove books for admins
-* JWT authentication
-* Two roles:
+### Public app experience
 
-  * **Super Admin**
-  * **Admin**
-* Super admin can create admins
-* Dark mode and light mode
-* Modern UI with Tailwind CSS
-* Dockerized development setup
+- Hero banner that always highlights 3 top books
+- Promo banner with rotating ad slides
+- Header search for books by title, author, or genre
+- Genre selection from the top navigation area
+- Search page that redirects to `/search` after a query is entered
+- Book carousel with topics such as `top_genre`, `must_top`, and `must_offer`
+- Books pages where users can view details, add books to cart, and continue to shopping
+- Footer with your social media links
 
-## Project Structure
+### Account and role features
 
-```bash
-backend/
-frontend/
-docker-compose.yml
-.env
-.git/
-.gitignore
-README.md
-```
+- User profile dropdown in the header
+- Access to shopping cart, my profile, and update account
+- Admin and superadmin shortcuts from the dropdown for managing books, users, and admins
+- Role-based access control for public users, admins, and superadmins
+- JWT-based login and authenticated requests
+
+### Discount and expiry behavior
+
+- Admins and superadmins can set discount prices and expiration times
+- The app calculates when discounts expire and reflects that in the UI and book data
+
+## Roles and Permissions
+
+### Superadmin
+
+- Can manage all books
+- Can add, update, and remove books
+- Can add admins and users
+- Can change admin and user details
+- Can change user roles
+- Can manage all users and grant the admin role to regular users
+- Cannot change passwords directly, because passwords are hashed
+
+### Admin
+
+- Can manage books
+- Can add, update, and remove books
+- Can add new users
+- Can manage users and change user details
+- Cannot change passwords or roles
+
+### Regular user
+
+- Can log in to the app
+- Can visit and update their own account information
 
 ## Tech Stack
 
 ### Backend
 
-* Express.js
-* MongoDB + Mongoose
-* JWT for authentication
-* bcrypt for password hashing
-* nodemon for development
+- Express.js
+- MongoDB + Mongoose
+- JWT
+- bcrypt
+- multer
+- Jest
+- Supertest
 
 ### Frontend
 
-* React.js
-* Tailwind CSS v3
-* React Router
-* Modern modal / popup UI for add, edit, and delete actions
+- React
+- Tailwind CSS v3
+- React Router
+- react-scripts
+- lucide-react
+- react-icons
 
-### DevOps
+### DevOps and tooling
 
-* Docker
-* Docker Compose
+- Docker
+- Docker Compose
+- Nodemon
+- PostCSS and Autoprefixer
+
+## Project Structure
+
+```bash
+.
+├── backend
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── seed
+│   │   └── superadmin.seed.js
+│   ├── src
+│   │   ├── app.js
+│   │   ├── config
+│   │   │   └── database.js
+│   │   ├── middlewares
+│   │   │   ├── error.js
+│   │   │   └── uploads
+│   │   │       ├── deleteUpload.js
+│   │   │       └── upload.js
+│   │   ├── models
+│   │   │   ├── Book.js
+│   │   │   └── User.js
+│   │   ├── modules
+│   │   │   ├── admins
+│   │   │   │   ├── admin.routes.js
+│   │   │   │   ├── controllers
+│   │   │   │   └── services
+│   │   │   ├── auth
+│   │   │   │   ├── auth.controller.js
+│   │   │   │   ├── auth.middleware.js
+│   │   │   │   └── auth.service.js
+│   │   │   ├── books
+│   │   │   │   ├── book.routes.js
+│   │   │   │   ├── controllers
+│   │   │   │   └── services
+│   │   │   └── users
+│   │   │       ├── controllers
+│   │   │       ├── services
+│   │   │       └── user.routes.js
+│   │   ├── server.js
+│   │   └── uploads
+│   └── tests
+│       ├── fixtures
+│       ├── helpers
+│       └── integration
+├── frontend
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── public
+│   ├── src
+│   │   ├── api
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   ├── components
+│   │   ├── constants
+│   │   ├── context
+│   │   ├── pages
+│   │   ├── routes
+│   │   ├── styles
+│   │   └── utils
+│   └── tailwind.config.js
+├── docker-compose.yml
+├── README.md
+└── structure.md
+```
 
 ## Before You Start
 
-Read these files first:
+Make sure you have the following installed:
 
-* `env.md` → for environment variables and `.env` setup
-* `superadmin.md` → for super admin credentials and seed instructions
+- Docker and Docker Compose for the easiest setup
+- Node.js and npm if you plan to run the backend or frontend outside Docker
 
 ## Docker Requirements
 
-You need:
+### Install Docker on Linux
 
-* Docker
-* Docker Compose
+On most Linux distributions, install Docker Engine and Docker Compose from the official Docker packages for your distribution. After installation, make sure Docker is running and your user can run Docker commands without `sudo`.
 
-## you can install docker for linux or windows
- 
-### Install Docker on Arch Linux
+Verify the installation with:
 
 ```bash
-sudo pacman -S docker docker-compose
-sudo systemctl enable docker
-sudo systemctl start docker
-sudo usermod -aG docker $USER
+docker --version
+docker compose version
+docker ps
 ```
-
-Then log out and log back in.
 
 ### Install Docker on Windows
 
-1. Download and install **Docker Desktop for Windows**.
-2. During installation, enable **Use WSL 2 based engine** if it is shown.
-3. After installation, start Docker Desktop.
-4. Open PowerShell or Command Prompt and check it with:
-
-```powershell
-docker --version
-docker compose version
-docker ps
-```
-
-If Docker Desktop starts correctly and `docker ps` works, Docker is ready.
-
-### Check Installation
+Install Docker Desktop for Windows and make sure WSL 2 is enabled when Docker Desktop asks for it. After installation, open PowerShell or Command Prompt and verify Docker with:
 
 ```bash
 docker --version
@@ -103,45 +196,94 @@ docker compose version
 docker ps
 ```
 
-If `docker ps` works without `sudo`, Docker is ready.
+## Environment Files
+
+### Backend: `backend/.env.docker`
+
+```env
+HOST=0.0.0.0
+PORT=5000
+MONGO_URI=mongodb://mongo:27017/lixyBookStore
+JWT_SECRET_KEY=<Strong-Secret-Key>
+EXPIRES_IN=30d
+TEST_SUPERADMIN_EMAIL=super@admin.gmail.com
+TEST_SUPERADMIN_PASSWORD=SuperAdminSecret12345
+UPLOAD_ROOT=/app/src/uploads
+```
+
+### Backend: `backend/.env`
+
+```env
+HOST=0.0.0.0
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/lixyBookStore
+JWT_SECRET_KEY=<Strong-Secret-Key>
+EXPIRES_IN=30d
+TEST_SUPERADMIN_EMAIL=super@admin.gmail.com
+TEST_SUPERADMIN_PASSWORD=SuperAdminSecret12345
+UPLOAD_ROOT=/home/.../book-library-mongoose/backend/src/uploads
+```
+
+### Frontend: `frontend/.env.docker`
+
+```env
+REACT_APP_API_BASE_URL=http://localhost:5000
+```
+
+### Frontend: `frontend/.env`
+
+```env
+REACT_APP_API_BASE_URL=http://localhost:5000
+```
 
 ## Setup
 
-### 1) Create the `.env` file
+### 1) Clone the repository
 
-Read `env.md` and create a `.env` file in the root of the project.
-
-Example:
-
-```env
-PORT=5000
-HOST=0.0.0.0
-MONGO_URI=mongodb://mongo:27017/bookLibrary
-JWT_SECRET=your_secret_key
+```bash
+git clone https://github.com/MahdiLix/Lixy-Book-Store.git
+cd Lixy-Book-Store
 ```
 
-### 2) Start the app with Docker Compose
+### 2) Create the environment files
 
-From the project root run:
+Create the four environment files in the exact locations shown above:
+
+- `backend/.env.docker`
+- `backend/.env`
+- `frontend/.env.docker`
+- `frontend/.env`
+
+Use the values from the environment file examples in this README.
+
+### 3) Start the app with Docker Compose
+
+From the project root, run:
 
 ```bash
 docker compose up --build
 ```
 
-Or run in background:
+To run in the background:
 
 ```bash
 docker compose up -d --build
 ```
 
-### 3) Check that everything started successfully
+This starts:
+
+- MongoDB on port `27017`
+- Backend on port `5000`
+- Frontend on port `3000`
+
+### 4) Check the containers
 
 ```bash
 docker compose ps
 docker compose logs -f
 ```
 
-If you want to check one service only:
+To inspect one service only:
 
 ```bash
 docker compose logs -f backend
@@ -151,88 +293,75 @@ docker compose logs -f mongo
 
 ## Create Super Admin
 
-To create the first super admin, run the seed script inside the backend container:
+After the containers are running, seed the first superadmin from the backend container:
 
 ```bash
 docker compose exec backend npm run seed
 ```
 
-This creates the single super admin used to manage admins.
+Use the credentials from the backend environment file:
 
-### Super Admin Login
-
-Open this address in your browser:
-
-```text
-http://localhost:3000/login
-```
-
-Use these credentials from `superadmin.md`:
-
-* **Email:** `super@admin.gmail.com`
-* **Password:** `SuperAdminSecret12345`
+- Email: `super@admin.gmail.com`
+- Password: `SuperAdminSecret12345`
 
 ## Open the App
 
-### Public Book Page
-
-Open:
-
-```text
-http://localhost:3000/books
-```
-
-### Login Page
-
-Open:
-
-```text
-http://localhost:3000/login
-```
+- Frontend: `http://localhost:3000`
+- Login page: `http://localhost:3000/login`
+- Public books page: `http://localhost:3000/books`
+- Search results: `http://localhost:3000/search`
 
 ## What Admins Can Do
 
 Admins can:
 
-* add new books
-* search books in the dashboard
-* edit books
-* remove books
+- add new books
+- update books
+- remove books
+- search books in the dashboard
+- add new users
+- manage users and edit user details
 
-The app also supports modal / popup UI for better book management.
+Superadmins can do everything admins can do, plus manage admins and change user roles.
 
 ## Notes
 
-* Use Docker Compose to run the full app.
-* MongoDB runs inside Docker.
-* Backend connects to MongoDB using the Docker service name `mongo`.
-* Frontend runs on port `3000`.
-* Backend runs on port `5000`.
+- MongoDB runs inside Docker by default
+- The backend connects to MongoDB using the Docker service name `mongo`
+- The frontend runs on port `3000`
+- The backend runs on port `5000`
+- Uploaded book images are stored inside the backend upload directory
+- Passwords are hashed, so password changes must go through the account or auth flows, not direct database edits
 
 ## Useful Commands
 
-Stop the app:
+### Docker
 
 ```bash
-docker compose down
-```
-
-Stop the app and remove volumes:
-
-```bash
+docker compose up -d --build
+docker compose ps
+docker compose logs -f
 docker compose down -v
-```
-
-Restart one service:
-
-```bash
 docker compose restart backend
+docker compose restart frontend
 ```
 
-Rebuild after code changes:
+### Backend
 
 ```bash
-docker compose up --build
+cd backend
+npm install
+npm run dev
+npm start
+npm test
+npm run seed
 ```
 
- 
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+npm run build
+```

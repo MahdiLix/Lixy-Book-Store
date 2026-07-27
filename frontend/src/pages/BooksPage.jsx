@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "../components/Layout/Header";
 import BooksGrid from "../components/Books/BooksGrid";
-import Loading from "../components/Ui/Loading";
-import FeedbackMessage from "../components/Ui/FeedbackMessage";
-import Pagination from "../components/Ui/Pagination"; 
+import Loading from "../components/ui/Loading";
+import FeedbackMessage from "../components/ui/FeedbackMessage";
+import Pagination from "../components/ui/Pagination"; 
 import { fetchBooks } from "../api/booksApi";
 import { ui } from "../styles/ui";
 import Footer from "../components/Layout/Footer";

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import Header from "../components/Layout/Header";
-import Loading from "../components/Ui/Loading";
-import FeedbackMessage from "../components/Ui/FeedbackMessage";
+import Loading from "../components/ui/Loading";
+import FeedbackMessage from "../components/ui/FeedbackMessage";
 import UpdateAccountForm from "../components/Account/UpdateAccountForm";
 import {
   updateUserProfile,

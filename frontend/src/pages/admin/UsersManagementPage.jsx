@@ -4,8 +4,8 @@ import Header from "../../components/Layout/Header";
 import UsersTable from "../../components/Admin/UsersTable";
 import AddUserForm from "../../components/Admin/AddUserForm";
 import UpdateAccountForm from "../../components/Account/UpdateAccountForm";
-import Loading from "../../components/Ui/Loading";
-import FeedbackMessage from "../../components/Ui/FeedbackMessage";
+import Loading from "../../components/ui/Loading";
+import FeedbackMessage from "../../components/ui/FeedbackMessage";
 import {
   getAllUsers,
   deleteUser,

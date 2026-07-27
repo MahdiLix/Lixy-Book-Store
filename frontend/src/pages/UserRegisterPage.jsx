@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../components/Layout/Header";
-import FeedbackMessage from "../components/Ui/FeedbackMessage";
+import FeedbackMessage from "../components/ui/FeedbackMessage";
 import { registerUser, loginUser } from "../api/userApi";
 import { saveAuthToken, saveUserInfo } from "../utils/auth";
 import { ui } from "../styles/ui";

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import LoginForm from "../components/Login/LoginForm";
-import FeedbackMessage from "../components/Ui/FeedbackMessage";
+import FeedbackMessage from "../components/ui/FeedbackMessage";
 import { loginUser } from "../api/userApi";
 import {
   isLoggedIn,

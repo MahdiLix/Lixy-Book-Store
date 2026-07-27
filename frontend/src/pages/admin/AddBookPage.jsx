@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Layout/Header";
 import AddBookForm from "../../components/Admin/AddBookForm";
-import FeedbackMessage from "../../components/Ui/FeedbackMessage";
+import FeedbackMessage from "../../components/ui/FeedbackMessage";
 import { addBook } from "../../api/booksApi";
 import { clearAuthToken, getAuthToken } from "../../utils/auth";
 import { createEmptyBookForm } from "../../utils/bookForm";

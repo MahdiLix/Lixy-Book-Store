@@ -5,7 +5,8 @@ const updateUserService = require("../services/updateUser");
 const VALID_ROLES = ["user", "admin", "superadmin"];
 
 const authorizeUpdate = async (requester, targetId, updateData) => {
-  const isSelfUpdate = requester.id === targetId;
+  //  Cast to String to prevent ObjectId vs String mismatch
+  const isSelfUpdate = String(requester.id) === String(targetId);
   const { role: requesterRole } = requester;
   const { role: newRole } = updateData;
 
@@ -14,30 +15,28 @@ const authorizeUpdate = async (requester, targetId, updateData) => {
     return appError(400, "Invalid role provided!");
   }
 
+  //  SUPERADMIN LOGIC
   if (requesterRole === "superadmin") {
-    // Cannot demote themselves
     if (isSelfUpdate && newRole && newRole !== "superadmin") {
       return appError(403, "You cannot demote your own superadmin account!");
     }
     return null; // Allowed
   }
+
+  //  ADMIN LOGIC
   if (requesterRole === "admin") {
     if (newRole) {
       if (newRole !== "user") {
         return appError(403, "Only superadmins can change roles!");
       }
-      // if frontend send 'user' remove it
-      delete updateData.role;
+      delete updateData.role; // Silently ignore default 'user' role from frontend
     }
 
-    // If updating another user, they must be a regular user
     if (!isSelfUpdate) {
       const targetUser = await User.findById(targetId).select("role");
-
       if (!targetUser) {
         return appError(404, "User not found");
       }
-      // admin cannot change other admins or superadmins
       if (targetUser.role !== "user") {
         return appError(403, "Admins can only update regular users!");
       }
@@ -46,12 +45,23 @@ const authorizeUpdate = async (requester, targetId, updateData) => {
   }
 
   if (requesterRole === "user") {
+    // IDOR protection
     if (!isSelfUpdate) {
       return appError(403, "You can only update your own profile!");
     }
+
+    // Prevent users from changing roles
+    if (newRole) {
+      if (newRole !== "user") {
+        return appError(403, "You are not allowed to change roles!");
+      }
+      delete updateData.role; // Silently ignore default 'user' role from frontend
+    }
+
+    return null;
   }
 
-  //  UNKNOWN ROLE
+  // 5. UNKNOWN ROLE
   return appError(403, "Invalid requester role!");
 };
 
@@ -75,10 +85,9 @@ const updateUserController = async (req, res, next) => {
       return next(authError);
     }
 
-    //  Check if updateData became empty after authorization
-    // (e.g. admin sent only { role: "user" } and it was deleted)
+    // Check if updateData became empty after authorization stripped the role field
     if (Object.keys(updateData).length === 0) {
-      return next(appError(400, "Provide username, email, or role to update"));
+      return next(appError(400, "Provide valid fields to update"));
     }
 
     const updatedUser = await updateUserService(targetId, updateData);

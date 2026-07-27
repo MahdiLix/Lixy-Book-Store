@@ -2,12 +2,13 @@ const express = require("express");
 const userRouter = express.Router();
 const { protect, authorize } = require("../auth/auth.middleware");
 const { login } = require("../auth/auth.controller");
+const createUserController = require("./controllers/createUser");
 const getAllUsersController = require("./controllers/getAllUsers");
 const getUserByIdController = require("./controllers/getUserById");
 const updateUserController = require("./controllers/updateUser");
 const changeUserPasswordController = require("./controllers/changeUserPassword");
 const deleteUserController = require("./controllers/deleteUser");
-const createUserController = require("./controllers/createUser");
+
 
 userRouter.post("/register", createUserController);
 userRouter.post("/login", login);

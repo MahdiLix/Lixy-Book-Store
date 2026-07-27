@@ -1,10 +1,10 @@
 const path = require("path");
 const fs = require("fs");
 const request = require("supertest");
-const app = require("../../app");
+const app = require("../../src/app");
 const mongoose = require("mongoose");
-const { getUserAuthToken } = require("../helper/userLoginAuth");
-const { uniqueSuffix, UPLOAD_ROOT } = require("../helper/testConfig");
+const { getUserAuthToken } = require("../helpers/userLoginAuth");
+const { uniqueSuffix, UPLOAD_ROOT } = require("../helpers/testConfig");
 
 describe("BOOKS API TESTS", () => {
   let bearerToken;
@@ -108,7 +108,6 @@ describe("BOOKS API TESTS", () => {
 
       bookId = res.body.data._id;
       uploadFilePath = res.body.data.bookImage;
- 
     });
   });
 

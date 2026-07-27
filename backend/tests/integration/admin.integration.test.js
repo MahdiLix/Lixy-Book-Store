@@ -1,10 +1,10 @@
 const request = require("supertest");
-const app = require("../../app");
+const app = require("../../src/app");
 const mongoose = require("mongoose");
 const {
   SUPERADMIN_CREDENTIALS,
   uniqueSuffix,
-} = require("../helper/testConfig");
+} = require("../helpers/testConfig");
 
 describe("ADMIN AUTH & CRUD", () => {
   let superAdBearerToken;
@@ -113,10 +113,10 @@ describe("ADMIN AUTH & CRUD", () => {
     });
   });
 
-  describe("GET /api/admin/users", () => {
+  describe("GET /api/admin/admins", () => {
     it("should get a list of all admins as superadmin", async () => {
       const res = await request(app)
-        .get("/api/admin/users")
+        .get("/api/admin/admins")
         .set("Authorization", superAdBearerToken);
 
       expect(res.status).toBe(200);

@@ -1,10 +1,10 @@
 const request = require("supertest");
-const app = require("../../app");
+const app = require("../../src/app");
 const mongoose = require("mongoose");
 const {
   SUPERADMIN_CREDENTIALS,
   uniqueSuffix,
-} = require("../helper/testConfig");
+} = require("../helpers/testConfig");
 
 describe("USER AUTH & CRUD", () => {
   let superAdBearerToken;
@@ -103,7 +103,7 @@ describe("USER AUTH & CRUD", () => {
         .get("/api/user/users")
         .set("Authorization", userBearerToken);
 
-      expect(res.status).toBe(403);  
+      expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
     });
 
@@ -142,19 +142,59 @@ describe("USER AUTH & CRUD", () => {
   });
 
   describe("PUT /api/user/update/:id", () => {
-    it("should update user data by id and ignore role injection", async () => {
+    it("should reject role escalation to admin by a regular user", async () => {
       const res = await request(app)
         .put(`/api/user/update/${createdUserId}`)
         .set("Authorization", userBearerToken)
         .send({
-          username: `${newUserUsername}_updated`,
-          email: `updated_${newUserEmail}`,
-          role: "admin",  
+          role: "admin",
+        });
+
+      expect(res.status).toBe(403);
+      expect(res.body.success).toBe(false);
+    });
+
+    it("should allow superadmin to change a user's role to admin", async () => {
+      const res = await request(app)
+        .put(`/api/user/update/${createdUserId}`)
+        .set("Authorization", superAdBearerToken)
+        .send({
+          role: "admin",
         });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
-      // Ensure the role NOT changed to admin
+      // Ensure the role WAS changed to admin
+      expect(res.body.data.role).toBe("admin");
+    });
+
+    it("should allow superadmin to revert role back to user", async () => {
+      const res = await request(app)
+        .put(`/api/user/update/${createdUserId}`)
+        .set("Authorization", superAdBearerToken)
+        .send({
+          role: "user",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      // Ensure the role WAS reverted to user
+      expect(res.body.data.role).toBe("user");
+    });
+
+    it("should allow a regular user to update their own profile data", async () => {
+      const res = await request(app)
+        .put(`/api/user/update/${createdUserId}`)
+        .set("Authorization", userBearerToken) // FIX: Changed from superAdBearerToken to userBearerToken
+        .send({
+          username: `${newUserUsername}_updated`,
+          email: `updated_${newUserEmail}`,
+          role: "user", // Frontend sending default value
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      // Ensure the role remained "user" and wasn't affected
       expect(res.body.data.role).toBe("user");
     });
 

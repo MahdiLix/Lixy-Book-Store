@@ -7,7 +7,7 @@ const getAllAdminsController = require("./controllers/getAllAdmins");
 const getAdminByIdController = require("./controllers/getAdminById");
 const updateAdminController = require("./controllers/updateAdmin");
 const changeAdminPasswordController = require("./controllers/changeAdminPassword");
-const deleteBookController = require("../books/controllers/deleteBook");
+const deleteAdminController = require("./controllers/deleteAdmin");
 
 
 adminRouter.post("/login", login);
@@ -48,7 +48,7 @@ adminRouter.delete(
   "/delete/:id",
   protect,
   authorize("superadmin"),
-  deleteBookController,
+  deleteAdminController,
 );
 
 module.exports = adminRouter;

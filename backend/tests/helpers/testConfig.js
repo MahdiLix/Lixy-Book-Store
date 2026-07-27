@@ -6,7 +6,7 @@ const SUPERADMIN_CREDENTIALS = {
 };
  
 const UPLOAD_ROOT =
-  process.env.UPLOAD_ROOT || path.resolve(process.cwd(), "uploads");
+  process.env.UPLOAD_ROOT || path.resolve(__dirname, "../../uploads");
 
   
 function uniqueSuffix() {

@@ -206,10 +206,10 @@ docker ps
 HOST=0.0.0.0
 PORT=5000
 MONGO_URI=mongodb://mongo:27017/lixyBookStore
-JWT_SECRET_KEY=<Strong-Secret-Key>
+JWT_SECRET_KEY=<Strong_Secret_Key>
 EXPIRES_IN=30d
-TEST_SUPERADMIN_EMAIL=super@admin.gmail.com
-TEST_SUPERADMIN_PASSWORD=SuperAdminSecret12345
+TEST_SUPERADMIN_EMAIL=superadmin@example.com
+TEST_SUPERADMIN_PASSWORD=Secret_pass
 UPLOAD_ROOT=/app/src/uploads
 ```
 
@@ -219,10 +219,10 @@ UPLOAD_ROOT=/app/src/uploads
 HOST=0.0.0.0
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/lixyBookStore
-JWT_SECRET_KEY=<Strong-Secret-Key>
+JWT_SECRET_KEY=<Strong_Secret_Key>
 EXPIRES_IN=30d
-TEST_SUPERADMIN_EMAIL=super@admin.gmail.com
-TEST_SUPERADMIN_PASSWORD=SuperAdminSecret12345
+TEST_SUPERADMIN_EMAIL=superadmin@example.com
+TEST_SUPERADMIN_PASSWORD=Secret_pass
 UPLOAD_ROOT=/home/.../book-library-mongoose/backend/src/uploads
 ```
 

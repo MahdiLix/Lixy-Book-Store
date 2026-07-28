@@ -1,3 +1,5 @@
+https://github.com/user-attachments/assets/a7c0d62c-868e-41b6-85b6-f7771a96952b
+
 # Lixy Book Store
 
 Lixy Book Store is a full-stack book management application built with React on the frontend and Express.js, MongoDB, JWT, and Docker on the backend. It supports public browsing, role-based authentication, book management, user management, admin management, shopping cart access, and responsive book discovery pages.
